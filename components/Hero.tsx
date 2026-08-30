@@ -12,7 +12,7 @@ const Hero = () => {
     title1: "Shivtirth",
      title2: "Best Water Park & Resorts",
     description: "Waterpark | Boating Park | Adventure Park | Amusement Park | Safari | Bird Park | Agro Park | Helicopter Ride | Wedding | Accommodation | Corporate Events | Festival Celebrations | Birthday Events | Special School Picnic",
-    videoUrl: "",
+    videoUrl: "/main.mp4",
     posterUrl: "/p6.jpg",
     subTitle: "मौज मस्ती चाहिये, शिवतीर्थ आइए"
   });
@@ -30,7 +30,7 @@ const Hero = () => {
             title1: data.content.title1 || data.content.title || heroData.title1,
             title2: data.content.title2 || heroData.title2,
             description: data.content.description || heroData.description,
-            videoUrl: data.content.videoUrl?.startsWith("http") ? data.content.videoUrl : "",
+            videoUrl: data.content.videoUrl || heroData.videoUrl,
             posterUrl: data.content.posterUrl || heroData.posterUrl,
             subTitle: data.content.subTitle || heroData.subTitle,
           });
@@ -45,23 +45,15 @@ const Hero = () => {
     <>
       <div className='overflow-hidden w-screen relative h-[98vh] flex flex-col items-center justify-center'>
         <div className='absolute inset-0 z-0'>
-          {heroData.videoUrl ? (
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className='h-full scale-110 w-full object-cover'
-              src={heroData.videoUrl}
-              poster={heroData.posterUrl}
-            />
-          ) : (
-            <img
-              src={heroData.posterUrl}
-              alt="Shivtirth Water Park"
-              className='h-full scale-110 w-full object-cover'
-            />
-          )}
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className='h-full scale-110 w-full object-cover'
+            src={heroData.videoUrl}
+            poster={heroData.posterUrl}
+          />
           {/* Overlay for better text readability */}
           <div className='absolute inset-0 bg-black/40' />
         </div>
