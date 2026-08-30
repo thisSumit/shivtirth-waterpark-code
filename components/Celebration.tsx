@@ -210,9 +210,7 @@ const Venue = () => {
                   />
                 ) : (
                   <div className='w-full h-full flex items-center justify-center text-background/40'>
-                    <p className='text-center px-8'>
-                      <img src="/hut2.png" alt="" />
-                    </p>
+                    <p className='text-center px-8'>No image available</p>
                   </div>
                 )}
               </div>

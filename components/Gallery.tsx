@@ -30,7 +30,6 @@ const mediaItems: MediaItem[] = [
   },
   { type: "image", src: "/birdspark-1.jpg" },
   { type: "image", src: "/p1.jpeg" },
-  { type: "video", src: "/ov2.MP4" },
   { type: "image", src: "/adventure.jpg" },
   { type: "image", src: "/ag4.jpg" },
 ];

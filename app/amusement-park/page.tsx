@@ -88,7 +88,7 @@ const AmusementParkPage = () => {
       <div className="relative">
         <div className="relative h-[56vh] md:h-[72vh] overflow-hidden">
           <Image
-            src="/amusement-park.jpg"
+            src="/amusement.jpg"
             alt="Amusement Park"
             fill
             className="object-cover object-center"

@@ -27,7 +27,6 @@ const DEFAULT_GALLERY: GalleryItem[] = [
   { id: "8", type: "image", src: "/farmhouse.png", category: "stay", title: "Farmhouse Bungalow Lawn" },
   { id: "9", type: "image", src: "/g8.png", category: "water-park", title: "High-Speed Water Slides" },
   { id: "10", type: "image", src: "/g10.png", category: "water-park", title: "Family Fun Pool" },
-  { id: "11", type: "video", src: "/ov2.MP4", category: "videos", title: "Park Thrills & Highlights" },
 ];
 
 const BASE_CATEGORIES = [

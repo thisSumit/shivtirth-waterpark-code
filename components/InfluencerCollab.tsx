@@ -20,17 +20,6 @@ type InfluencerFormData = {
   acceptConsent: boolean;
 };
 
-const instagramVideos = [
-  {
-    title: "Wave Pool Moments",
-    source: "/main.mp4",
-  },
-  {
-    title: "Adventure Highlights",
-    source: "/ov2.MP4",
-  },
-];
-
 const brandGuidelines = [
   "Share final deliverables within 5-6 days after your visit.",
   "Send draft content for approval before posting.",
@@ -410,34 +399,6 @@ const InfluencerCollab = () => {
         </div>
       </section>
 
-      <section className="px-4 pb-12 pt-6 md:px-8">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-100 bg-white p-6 shadow-lg md:p-8">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-2xl font-black md:text-3xl">Instagram Video Highlights</h3>
-            <Link
-              href="https://www.instagram.com/shivtirthbestwaterpark/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
-            >
-              Follow @shivtirthbestwaterpark
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {instagramVideos.map((video) => (
-              <article key={video.source} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-                <div className="relative aspect-[9/16] bg-black">
-                  <video src={video.source} className="h-full w-full object-cover" controls playsInline preload="metadata" />
-                </div>
-                <div className="p-4">
-                  <p className="text-sm font-semibold text-slate-800">{video.title}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
     </main>
   );
 };
