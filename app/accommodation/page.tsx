@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { BadgeCheck, ShieldCheck } from 'lucide-react'
 import { supabase } from "@/lib/supabase";
 
 type AccommodationItem = {
@@ -90,6 +92,51 @@ const getSectionId = (name: string) => {
     .trim()
     .replace(/\s+/g, "-");
 };
+
+const accommodationFacilities = [
+  "Comfortable rooms and stay options",
+  "Basic room amenities and clean bathrooms",
+  "Parking facility for guests",
+  "Peaceful natural surroundings and open-air environment",
+  "Family-friendly stay environment",
+  "Group accommodation options",
+  "Dining options subject to package and availability",
+  "Convenient access to Shivtirth attractions",
+];
+
+const accommodationRules = [
+  "Guests must carry valid ID proof during check-in.",
+  "Check-in and check-out must be completed as per the communicated timings.",
+  "Guests are responsible for keeping their rooms and belongings safe.",
+  "Smoking and restricted activities are not permitted in prohibited areas.",
+  "Guests should maintain cleanliness and avoid damaging accommodation property.",
+  "Children must remain under proper adult supervision.",
+  "Any damage to room property may be chargeable.",
+  "Booking cancellation, refund and modification policies apply as communicated at booking time.",
+];
+
+const accommodationFaqs = [
+  {
+    question: 'Does Shivtirth have accommodation facilities?',
+    answer: 'Yes, Shivtirth offers accommodation options for visitors who want to extend their stay and enjoy the destination at a relaxed pace.'
+  },
+  {
+    question: 'Can I stay overnight at Shivtirth?',
+    answer: 'Yes, overnight accommodation may be available depending on room availability and the selected package.'
+  },
+  {
+    question: 'What type of accommodation is available at Shivtirth?',
+    answer: 'Shivtirth offers farmhouse bungalows, camping tents, dormitory cottages, and deluxe AC rooms for families and groups.'
+  },
+  {
+    question: 'Is accommodation suitable for families?',
+    answer: 'Yes. Shivtirth accommodation is designed to provide a comfortable stay for families, couples and group travellers.'
+  },
+  {
+    question: 'How can I book accommodation at Shivtirth?',
+    answer: 'Guests can contact the Shivtirth team to check room availability, rates, packages and booking details.'
+  }
+];
 
 export default function AccommodationPage() {
   const [accommodations, setAccommodations] = useState<AccommodationItem[]>(defaultAccommodations);
@@ -232,7 +279,7 @@ export default function AccommodationPage() {
                   Book Now
                 </InteractiveHoverButton>
                 <Link
-                  href="tel:+918275737579"
+                  href="tel:+918605362212"
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-slate-100 text-slate-800 font-semibold hover:bg-accent/20 transition text-sm"
                 >
                   Call to Plan
@@ -241,6 +288,54 @@ export default function AccommodationPage() {
             </div>
           </div>
         ))}
+      </section>
+
+      <section className="max-w-7xl mx-auto px-4 pb-16 md:pb-20">
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="rounded-[28px] bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 md:p-8">
+            <h3 className="text-2xl font-black text-slate-900">Facilities</h3>
+            <ul className="mt-5 space-y-3">
+              {accommodationFacilities.map((facility) => (
+                <li key={facility} className="flex items-start gap-3 text-sm text-slate-700">
+                  <span className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent/20 text-accent">
+                    <BadgeCheck className="h-3.5 w-3.5" />
+                  </span>
+                  <span>{facility}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="rounded-[28px] bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 md:p-8">
+            <h3 className="text-2xl font-black text-slate-900">Rules & Guidelines</h3>
+            <ul className="mt-5 space-y-3">
+              {accommodationRules.map((rule) => (
+                <li key={rule} className="flex items-start gap-3 text-sm text-slate-700">
+                  <span className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                  </span>
+                  <span>{rule}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-4 pb-16 md:pb-20">
+        <div className="rounded-[28px] bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 md:p-8">
+          <h3 className="text-2xl font-black text-slate-900 mb-3">Frequently Asked Questions</h3>
+          <div className="max-w-7xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {accommodationFaqs.map((faq, idx) => (
+                <AccordionItem key={idx} value={`accommodation-faq-${idx}`}>
+                  <AccordionTrigger className="text-left text-slate-900 hover:text-accent">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="text-slate-600 pt-2">{faq.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
       </section>
     </main>
   );

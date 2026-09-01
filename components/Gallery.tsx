@@ -4,15 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { InteractiveHoverButton } from "./ui/interactive-hover-button";
 import { supabase } from "@/lib/supabase";
-
-/* ================= TYPES ================= */
+import AnimatedHeading from "./ui/AnimatedHeading";
+import { ScrollReveal } from "./ui/ScrollReveal";
 
 type MediaItem =
   | { type: "image"; src: string }
-  | { type: "video"; src: string } // mp4
+  | { type: "video"; src: string }
   | { type: "youtube"; url: string };
-
-/* ================= DATA ================= */
 
 const mediaItems: MediaItem[] = [
   { type: "image", src: "/o11.jpg" },
@@ -34,8 +32,6 @@ const mediaItems: MediaItem[] = [
   { type: "image", src: "/ag4.jpg" },
 ];
 
-/* ================= COMPONENT ================= */
-
 export default function GalleryAutoScroll() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
@@ -47,7 +43,7 @@ export default function GalleryAutoScroll() {
   useEffect(() => {
     async function fetchGallery() {
       try {
-        const { data, error } = await supabase
+        const { data } = await supabase
           .from('gallery')
           .select('type, src')
           .order('display_order', { ascending: true });
@@ -82,7 +78,6 @@ export default function GalleryAutoScroll() {
       if (!isPaused && !isDraggingRef.current) {
         container.scrollLeft += speed;
 
-        // Seamless loop because list is duplicated.
         if (container.scrollLeft >= half) {
           container.scrollLeft -= half;
         }
@@ -127,19 +122,14 @@ export default function GalleryAutoScroll() {
   };
 
   return (
-    <section className="py-8 md:py-10 bg-background overflow-hidden">
+    <section className="py-8 bg-background overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="uppercase text-2xl md:text-3xl font-black text-slate-900 mb-2">
-            Watch Some MOMENTs!
-          </h2>
+        <AnimatedHeading
+          title="Watch Some MOMENTs!"
+          subtitle="Turn every laugh, splash, and thrill into memories that last forever."
+        />
 
-          {/* <p className="text-slate-600 max-w-2xl mx-auto mb-8 text-base md:text-lg">
-            Turn every laugh, splash, and thrill into memories that last forever. From family fun to wild group adventures, every visit to Shivtirth is a story worth sharing.
-📸 Show us your best moments with #ShivtirthMemories
-          </p> */}
-
+        <ScrollReveal direction="up" delay={0.2} duration={0.5} className="flex justify-center mb-8">
           <InteractiveHoverButton
             onClick={() =>
               window.open(
@@ -149,42 +139,42 @@ export default function GalleryAutoScroll() {
               )
             }
           >
-            Follow @ShivtirthWaterPark
+            Visit Our Instagram
           </InteractiveHoverButton>
-        </div>
+        </ScrollReveal>
       </div>
 
-      {/* Auto scrolling row */}
-      <div className="relative">
-        <div
-          ref={scrollRef}
-          className="gallery-scroll flex w-full gap-6 overflow-x-auto overflow-y-hidden px-4 md:px-8 cursor-grab select-none"
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-          onPointerLeave={() => {
-            if (isDraggingRef.current) return;
-            setIsPaused(false);
-          }}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => {
-            if (isDraggingRef.current) return;
-            setIsPaused(false);
-          }}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setIsPaused(false)}
-          aria-label="Scrollable gallery"
-        >
-          <div className="flex w-max gap-6 py-2">
-            {[...activeMedia, ...activeMedia].map((item, index) => (
-              <MediaCard key={index} item={item} />
-            ))}
+      <ScrollReveal direction="fade" delay={0.3} duration={0.8}>
+        <div className="relative">
+          <div
+            ref={scrollRef}
+            className="gallery-scroll flex w-full gap-6 overflow-x-auto overflow-y-hidden px-4 md:px-8 cursor-grab select-none"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onPointerLeave={() => {
+              if (isDraggingRef.current) return;
+              setIsPaused(false);
+            }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => {
+              if (isDraggingRef.current) return;
+              setIsPaused(false);
+            }}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
+            aria-label="Scrollable gallery"
+          >
+            <div className="flex w-max gap-6 py-2">
+              {[...activeMedia, ...activeMedia].map((item, index) => (
+                <MediaCard key={index} item={item} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
 
-      {/* CSS */}
       <style jsx>{`
         .gallery-scroll {
           scrollbar-width: thin;
@@ -209,23 +199,19 @@ export default function GalleryAutoScroll() {
   );
 }
 
-/* ================= MEDIA CARD ================= */
-
 function MediaCard({ item }: { item: MediaItem }) {
   return (
-    <div className="relative w-72 md:w-96 h-[420px] md:h-[520px] shrink-0 rounded-2xl overflow-hidden shadow-xl transition-transform duration-500 hover:scale-[1.02] bg-black">
-      {/* IMAGE */}
+    <div className="group relative w-72 md:w-96 h-[420px] md:h-[520px] shrink-0 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl bg-black border border-slate-800">
       {item.type === "image" && (
         <Image
           src={item.src}
           alt="Gallery"
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
           sizes="(max-width: 768px) 288px, 384px"
         />
       )}
 
-      {/* MP4 VIDEO */}
       {item.type === "video" && (
         <video
           src={item.src}
@@ -237,7 +223,6 @@ function MediaCard({ item }: { item: MediaItem }) {
         />
       )}
 
-      {/* YOUTUBE VIDEO */}
       {item.type === "youtube" && (
         <iframe
           className="w-full h-full"
@@ -248,20 +233,18 @@ function MediaCard({ item }: { item: MediaItem }) {
           allowFullScreen
         />
       )}
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </div>
   );
 }
 
-/* ================= HELPERS ================= */
-
 function getYouTubeEmbedUrl(url: string) {
-  // Shorts → Embed
   if (url.includes("/shorts/")) {
     const id = url.split("/shorts/")[1].split("?")[0];
     return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&loop=1&playlist=${id}&rel=0&modestbranding=1`;
   }
 
-  // Normal YouTube
   const idMatch = url.match(/v=([^&]+)/);
   if (idMatch) {
     return `https://www.youtube.com/embed/${idMatch[1]}?autoplay=1&mute=1&playsinline=1&loop=1&playlist=${idMatch[1]}&rel=0&modestbranding=1`;

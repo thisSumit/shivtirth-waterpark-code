@@ -164,7 +164,7 @@ const Venue = () => {
 
             {/* Action Buttons */}
             <div className='flex flex-col sm:flex-row gap-4 mt-6'>
-              <InteractiveHoverButton onClick={() => window.location.href = "tel:+918275737579"} className='flex-1 py-4 px-6'>
+              <InteractiveHoverButton onClick={() => window.location.href = "tel:+918605362212"} className='flex-1 py-4 px-6'>
                 Plan Your Perfect Event
               </InteractiveHoverButton>
             </div>
@@ -210,7 +210,9 @@ const Venue = () => {
                   />
                 ) : (
                   <div className='w-full h-full flex items-center justify-center text-background/40'>
-                    <p className='text-center px-8'>No image available</p>
+                    <p className='text-center px-8'>
+                      <img src="/hut2.png" alt="" />
+                    </p>
                   </div>
                 )}
               </div>
@@ -234,7 +236,7 @@ const Venue = () => {
                   </InteractiveHoverButton>
                   <InteractiveHoverButton
                     onClick={() => {
-                      window.location.href = 'tel:+918275737579'
+                      window.location.href = 'tel:+918605362212'
                     }}
                     className='flex-1 w-50 justify-center'
                   >

@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { InteractiveHoverButton } from "./ui/interactive-hover-button";
 import { supabase } from "@/lib/supabase";
+import AnimatedHeading from "./ui/AnimatedHeading";
+import { ScrollReveal } from "./ui/ScrollReveal";
 
 interface OfferImage {
   src: string;
@@ -81,122 +83,118 @@ const OfferSection = () => {
   if (activeOffers.length === 0) return null;
 
   return (
-    <section className="w-full bg-background py-8 md:py-10">
+    <section className="w-full bg-background py-12 md:py-16">
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
-        {/* Header */}
-        <div className="mb-8 md:mb-10 text-center">
-          <h2 className="uppercase text-2xl md:text-3xl font-black text-slate-900 mb-2">
-            Best Offers
-          </h2>
+        <AnimatedHeading
+          title="Best Offers"
+          subtitle="Exclusive deals and packages tailored for maximum fun and unbeatable value."
+        />
 
-          <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-primary" />
-        </div>
+        <ScrollReveal direction="up" delay={0.2} duration={0.6}>
+          <div className="relative mx-auto w-full max-w-6xl">
+            <button
+              onClick={() => scrollOffers(-1)}
+              className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-slate-200 bg-white p-2 text-slate-700 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-white md:-left-5 md:p-3"
+              aria-label="Previous offer"
+            >
+              <ChevronLeft
+                size={24}
+                strokeWidth={2.5}
+                className="md:h-7 md:w-7"
+              />
+            </button>
 
-        {/* Carousel */}
-        <div className="relative mx-auto w-full max-w-6xl">
-          {/* Left Button */}
-          <button
-            onClick={() => scrollOffers(-1)}
-            className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-slate-200 bg-white p-2 text-slate-700 shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white md:-left-5 md:p-3"
-            aria-label="Previous offer"
-          >
-            <ChevronLeft
-              size={24}
-              strokeWidth={2.5}
-              className="md:h-7 md:w-7"
-            />
-          </button>
+            <button
+              onClick={() => scrollOffers(1)}
+              className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-slate-200 bg-white p-2 text-slate-700 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-white md:-right-5 md:p-3"
+              aria-label="Next offer"
+            >
+              <ChevronRight
+                size={24}
+                strokeWidth={2.5}
+                className="md:h-7 md:w-7"
+              />
+            </button>
 
-          {/* Right Button */}
-          <button
-            onClick={() => scrollOffers(1)}
-            className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-slate-200 bg-white p-2 text-slate-700 shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white md:-right-5 md:p-3"
-            aria-label="Next offer"
-          >
-            <ChevronRight
-              size={24}
-              strokeWidth={2.5}
-              className="md:h-7 md:w-7"
-            />
-          </button>
+            <div
+              ref={offerTrackRef}
+              className="
+                flex
+                gap-4
+                md:gap-6
+                overflow-x-auto
+                scroll-smooth
+                snap-x
+                snap-mandatory
+                pb-2
+                [scrollbar-width:none]
+                [-ms-overflow-style:none]
+                [&::-webkit-scrollbar]:hidden
+              "
+            >
+              {activeOffers.map((offer, index) => {
+                const imgUrl =
+                  offer.src.startsWith("http") ||
+                  offer.src.startsWith("/")
+                    ? offer.src
+                    : `/${offer.src}`;
 
-          <div
-            ref={offerTrackRef}
-            className="
-              flex
-              gap-4
-              md:gap-6
-              overflow-x-auto
-              scroll-smooth
-              snap-x
-              snap-mandatory
-              pb-2
-              [scrollbar-width:none]
-              [-ms-overflow-style:none]
-              [&::-webkit-scrollbar]:hidden
-            "
-          >
-            {activeOffers.map((offer, index) => {
-              const imgUrl =
-                offer.src.startsWith("http") ||
-                offer.src.startsWith("/")
-                  ? offer.src
-                  : `/${offer.src}`;
-
-              return (
-                <div
-                  key={`${offer.src}-${index}`}
-                  data-offer-card
-                  className="
-                    group
-                    min-w-full
-                    snap-center
-                    md:min-w-[calc(50%-12px)]
-                  "
-                >
+                return (
                   <div
-                    onClick={() => router.push("/offers")}
+                    key={`${offer.src}-${index}`}
+                    data-offer-card
                     className="
-                      relative
-                      w-full
-                      cursor-pointer
-                      overflow-hidden
-                      rounded-2xl
-                      shadow-md
-                      transition-all
-                      duration-300
-                      hover:-translate-y-1
-                      hover:shadow-xl
+                      group
+                      min-w-full
+                      snap-center
+                      md:min-w-[calc(50%-12px)]
                     "
-                    style={{
-                      aspectRatio:
-                        offer.aspectRatio ||
-                        DEFAULT_OFFER_ASPECT_RATIO,
-                    }}
                   >
-                    <Image
-                      src={imgUrl}
-                      alt={offer.alt}
-                      fill
-                      priority={index === 0}
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
-                    />
+                    <div
+                      onClick={() => router.push("/offers")}
+                      className="
+                        relative
+                        w-full
+                        cursor-pointer
+                        overflow-hidden
+                        rounded-2xl
+                        shadow-md
+                        transition-all
+                        duration-500
+                        hover:-translate-y-2
+                        hover:shadow-2xl
+                        border
+                        border-slate-200/80
+                      "
+                      style={{
+                        aspectRatio:
+                          offer.aspectRatio ||
+                          DEFAULT_OFFER_ASPECT_RATIO,
+                      }}
+                    >
+                      <Image
+                        src={imgUrl}
+                        alt={offer.alt}
+                        fill
+                        priority={index === 0}
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
-        {/* CTA */}
-        <div className="mt-8 flex justify-center md:mt-12">
+        <ScrollReveal direction="up" delay={0.4} duration={0.5} className="mt-8 flex justify-center md:mt-12">
           <InteractiveHoverButton
             onClick={() => router.push("/offers")}
           >
             Explore Offers
           </InteractiveHoverButton>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

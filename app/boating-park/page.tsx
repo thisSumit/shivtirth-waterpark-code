@@ -1,74 +1,73 @@
 "use client";
 
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
-import OfferSection from '@/components/OfferSection'
-import { Clock, Users, Shield } from 'lucide-react'
-import { getWhatsAppBookingHref } from '@/lib/whatsapp'
-import { supabase } from '@/lib/supabase'
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { BadgeCheck, ShieldCheck } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const BoatingParkPage = () => {
   const boatingSlides = [
     {
       title: 'Banana Boat',
-      description: 'Gather your group and get ready for a ride full of energy and excitement. As the banana boat speeds across the water, every turn brings laughter, splashes, and moments you will want to relive. It is the perfect mix of thrill and togetherness-made for unforgettable group fun.',
+      description: 'Gather your group and get ready for a ride full of energy and excitement. As the banana boat speeds across the water, every turn brings laughter, splashes, and moments you will want to relive.',
       image: '/Boating-Park.jpg',
     },
     {
       title: 'Speed Boat',
-      description: 'Experience pure adrenaline as you race across the water with powerful speed and sharp turns. Designed for thrill seekers, this ride delivers high-energy moments, exciting splashes, and a rush you will feel long after it ends.',
+      description: 'Experience pure adrenaline as you race across the water with powerful speed and sharp turns. Designed for thrill seekers, this ride delivers high-energy moments and exciting splashes.',
       image: '/speed-boat.jpg',
     },
     {
       title: 'Shikara Ride',
-      description: 'Unwind with a calm and scenic ride that lets you slow down and take in the beauty around you. Gliding gently over the water, this peaceful experience offers a refreshing escape-perfect for relaxing moments with your loved ones.',
+      description: 'Unwind with a calm and scenic ride that lets you slow down and take in the beauty around you. Gliding gently over the water, this peaceful experience offers a refreshing escape.',
       image: '/shikara-boat.jpg',
     },
     {
       title: 'Dragon Boat',
-      description: 'Step into a visually striking ride that brings together group fun and a unique on-water experience. As the boat moves across the water, enjoy the lively atmosphere, shared excitement, and a ride that is as engaging as it is memorable.',
+      description: 'Step into a visually striking ride that brings together group fun and a unique on-water experience as the boat moves across the water in lively unison.',
       image: '/dragon-boat.jpg',
     },
     {
       title: 'Sofa Boat',
-      description: 'Settle in for a smooth and comfortable ride as you glide across the water at a relaxed pace. Ideal for those who prefer a gentle, enjoyable experience, it is the perfect way to unwind while still being part of the fun.',
+      description: 'Settle in for a smooth and comfortable ride as you glide across the water at a relaxed pace. Ideal for those who prefer a gentle, enjoyable experience.',
       image: '/sofa-boat.jpg',
     },
     {
       title: 'Train Boat',
-      description: 'A favorite for families and groups, this connected ride brings a playful twist to your time on the water. As it moves smoothly across the lake, enjoy the fun of riding together, with gentle excitement and plenty of shared moments along the way.',
+      description: 'A favorite for families and groups, this connected ride brings a playful twist to your time on the water, with gentle excitement along the way.',
       image: '/train-boat.jpg',
     },
     {
       title: 'Octopus Ride',
-      description: 'Step into a high-energy ride where motion, water, and excitement come together. With spinning movements and unexpected twists, every moment feels lively and engaging-perfect for those who enjoy a fun, action-packed experience.',
+      description: 'Step into a high-energy ride where motion, water, and excitement come together with spinning movements and unexpected twists.',
       image: '/octopus-boat.jpg',
     },
     {
       title: 'Disco Boat',
-      description: 'Step into a ride filled with rhythm, movement, and energy. As the boat sways and spins, enjoy a lively atmosphere that blends music, fun, and water excitement-creating an experience that feels like a celebration on the water.',
+      description: 'Step into a ride filled with rhythm, movement, and energy. As the boat sways and spins, enjoy a lively celebration atmosphere on the water.',
       image: '/disco-boat.jpg',
     },
     {
       title: 'Zorbing Ball',
-      description: 'Step inside a giant transparent ball and experience the fun of walking and rolling on water like never before. Safe, playful, and completely unique, it is an activity that brings laughter, balance, and unforgettable moments for all ages.',
+      description: 'Step inside a giant transparent ball and experience the fun of walking and rolling on water like never before in a safe and playful ball.',
       image: '/zorbing-ball.jpg',
     },
     {
       title: 'Kayak Boat',
-      description: 'Enjoy a peaceful and scenic ride that lets you connect with nature. As you paddle gently across the water, take in the beauty around you and find a moment of calm in the midst of your adventure.',
+      description: 'Enjoy a peaceful and scenic ride that lets you connect with nature as you paddle gently across the water.',
       image: '/Boating-Park.jpg',
     },
     {
       title: 'Pedal Boat',
-      description: 'Get a fun workout while enjoying the water with a pedal boat ride. Perfect for families and friends, it offers a leisurely pace that lets you take in the surroundings while still being part of the fun.',
+      description: 'Get a fun workout while enjoying the water at your own pace, perfect for families and friends.',
       image: '/Boating-Park.jpg',
     },
-  ]
+  ];
 
-  const [slides, setSlides] = useState(boatingSlides)
+  const [slides, setSlides] = useState(boatingSlides);
 
   useEffect(() => {
     async function fetchAttractions() {
@@ -78,48 +77,61 @@ const BoatingParkPage = () => {
           .select('title, description, image')
           .eq('park_type', 'boating-park')
           .eq('is_hidden', false)
-          .order('display_order', { ascending: true })
+          .order('display_order', { ascending: true });
         if (data && data.length > 0) {
-          setSlides(data)
+          setSlides(data);
         }
       } catch (err) {
-        console.error("Error loading attractions:", err)
+        console.error("Error loading attractions:", err);
       }
     }
-    fetchAttractions()
-  }, [])
-
-  const facilities = [
-    { icon: '🦺', title: 'Safety gear', description: 'Life jackets and essential equipment are provided for all rides.' },
-    { icon: '👨‍✈️', title: 'Guided rides', description: 'Trained staff help guide every boating experience safely.' },
-    { icon: '🛶', title: 'Multiple boat options', description: 'Choose from a variety of boats for family fun or adventure.' },
-  ]
-
-  const rulesRegulations = [
-    {
-      category: 'Rules & Regulations',
-      rules: [
-        'Life jackets compulsory',
-        'Follow staff instructions',
-        'Weight limits apply',
-      ],
-    },
-  ]
-
-  const timings = [
-    { day: 'Timings', time: '10:00 AM to 02:00 PM' },
-  ]
+    fetchAttractions();
+  }, []);
 
   const boatingFacilities = [
-    { icon: '🦺', title: 'Safety gear', description: 'Life jackets and essential equipment are provided for all rides.' },
-    { icon: '👨‍✈️', title: 'Guided rides', description: 'Trained staff help guide every boating experience safely.' },
-    { icon: '🛶', title: 'Multiple boat options', description: 'Choose from a variety of boats for family fun or adventure.' },
-  ]
+    'Diverse Boat Fleet - Banana Boat, Sofa Boat, Speed Boat, Shikara Boat, Train Boat, Dragon Boat, Disco Boat, Octopus Boat, Kayak, and Pedal Boats',
+    'Safety Gear Station - Free life jacket sizing, fitting, and safety check before boarding',
+    'Boarding Docks - Non-slip, secured floating jetties and boarding ramps with staff assistance',
+    'Shaded Waiting Lounge - Covered seating area near the lake dock for waiting visitors and groups',
+    'Trained Rescue Boat & Guards - Certified rescue boat operators and lifeguards on water for instant support'
+  ];
+
+  const boatingRules = [
+    'Life Jackets Mandatory: Every passenger must wear a securely fastened life jacket throughout the ride',
+    'Strict Weight & Seating Limits: Never exceed maximum passenger capacity marked for each boat type',
+    'Remain Seated: Standing, rocking, jumping, or switching seats while boat is in motion is prohibited',
+    'Follow Operator Instructions: Obey the boat captain or dock attendant\'s signals at all times',
+    'Child Supervision: Children under 12 years must be accompanied by an adult or teacher',
+    'No Littering or Items in Water: Throwing trash, phones, cameras, or belongings into water is forbidden'
+  ];
+
+  const boatingFaqs = [
+    {
+      question: 'Where can I go boating near Nagpur?',
+      answer: 'Shivtirth Boating Park near Umri Dam, Saoner, offers multiple boating and water experiences near Nagpur.'
+    },
+    {
+      question: 'What types of boating are available at Shivtirth?',
+      answer: 'Visitors can enjoy Banana Boat, Speed Boat, Disco Boat, Dragon Boat, Sofa Boat, Train Boat, Octopus Ride, Shikara Ride, and Kayaking.'
+    },
+    {
+      question: 'Is Shivtirth Boating Park suitable for families?',
+      answer: 'Yes. Shivtirth offers several boating experiences suitable for families and groups, subject to individual ride safety requirements.'
+    },
+    {
+      question: 'Can I enjoy boating and the water park on the same visit?',
+      answer: 'Yes. Shivtirth is designed as a multi-experience destination where visitors can combine boating with other park attractions.'
+    },
+    {
+      question: 'What is the best boating experience at Shivtirth?',
+      answer: 'Speed Boat is ideal for thrill seekers, while Shikara and group rides are suitable for a more relaxed experience.'
+    }
+  ];
 
   return (
-    <main id="about-park" className="bg-slate-50">
+    <main id="about-park" className="bg-gradient-to-b from-teal-950 via-slate-900 to-teal-950 text-slate-100">
       <div className="relative">
-        <div className="relative h-[56vh] md:h-[72vh] overflow-hidden">
+        <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
           <Image
             src="/Boating-Park.jpg"
             alt="Boating Park"
@@ -127,166 +139,130 @@ const BoatingParkPage = () => {
             className="object-cover object-center"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/50 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-teal-950 via-teal-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
-              <h1 className="text-3xl md:text-5xl font-black text-yellow-400 drop-shadow-lg">Boating Park</h1>
-              <p className="mt-3 text-sm text-white/90 drop-shadow-sm">
-                Banana Boat | Sofa Boat | Speed Boat | Shikara Boat | Train Boat | Dragon Boat | Disco Boat | Octopus Boat | Kayak Boat | Pedal Boat | Rowing Boat | Boat House | And Many More…
+              <h1 className="text-2xl md:text-4xl font-bold text-amber-400 drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                Boating Park
+              </h1>
+              <p className="mt-2 text-xs md:text-sm text-teal-100/90 drop-shadow-sm font-medium">
+                Banana Boat | Sofa Boat | Speed Boat | Shikara Boat | Train Boat | Dragon Boat | Disco Boat | Octopus Boat | Kayak Boat | Pedal Boat
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Stats Section */}
-      {/* <section className="relative z-10 max-w-6xl mx-auto px-4 -mt-10 md:-mt-16 pb-10">
-        <div className="bg-white rounded-3xl shadow-xl p-5 md:p-8 grid grid-cols-3 gap-3 md:gap-8 text-center border border-slate-100">
-          <div className="flex flex-col items-center">
-            <span className="text-3xl md:text-5xl mb-2">🚤</span>
-            <h3 className="text-xs md:text-sm font-semibold uppercase tracking-wider text-slate-500">Boats</h3>
-            <p className="text-base md:text-xl font-bold text-slate-800 mt-1">7+ Ride Types</p>
-          </div>
-          <div className="flex flex-col items-center border-x border-slate-100">
-            <span className="text-3xl md:text-5xl mb-2">🌊</span>
-            <h3 className="text-xs md:text-sm font-semibold uppercase tracking-wider text-slate-500">Vibe</h3>
-            <p className="text-base md:text-xl font-bold text-slate-800 mt-1">Lake Adventure</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-3xl md:text-5xl mb-2">🛟</span>
-            <h3 className="text-xs md:text-sm font-semibold uppercase tracking-wider text-slate-500">Safety</h3>
-            <p className="text-base md:text-xl font-bold text-slate-800 mt-1">Life Jacket Mandatory</p>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Sticky Book Now Button */}
       <InteractiveHoverButton
         href={"/offers"}
-        className="flex fixed bottom-8 left-1/2 -translate-x-1/2 items-center z-20 px-8 py-3"
+        className="flex fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold"
       >
         BOOK NOW
       </InteractiveHoverButton>
-      
 
-      {/* <section className="py-10 md:py-12 bg-slate-50">
-        <OfferSection />
-      </section> */}
+      {/* Attractions Section - Customized Lake Teal Gradient */}
+      <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e57] via-[#006d77] to-[#002e34] text-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <ScrollReveal direction="up" delay={0.1}>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              Boating Park Activities
+            </h2>
+            <p className="text-teal-100/90 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
+              Step beyond the ordinary and discover boating experiences built for excitement and scenic relaxation on the water.
+            </p>
+          </ScrollReveal>
 
-      <section className="py-10 md:py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">Some Activities</h2>
-          <p className="text-gray-600 mb-8 md:mb-10 text-sm leading-snug max-w-3xl">Step beyond the ordinary and discover experiences built for action and excitement. Designed for those who enjoy energy, movement, and outdoor fun-each attraction offers something engaging, active, and memorable.</p>
-
-          <div className="space-y-10 md:space-y-12">
+          <div className="space-y-8 md:space-y-10">
             {slides.map((slide, idx) => (
-              <div key={idx} className="space-y-3 md:space-y-4">
-                <h3 className="text-2xl md:text-3xl font-black">{slide.title}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-10 items-center">
+              <ScrollReveal key={idx} direction="up" delay={0.15 * (idx % 2)} duration={0.5}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-teal-400/20">
                   <div className={`order-1 ${idx % 2 === 1 ? 'md:order-2' : ''}`}>
-                    <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-lg">
+                    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
                       <Image
                         src={slide.image}
                         alt={slide.title}
                         fill
-                        className="object-cover object-[50%_18%] hover:scale-105 transition duration-300"
+                        className="object-cover object-[50%_18%] hover:scale-105 transition duration-500"
                       />
                     </div>
                   </div>
                   <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    <p className="text-sm text-gray-700 leading-snug">{slide.description}</p>
+                    <h3 className="text-lg md:text-xl font-bold text-amber-300 font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                      {slide.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-teal-50 leading-relaxed font-normal">{slide.description}</p>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-10 md:py-12 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-black">Facilities</h2>
-          <p className="text-gray-600 mb-6 text-sm leading-snug">Enjoy premium amenities during your visit</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            {boatingFacilities.map((facility, idx) => (
-              <div key={idx} className="bg-white p-6 md:p-7 rounded-2xl shadow-lg hover:shadow-xl transition">
-                <div className="text-4xl mb-3">{facility.icon}</div>
-                 <h3 className="text-lg font-bold">{facility.title}</h3>
-                <p className="text-sm text-gray-600">{facility.description}</p>
-              </div>
-            ))}
+      {/* Facilities & Rules */}
+      <section className="mx-auto max-w-6xl px-4 pt-6">
+        <ScrollReveal direction="up" delay={0.2}>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-teal-100">
+              <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                Facilities
+              </h3>
+              <ul className="space-y-2.5">
+                {boatingFacilities.map((facility) => (
+                  <li key={facility} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-teal-100 text-teal-700 shrink-0">
+                      <BadgeCheck className="h-3 w-3" />
+                    </span>
+                    <span>{facility}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-teal-100">
+              <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                Rules & Regulations
+              </h3>
+              <ul className="space-y-2.5">
+                {boatingRules.map((rule) => (
+                  <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
+                      <ShieldCheck className="h-3 w-3" />
+                    </span>
+                    <span>{rule}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      <section id="rules-regulations" className="py-10 md:py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-black">Rules & Regulations</h2>
-          <p className="text-gray-600 mb-6 text-sm leading-snug">Please follow these guidelines for a safe and enjoyable experience</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {rulesRegulations.map((section, idx) => (
-              <div key={idx} className="bg-slate-50 p-6 md:p-8 rounded-2xl border-2 border-slate-200">
-                {/* <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-slate-900">{section.category}</h3> */}
-                <ul className="space-y-2.5 md:space-y-3">
-                  {section.rules.map((rule, rIdx) => (
-                    <li key={rIdx} className="flex items-start gap-3">
-                      <span className="text-slate-900 font-bold text-sm shrink-0">✓</span>
-                      <span className="text-sm">{rule}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+      {/* FAQ */}
+      <section className="mx-auto max-w-6xl px-4 py-6 pb-10">
+        <ScrollReveal direction="up" delay={0.25}>
+          <div className="rounded-2xl bg-white/95 text-slate-900 p-5 md:p-6 shadow-lg border border-teal-100">
+            <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              Frequently Asked Questions
+            </h3>
+            <Accordion type="single" collapsible className="w-full space-y-2">
+              {boatingFaqs.map((faq, idx) => (
+                <AccordionItem key={idx} value={`boating-faq-${idx}`} className="border-slate-200">
+                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-teal-600 text-left">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs md:text-sm text-slate-600 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
-
-      {/* <section className="bg-white py-10 md:py-12 border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-            <div className="flex items-start gap-4">
-              <Clock className="w-8 h-8 text-slate-800 shrink-0 mt-1" />
-              <div>
-                <h3 className="font-bold text-base md:text-lg mb-2">Best Visit Time</h3>
-                <p className="text-gray-600">Visit during morning slots for calm rides and evenings for lively vibes.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <Users className="w-8 h-8 text-slate-800 shrink-0 mt-1" />
-              <div>
-                <h3 className="font-bold text-base md:text-lg mb-2">Group Packages</h3>
-                <p className="text-gray-600">Special group packages available for schools, colleges, and families.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <Shield className="w-8 h-8 text-slate-800 shrink-0 mt-1" />
-              <div>
-                <h3 className="font-bold text-base md:text-lg mb-2">Safety First</h3>
-                <p className="text-gray-600">All rides are supervised by trained staff and safety marshals.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      {/* <section id="timings" className="py-10 md:py-12 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-black mb-3">Operating Hours</h2>
-          <p className="text-gray-600 mb-8 text-base md:text-lg leading-snug">Plan your visit according to our timings</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            {timings.map((timing, idx) => (
-              <div key={idx} className="bg-white p-5 md:p-6 rounded-2xl shadow-lg border-l-4 border-accent">
-                <h3 className="font-bold text-base md:text-lg mb-2">{timing.day}</h3>
-                <p className="text-xl md:text-2xl text-slate-900 font-bold">{timing.time}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
     </main>
-  )
-}
+  );
+};
 
-export default BoatingParkPage
+export default BoatingParkPage;

@@ -9,6 +9,7 @@ import Logos from "@/components/Logos";
 import OfferSection from "@/components/OfferSection";
 import Package from "@/components/Package";
 import PopUp from "@/components/PopUp";
+import Speciallity from "@/components/Speciallity";
 import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
@@ -19,8 +20,9 @@ export default function Home() {
       <Hero/>
       <Logos/>
       {/* <Description/> */}
-      <OfferSection/>
+      {/* <OfferSection/> */}
       <Testimonials/>
+      <Speciallity />
       {/* <Package/> */}
       {/* <Venue/> */}
       {/* <Description/> */}

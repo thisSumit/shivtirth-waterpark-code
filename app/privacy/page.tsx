@@ -81,8 +81,8 @@ export default function PrivacyPage() {
           <section className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xl">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Contact Us</h2>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 text-slate-700">
-              <p className="mb-2"><span className="text-slate-900 font-semibold">Email:</span> info@shivtirth.com</p>
-              <p className="mb-2"><span className="text-slate-900 font-semibold">Phone:</span> +91 82757 37577</p>
+              <p className="mb-2"><span className="text-slate-900 font-semibold">Email:</span> shivtirthtourism@gmail.com</p>
+              <p className="mb-2"><span className="text-slate-900 font-semibold">Phone:</span> +91 8605362212</p>
               <p><span className="text-slate-900 font-semibold">Address:</span> Umari Dam, near Saoner, Nagpur</p>
             </div>
           </section>

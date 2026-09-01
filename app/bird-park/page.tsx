@@ -4,65 +4,55 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { BadgeCheck, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { BadgeCheck, ShieldCheck } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
-const AdventureParkPage = () => {
-  const adventureSlides = [
+const BirdParkPage = () => {
+  const birdSlides = [
     {
-      title: 'Zip Line',
-      description: 'Soar across the adventure zone and feel the rush of speed and height in one seamless ride. Designed for excitement and smooth movement, it offers a thrilling perspective from above.',
-      image: '/Adventure-Park.jpg',
+      title: 'Guineafowls',
+      description: 'Guineafowls are distinctive birds known for their spotted feathers and unique appearance. Their lively nature makes them an interesting attraction for children and families.',
+      image: '/Bird-Park.jpg',
     },
     {
-      title: 'Rope Bridges',
-      description: 'Test your balance as you make your way across suspended paths set above the ground. With every step, enjoy a mix of light challenge and scenic views.',
-      image: '/rope-bridges.jpg',
+      title: 'Turkey',
+      description: 'Turkeys are large, fascinating birds known for their impressive size and distinctive appearance. Visitors can enjoy observing these beautiful birds up close.',
+      image: '/Bird-Park.jpg',
     },
     {
-      title: 'Obstacle Courses',
-      description: 'Take on a series of fun challenges that put your agility, focus, and determination to the test. Each section is designed to keep you active and engaged.',
-      image: '/obstacle-bridge.jpg',
+      title: 'Lovebirds',
+      description: 'Lovebirds are small, colorful and social birds known for their beautiful appearance and affectionate nature. They are especially popular with children and bird lovers.',
+      image: '/Bird-Park.jpg',
     },
     {
-      title: 'Burma Bridges',
-      description: 'Take on a classic outdoor challenge as you balance your way across rope-supported bridges. With guided safety and a well-designed setup, it offers an authentic adventure experience.',
-      image: '/burma-bridges.jpg',
+      title: 'Pigeons',
+      description: 'Pigeons are familiar and fascinating birds found in many parts of the world. At Shivtirth Bird Park, visitors can observe these gentle birds in a natural setting.',
+      image: '/Bird-Park.jpg',
     },
     {
-      title: 'Net Climbing',
-      description: 'Climb secure net structures that combine physical activity and thrill for kids, youth, and adventure enthusiasts.',
-      image: '/net-climbing.jpeg',
+      title: 'English Duck (Mallard)',
+      description: 'Mallard ducks are attractive waterfowl recognized for their colorful plumage and classic duck appearance.',
+      image: '/Bird-Park.jpg',
     },
     {
-      title: 'Commando Tower',
-      description: 'Push your limits with a multi-activity challenge designed to build confidence and courage. With guided climbing and controlled descents under expert supervision.',
-      image: '/commando-tower.jpeg',
+      title: 'Country Duck (Gavrani Duck)',
+      description: 'Gavrani Ducks, commonly known as country ducks, are traditional native ducks that offer visitors a glimpse of local farm life.',
+      image: '/Bird-Park.jpg',
     },
     {
-      title: 'Target Shooting',
-      description: 'Test your focus and precision in a controlled, engaging setup designed for both fun and skill-building.',
-      image: '/target-shooting.jpg',
+      title: 'Rabbit',
+      description: 'Rabbits are gentle, cute and playful animals that are especially loved by children as part of the park’s nature experience.',
+      image: '/Bird-Park.jpg',
     },
     {
-      title: 'Tree House',
-      description: 'A peaceful spot set amidst nature, offering elevated views and a refreshing break from the activity around. Designed as a relaxing stay point.',
-      image: '/tree-house.jpg',
-    },
-    {
-      title: '3D Show',
-      description: 'Discover an immersive experience set within Mogli Park, where visuals, motion, and storytelling come together in a jungle-inspired setting.',
-      image: '/3d-show.jpeg',
-    },
-    {
-      title: 'Butterfly Garden',
-      description: 'A calm, nature-filled space designed for quiet moments and gentle exploration. Surrounded by greenery and vibrant butterflies.',
-      image: '/butterfly-garden.jpeg',
+      title: 'Hen and Rooster',
+      description: 'The hen and rooster are a classic part of the farm environment, offering children an enjoyable introduction to farm animals.',
+      image: '/Bird-Park.jpg',
     },
   ];
 
-  const [slides, setSlides] = useState(adventureSlides);
+  const [slides, setSlides] = useState(birdSlides);
 
   useEffect(() => {
     async function fetchAttractions() {
@@ -70,57 +60,67 @@ const AdventureParkPage = () => {
         const { data } = await supabase
           .from('attractions')
           .select('title, description, image')
-          .eq('park_type', 'adventure-park')
+          .eq('park_type', 'bird-park')
           .eq('is_hidden', false)
           .order('display_order', { ascending: true });
+
         if (data && data.length > 0) {
           setSlides(data);
         }
       } catch (err) {
-        console.error("Error loading attractions:", err);
+        console.error('Error loading bird park attractions:', err);
       }
     }
+
     fetchAttractions();
   }, []);
 
-  const adventureFacilities = [
-    'Certified Safety Harness & Gear Station - High-grade safety helmets, full-body harnesses, and carabiners fitted by trained instructors',
-    'Diverse Obstacle Zones - Zip Line, Rope Bridges, Tyre Bridges, Burma Bridges, Obstacle Courses, Net Climbing, and Commando Towers',
-    'Nature & Trekking Tracks - Guided nature trails for Satpuda Trekking, Tree House access, and Butterfly Garden entry',
-    'Entertainment & Target Arenas - Specialized zones for 3D Shows and Various Shooting activities',
-    'Trained Instructors & Marshals - Professional adventure marshals at every high-element tower and rope course',
-    'First Aid & Hydration Stations - Drinking water and first-aid setups located near major adventure courses'
+  const birdFacilities = [
+    'Variety of birds - Guineafowls, Turkey, Lovebirds, Pigeons, Mallard Ducks, Gavrani Ducks',
+    'Farm animals - Rabbits, Hens and Roosters for educational experiences',
+    'Nature-friendly environment - Peaceful setting for bird observation and interaction',
+    'Family-friendly experience - Safe and educational for all ages',
+    'Bird-watching opportunities - Designated viewing areas and photo points',
+    'School visit friendly - Educational guides and learning experiences available'
   ];
 
-  const adventureRules = [
-    'Mandatory Safety Gear: Safety harnesses and helmets must remain securely worn and clipped in at all times',
-    'Proper Footwear Required: Closed-toe sports shoes or trekking shoes are mandatory (no sandals or bare feet)',
-    'Follow Marshal Signals: Wait for instructor\'s explicit signal before starting any zip line, climb, or bridge obstacle',
-    'Height & Weight Limits: Specific high-rope elements carry strict minimum height and maximum weight limits',
-    'One Person per Element: Only one participant allowed on a single bridge section, zip line, or climbing line at a time',
-    'Health & Physical Fitness: Individuals with high blood pressure, heart conditions, or pregnancy should avoid high-thrill activities'
+  const birdRules = [
+    'Do not tease, chase or frighten the birds and animals',
+    'Do not touch or handle birds/animals unless permitted by staff',
+    'Do not feed birds or animals with outside food',
+    'Follow staff instructions and displayed park guidelines',
+    'Children must remain under adult supervision',
+    'Do not throw objects into bird or animal enclosures',
+    'Maintain cleanliness and use designated dustbins',
+    'Avoid loud noises near birds and animals',
+    'Do not enter restricted or staff-only areas',
+    'Photography should not disturb the birds or animals',
+    'Do not use flash photography if prohibited',
+    'Respect the natural environment and other visitors',
+    'Follow all safety barriers and designated walking paths',
+    'Report any issue or emergency to park staff immediately'
   ];
 
-  const adventureFaqs = [
+  const birdFaqs = [
     {
-      question: 'What adventure activities are available at Shivtirth?',
-      answer: 'Shivtirth Adventure Park offers Zipline, Rope Bridges, Burma Bridge, Commando Tower, obstacle activities, target shooting and Mowgli-themed adventures.'
+      question: 'What is Sai Bird Park at Shivtirth?',
+      answer: 'Sai Bird Park is a nature-focused attraction at Shivtirth where visitors can see different types of birds and animals in a relaxing environment.'
     },
     {
-      question: 'Where is the best adventure park near Nagpur?',
-      answer: 'Shivtirth Adventure Park at Umri (Dam), Saoner is a major adventure destination near Nagpur.'
+      question: 'Where is Bird Park near Nagpur?',
+      answer: 'Sai Bird Park is located inside the Shivtirth destination at Umri (Dam), Saoner, near Nagpur.'
     },
     {
-      question: 'Does Shivtirth have a zipline?',
-      answer: 'Yes. Zipline is one of the key adventure activities at Shivtirth.'
+      question: 'What birds can I see at Shivtirth Bird Park?',
+      answer: 'Visitors can see Guineafowls, Turkey, Lovebirds, Pigeons, Mallard Ducks and Country/Gavrani Ducks, along with rabbits and farm birds.'
     },
     {
-      question: 'Is Shivtirth Adventure Park suitable for children?',
-      answer: 'Some activities are suitable for children, while others may have specific age, height or safety requirements.'
+      question: 'Is Bird Park suitable for children?',
+      answer: 'Yes. It is a family-friendly and educational experience where children can observe birds and animals in a calm environment.'
     },
     {
-      question: 'Can families enjoy the Adventure Park?',
-      answer: 'Yes. Families can choose activities according to the age and suitability of each participant.'
+      question: 'Can I visit Bird Park along with other Shivtirth attractions?',
+      answer: 'Yes. Depending on the package and attraction availability, Bird Park can be combined with other Shivtirth experiences.'
     }
   ];
 
@@ -129,8 +129,8 @@ const AdventureParkPage = () => {
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
           <Image
-            src="/mowgli-adventure.jpg"
-            alt="Adventure Park"
+            src="/Bird-Park.jpg"
+            alt="Bird Park"
             fill
             className="object-cover object-center"
             priority
@@ -140,10 +140,10 @@ const AdventureParkPage = () => {
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
               <h1 className="text-2xl md:text-4xl font-bold text-amber-400 drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-                Adventure Park
+                Bird Park
               </h1>
               <p className="mt-2 text-xs md:text-sm text-emerald-100/90 drop-shadow-sm font-medium">
-                Zip Line | Rope Bridges | Tyre Bridges | Burma Bridges | Obstacle Courses | Net Climbing | Commando Tower | Tree House | 3D Show | Butterfly Garden
+                Guineafowls | Turkey | Lovebirds | Pigeons | Mallard Ducks | Gavrani Ducks | Rabbits | Family-Friendly Learn & Explore Experience
               </p>
             </div>
           </div>
@@ -151,21 +151,21 @@ const AdventureParkPage = () => {
       </div>
 
       <InteractiveHoverButton
-        href={"/offers"}
+        href="/offers"
         className="flex fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold"
       >
         BOOK NOW
       </InteractiveHoverButton>
 
-      {/* Attractions Section - Customized Mowgli Jungle Forest Green Gradient */}
-      <section className="py-10 md:py-14 bg-gradient-to-br from-[#1b4332] via-[#2d6a4f] to-[#081c15] text-white">
+      {/* Attractions Section - Customized Nature Leaf Green Gradient */}
+      <section className="py-10 md:py-14 bg-gradient-to-br from-[#386641] via-[#6a994e] to-[#1a3a2a] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-              Adventure Park Thrills & Obstacles
+              Birds & Animals at Sai Bird Park
             </h2>
             <p className="text-emerald-100/90 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
-              Unleash your inner explorer with Mowgli-inspired adventures packed with adrenaline, physical challenges, and unforgettable outdoor experiences.
+              Discover the colorful world of birds and nature at Bird Park, Shivtirth. Meet different varieties of birds in a peaceful sanctuary setting.
             </p>
           </ScrollReveal>
 
@@ -175,7 +175,12 @@ const AdventureParkPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-emerald-400/20">
                   <div className={`order-1 ${idx % 2 === 1 ? 'md:order-2' : ''}`}>
                     <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
-                      <Image src={slide.image} alt={slide.title} fill className="object-cover object-[50%_18%] hover:scale-105 transition duration-500" />
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        fill
+                        className="object-cover object-center hover:scale-105 transition duration-500"
+                      />
                     </div>
                   </div>
                   <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
@@ -200,7 +205,7 @@ const AdventureParkPage = () => {
                 Facilities
               </h3>
               <ul className="space-y-2.5">
-                {adventureFacilities.map((facility) => (
+                {birdFacilities.map((facility) => (
                   <li key={facility} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
                     <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
                       <BadgeCheck className="h-3 w-3" />
@@ -216,7 +221,7 @@ const AdventureParkPage = () => {
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">
-                {adventureRules.map((rule) => (
+                {birdRules.map((rule) => (
                   <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
                     <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
                       <ShieldCheck className="h-3 w-3" />
@@ -238,8 +243,8 @@ const AdventureParkPage = () => {
               Frequently Asked Questions
             </h3>
             <Accordion type="single" collapsible className="w-full space-y-2">
-              {adventureFaqs.map((faq, idx) => (
-                <AccordionItem key={idx} value={`adventure-faq-${idx}`} className="border-slate-200">
+              {birdFaqs.map((faq, idx) => (
+                <AccordionItem key={idx} value={`bird-faq-${idx}`} className="border-slate-200">
                   <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-emerald-700 text-left">
                     {faq.question}
                   </AccordionTrigger>
@@ -256,4 +261,4 @@ const AdventureParkPage = () => {
   );
 };
 
-export default AdventureParkPage;
+export default BirdParkPage;

@@ -1,43 +1,20 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
-import Description from "@/components/Description";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import Image from "next/image";
 import Link from "next/link";
-import { getWhatsAppBookingHref } from "@/lib/whatsapp";
 import { supabase } from "@/lib/supabase";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-const parks = [
-  // {
-  //   name: "Water Park",
-  //   image: "/Water-Park.jpg",
-  //   description: "Dive into an action-packed water world with high-thrill slides, massive pools, and immersive splash zones, all designed for ultimate fun with top-notch safety.",
-  //   features: ["8 Water Pools", "Grand Waterfall", "Rappelling", "High-Thrill Slides", "Foam Dance Arena", "Rain Dance Zones"],
-  // },
-  // {
-  //   name: "Amusement Park",
-  //   image: "/a5.jpeg",
-  //   description: "Feel the adrenaline rush with electrifying rides, vibrant attractions, and non-stop entertainment designed to thrill every moment.",
-  //   features: ["Tora Tora Ride", "Columbus Ride", "High Swing", "Round Swing", "Jumper Ride", "Kids Play Zone", "Shooting Games"],
-  // },
-  // {
-  //   name: "Adventure Park",
-  //   image: "/Adventure-Park.jpg",
-  //   description: "Unleash your inner explorer with Mowgli-inspired adventures packed with adrenaline, challenges, and unforgettable outdoor experiences.",
-  //   features: ["Zip Line", "Rope Bridges", "Obstacle Courses", "Burma Bridges", "Net Climbing", "Commando Tower", "Target Shooting", "Tree House", "3D Experience", "Butterfly Garden"],
-  // },
-  // {
-  //   name: "Boating Park",
-  //   image: "/Boating-Park.jpg",
-  //   description: "Sail through excitement with a wide range of boating adventures, combining scenic beauty with thrilling water experiences.",
-  //   features: ["Banana Boat", "Speed Boat", "Shikara Ride", "Dragon Boat", "Sofa Boat", "Train Boat", "Octopus Ride", "Disco Boat", "Zorbing Ball", "Mini Cruise"],
-  // },
-  {
-    name: "Bird Park",
-    image: "/Bird-Park.jpg",
-    description: "Leave the ordinary behind and step into a lush, interactive sanctuary. Shivtirth Bird Park is more than just a habitat - it is a journey designed to bring you face-to-face with the wild. From the graceful glide of swans to the playful hops of our furry residents, discover a peaceful haven where you can experience a rare, hand-in-hand connection with nature's most beautiful creatures.",
-    features: ["Swan Feeding", "Duck Feeding", "Guinea Fowl", "Pigeons", "Love Birds", "Roosters", "Rabbits", "Turkey", "Exotic Birds", "Sheep & More"],
-  },
+type ParkItem = {
+  name: string;
+  image: string;
+  description: string;
+  features: string[];
+  href?: string;
+};
+
+const parks: ParkItem[] = [
   {
     name: "Agro Park",
     image: "/ag4.jpg",
@@ -50,30 +27,13 @@ const parks = [
     description: "Soar above the skies of Nagpur with breathtaking helicopter tours at Shivtirth - an adventure like no other. Take your thrill to new heights with Shivtirth Air Tourism Experience. A 25 km helicopter ride that reveals Nagpur's breathtaking beauty from the sky.",
     features: ["25 km Panoramic Flight", "Family-Friendly Adventure", "Aerial Photography", "Bird's-Eye City Views"],
   },
-  // {
-  //   name: "Safari",
-  //   image: "/safari-1.jpg",
-  //   description: "Forget the zoo - experience the pulse-pounding heart of the wild. Our Safari Expedition takes you deep into a rugged habitat where every turn reveals a new wonder. Whether you are chasing the sunset or spotting majestic wildlife, it is a high-octane, off-road journey designed for the brave and the curious.",
-  //   features: ["Jungle Gypsy Safari", "Tractor Safari", "Train Safari (Shivapuri)", "Shivshahi Bus Safari", "Bullock Cart Safari"],
-  // },
-  // {
-  //   name: "Stay Facilities",
-  //   image: "/farmhouse.png",
-  //   description: "Why let the fun end at sunset? Trade the long drive home for a night under the stars. From cozy, rustic stays to premium comfort, our facilities are designed to let you recharge in the heart of nature. Wake up to the sound of birds and the fresh scent of the wild - your ultimate staycation starts here.",
-  //   features: ["Farmhouse Bungalows", "Dormitory Cottages", "Camping Tents", "AC Rooms"],
-  // },
-  // {
-  //   name: "Dining",
-  //   image: "/Dining-Image.jpeg",
-  //   description: "Refuel your body and treat your taste buds to a culinary journey like no other. From authentic local delicacies to popular global favorites, our dining experience is the perfect break between thrills. Whether it is a quick snack to keep you going or a hearty meal with the whole family, we serve every dish with a side of spectacular views.",
-  //   features: ["Family Dining", "Cafeteria", "Specialty Beverages", "Vegetarian Options", "Kids Menu", "Outdoor Seating"],
-  // },
-  // {
-  //   name: "School & College Picnics",
-  //   image: "/s1.jpg",
-  //   description: "Elevate the classroom to the great outdoors! We specialize in creating high-energy, perfectly organized picnic experiences that balance heart-pounding thrills with meaningful team-building. From safety-first water adventures to educational nature trails, we provide a secure environment where students can bond, learn, and create stories that will last a lifetime.",
-  //   features: ["School Trips", "College Picnics", "Group Activities", "Educational Tours", "Safe Supervision"],
-  // },
+  {
+    name: "Accommodation (Stay Facilities)",
+    image: "/Stay-Facilities.jpg",
+    description: "Extend your stay with peaceful farmhouse bungalows, dormitory cottages, camping tents, and AC rooms equipped with modern amenities, bonfire nights, and 24/7 security.",
+    features: ["Farmhouse Bungalows", "Dormitory Cottages", "Camping Tents", "AC Rooms", "24/7 Security", "Night Bonfire & Dining"],
+    href: "/accommodation",
+  },
   {
     name: "Wedding Celebrations",
     image: "/wedding-1.jpg",
@@ -112,8 +72,8 @@ const getParkSectionId = (name: string) => {
     .replace(/&/g, 'and')
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
-    .replace(/\s+/g, '-')
-}
+    .replace(/\s+/g, '-');
+};
 
 export const ParkPage = () => {
   const [activeParks, setActiveParks] = useState(parks);
@@ -127,11 +87,12 @@ export const ParkPage = () => {
           .eq('is_hidden', false)
           .order('display_order', { ascending: true });
         if (data && data.length > 0) {
-          const dbParks = data.map((item) => ({
+          const dbParks: ParkItem[] = data.map((item) => ({
             name: item.title,
             image: item.image,
             description: item.description,
             features: Array.isArray(item.features) ? item.features : [],
+            href: item.title.toLowerCase().includes('accommodation') ? '/accommodation' : undefined,
           }));
 
           const merged = [...parks];
@@ -161,7 +122,7 @@ export const ParkPage = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-linear-to-b from-slate-50 via-white to-slate-50 text-slate-900">
+    <main className="min-h-screen bg-gradient-to-br from-[#8ECAE6] via-[#219EBC] to-[#023047] text-slate-900">
       <div className="relative">
         <div className="relative h-[56vh] md:h-[72vh] overflow-hidden">
           <Image src="/park-experience.png" alt="Parks and experiences background" fill className="object-cover object-center" priority />
@@ -173,11 +134,11 @@ export const ParkPage = () => {
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent/20 border border-accent/40 text-accent font-bold text-xs uppercase tracking-wider mb-3 backdrop-blur-md">
                 Parks & Experiences
               </span>
-              <h1 className="text-3xl md:text-5xl font-black text-white drop-shadow-lg uppercase tracking-wide">
+              <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg uppercase tracking-wide font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Nagpur’s Ultimate Fun Destination
               </h1>
               <p className="mt-3 text-sm md:text-lg text-white/90 drop-shadow-md leading-relaxed font-medium">
-                Get Shivtirth non-stop excitement at Shivtirth Water Park, packed with thrilling rides, scenic spaces, and endless entertainment.
+                Get non-stop excitement at Shivtirth Water Park, packed with thrilling rides, scenic spaces, and endless entertainment.
               </p>
             </div>
           </div>
@@ -186,64 +147,71 @@ export const ParkPage = () => {
         <div className="max-w-7xl mx-auto px-4 -mt-8" />
       </div>
 
-      {/* <Description/> */}
-
       {/* Parks List */}
-      <section className="max-w-7xl mx-auto px-2 md:px-4 py-10 md:py-12 space-y-6 md:space-y-7">
+      <section className="max-w-7xl mx-auto px-2 md:px-4 py-10 md:py-12 space-y-8 md:space-y-10">
         {activeParks.map((park, idx) => (
-          <div
-            key={park.name}
-            id={getParkSectionId(park.name)}
-            className="grid grid-cols-1 md:grid-cols-2 items-stretch gap-0 rounded-3xl bg-white shadow-2xl overflow-hidden"
-          >
+          <ScrollReveal key={park.name} direction="up" delay={0.1 * (idx % 3)} duration={0.6}>
             <div
-              className={`relative w-full aspect-square overflow-hidden order-1 ${idx % 2 === 1 ? "md:order-2" : "md:order-1"
-                }`}
+              id={getParkSectionId(park.name)}
+              className="grid grid-cols-1 md:grid-cols-2 items-stretch gap-0 rounded-3xl bg-white shadow-2xl overflow-hidden hover:shadow-amber-500/10 transition-all duration-300"
             >
-              <Image
-                src={park.image}
-                alt={park.name}
-                fill
-                className="object-cover object-center"
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                priority={idx === 0}
-              />
-            </div>
+              <div
+                className={`relative w-full aspect-square overflow-hidden order-1 ${idx % 2 === 1 ? "md:order-2" : "md:order-1"
+                  }`}
+              >
+                <Image
+                  src={park.image}
+                  alt={park.name}
+                  fill
+                  className="object-cover object-center transition-transform duration-700 hover:scale-105"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  priority={idx === 0}
+                />
+              </div>
 
-            <div
-              className={`space-y-3 md:space-y-4 order-2 px-5 md:px-8 py-5 md:py-6 self-center ${idx % 2 === 1 ? "md:order-1" : "md:order-2"
-                }`}
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 text-slate-500 text-xs font-semibold uppercase tracking-wide">
-                Featured Park
-              </div>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
-                {park.name}
-              </h2>
-              <p className="text-base md:text-lg text-slate-700 leading-relaxed">
-                {park.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {park.features && park.features.map((feature, fIdx) => (
-                  <span key={fIdx} className="inline-block px-2.5 py-1 bg-linear-to-r from-accent/20 to-accent/10 border border-accent/30 rounded-full text-xs md:text-sm font-semibold text-slate-700 hover:bg-accent/30 transition">
-                    {feature}
-                  </span>
-                ))}
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="tel:+918275737579"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-slate-100 text-slate-800 font-semibold hover:bg-accent/20 transition"
-                >
-                  Call to Plan
-                </Link>
+              <div
+                className={`space-y-3 md:space-y-4 order-2 px-5 md:px-8 py-6 md:py-8 self-center ${idx % 2 === 1 ? "md:order-1" : "md:order-2"
+                  }`}
+              >
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 text-slate-600 text-xs font-bold uppercase tracking-wide">
+                  Featured Experience
+                </div>
+                <h2 className="text-3xl md:text-5xl font-bold text-slate-900 leading-tight font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                  {park.name}
+                </h2>
+                <p className="text-base md:text-lg text-slate-700 leading-relaxed font-normal">
+                  {park.description}
+                </p>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {park.features && park.features.map((feature, fIdx) => (
+                    <span key={fIdx} className="inline-block px-3 py-1 bg-amber-50 border border-amber-300/60 rounded-full text-xs md:text-sm font-semibold text-slate-800 hover:bg-amber-100 transition">
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-3 pt-3">
+                  {park.href ? (
+                    <Link
+                      href={park.href}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-amber-400 text-slate-950 font-bold text-sm uppercase tracking-wider hover:bg-amber-500 transition shadow-md"
+                    >
+                      View Accommodation Stay
+                    </Link>
+                  ) : null}
+                  <Link
+                    href="tel:+918605362212"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
+                  >
+                    Call to Plan
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         ))}
       </section>
     </main>
-  )
-}
+  );
+};
 
-export default ParkPage
+export default ParkPage;

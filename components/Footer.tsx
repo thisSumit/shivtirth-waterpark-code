@@ -54,7 +54,7 @@ const Footer = () => {
                 aria-label="Instagram"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3a5 5 0 110 10 5 5 0 010-10zm0 2.2a2.8 2.8 0 100 5.6 2.8 2.8 0 000-5.6zM17.8 6.2a1 1 0 110 2 1 1 0 010-2z"/>
+                  <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3a5 5 0 110 10 5 5 0 010-10zm0 2.2a2.8 2.8 0 100 5.6 2.8 2.8 0 000-5.6zM17.8 6.2a1 1 0 110 2 1 1 0 010-2z" />
                 </svg>
               </a>
               <a
@@ -65,7 +65,7 @@ const Footer = () => {
                 aria-label="Facebook"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.7c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6V12h2.9l-.5 2.9h-2.4v7A10 10 0 0022 12z"/>
+                  <path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.7c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6V12h2.9l-.5 2.9h-2.4v7A10 10 0 0022 12z" />
                 </svg>
               </a>
               <a
@@ -76,7 +76,7 @@ const Footer = () => {
                 aria-label="YouTube"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M23.5 6.2a3 3 0 00-2.1-2c-1.9-.5-9.4-.5-9.4-.5s-7.5 0-9.4.5a3 3 0 00-2.1 2C.1 8.1.1 12 .1 12s0 3.9.4 5.8a3 3 0 002.1 2c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 002.1-2c.4-1.9.4-5.8.4-5.8s0-3.9-.4-5.8zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z"/>
+                  <path d="M23.5 6.2a3 3 0 00-2.1-2c-1.9-.5-9.4-.5-9.4-.5s-7.5 0-9.4.5a3 3 0 00-2.1 2C.1 8.1.1 12 .1 12s0 3.9.4 5.8a3 3 0 002.1 2c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 002.1-2c.4-1.9.4-5.8.4-5.8s0-3.9-.4-5.8zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z" />
                 </svg>
               </a>
               <a
@@ -87,7 +87,7 @@ const Footer = () => {
                 aria-label="Location"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2a7 7 0 00-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/>
+                  <path d="M12 2a7 7 0 00-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
                 </svg>
               </a>
             </div>
@@ -114,7 +114,7 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h4 className="text-lg font-bold text-white mb-4">Contact</h4>
-            <ul className="space-y-3 text-slate-300">
+            <ul className="space-y-3 text-sm text-slate-300">
               <li>
                 <Link href="https://maps.app.goo.gl/yXiw1fawYjGef5co6" className="hover:text-accent transition" target="_blank" rel="noopener noreferrer">
                   Umari Dam, near Saoner, Nagpur
@@ -151,17 +151,17 @@ const Footer = () => {
             <Link href="/terms" className="hover:text-accent transition">Terms & Conditions</Link>
           </div>
           <span className="hidden md:inline">•</span>
-            <span className="text-md">
-              Created by{' '}
-              <a
-                href="https://avantula.live"
-                target="_blank"
-                rel="noreferrer"
-                className="font-bold hover:text-accent transition"
-              >
-                Avantula
-              </a>
-            </span>
+          <span className="text-md">
+            Created by{' '}
+            <a
+              href="https://avantula.live"
+              target="_blank"
+              rel="noreferrer"
+              className="font-bold hover:text-accent transition"
+            >
+              Avantula
+            </a>
+          </span>
         </div>
       </div>
     </footer>

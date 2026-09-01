@@ -156,11 +156,11 @@ const InfluencerCollab = () => {
           <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-accent blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-32 text-center md:px-8">
+        <div className="relative mx-auto max-w-7xl px-4 py-8 pt-32 text-center md:px-8">
           <p className="mb-4 inline-block rounded-full border border-accent/40 bg-accent/20 px-4 py-2 font-semibold text-accent">
             Creator Partnership Program
           </p>
-          <h1 className="mb-6 text-4xl font-black uppercase leading-tight md:text-6xl">
+          <h1 className="mb-6 text-2xl font-bold uppercase leading-tight md:text-3xl font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
             Join The Shivtirth
             <br />
             Influencer Family
@@ -172,8 +172,11 @@ const InfluencerCollab = () => {
       <section className="px-4 pb-12 pt-6 md:px-8">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 lg:grid-cols-3">
 
-          <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="space-y-8 rounded-3xl border border-slate-100 bg-white p-6 shadow-lg md:p-8">
+          <div className="lg:col-span-2 lg:col-start-1 lg:col-end-4 flex justify-center">
+            <form
+              onSubmit={handleSubmit}
+              className="w-full max-w-3xl space-y-8 rounded-3xl border border-slate-100 bg-white p-6 shadow-lg md:p-8"
+            >
               <h3 className="text-2xl font-black">Collaboration Request Form</h3>
 
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2">

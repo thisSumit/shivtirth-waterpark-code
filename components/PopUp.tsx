@@ -64,75 +64,156 @@ const PopUp: React.FC<PopUpProps> = ({ onClose }) => {
   if (!isClient || !isVisible) return null
 
   return (
-    <div className="fixed inset-0 z-1000 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      {/* Overlay */}
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
-        onClick={handleClose}
-      />
+    <>
+      <style jsx>{`
+        @keyframes overlayFade {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
 
-      {/* Modal Card */}
-      <div className="relative bg-white rounded-3xl shadow-2xl w-[min(82vw,560px)] max-h-[80vh] overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden animate-in fade-in zoom-in-95 duration-500">
-        {/* Top Gradient - Yellow accent */}
-        <div className="absolute top-0 left-0 right-0 h-3 bg-accent" />
+        @keyframes revealOpen {
+          0% {
+            opacity: 0;
+            transform: translateY(16px) scaleY(0.15) scaleX(0.8);
+            clip-path: inset(50% 0 50% 0 round 26px);
+          }
+          35% {
+            opacity: 0.9;
+            transform: translateY(4px) scaleY(0.6) scaleX(0.96);
+            clip-path: inset(18% 0 18% 0 round 24px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scaleY(1) scaleX(1);
+            clip-path: inset(0 0 0 0 round 26px);
+          }
+        }
 
-        {/* Close Button */}
-        <button
+        @keyframes revealImage {
+          0% {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes revealButton {
+          0% {
+            opacity: 0;
+            transform: translateY(18px) scale(0.97);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes revealCloseButton {
+          0% {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .popup-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.62);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          animation: overlayFade 0.5s ease-out both;
+        }
+
+        .popup-dialog {
+          position: relative;
+          width: min(82vw, 560px);
+          max-height: 80vh;
+          overflow: hidden;
+          border-radius: 28px;
+          background: white;
+          box-shadow: 0 35px 90px rgba(15, 23, 42, 0.4);
+          animation: revealOpen 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+          transform-origin: center center;
+        }
+
+        .popup-image-wrap {
+          opacity: 0;
+          animation: revealImage 0.45s ease-out 0.55s forwards;
+        }
+
+        .popup-button-wrap {
+          opacity: 0;
+          animation: revealButton 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+        }
+
+        .popup-close-btn {
+          opacity: 0;
+          animation: revealCloseButton 0.35s ease-out 0.68s forwards;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .popup-overlay,
+          .popup-dialog,
+          .popup-image-wrap,
+          .popup-button-wrap,
+          .popup-close-btn {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
+        }
+      `}</style>
+
+      <div className="fixed inset-0 z-1000 flex items-center justify-center p-4">
+        <div
+          className="popup-overlay"
           onClick={handleClose}
-          className="absolute top-6 right-6 z-10 bg-white/90 hover:bg-white text-black p-2 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-110"
-          aria-label="Close popup"
-        >
-          <X size={24} strokeWidth={2.5} />
-        </button>
+        />
 
-        {/* Content */}
-        <div className="p-4 md:p-3 text-center">
-          {/* Image Section */}
-          <div className="mb-4 flex justify-center">
-            <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl shadow-xl">
-              <Image
-                src={popupData.imageUrl}
-                alt="Shivtirth Water Park"
-                fill
-                className="object-cover"
-                priority
-              />
+        <div className="popup-dialog relative overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="absolute top-0 left-0 right-0 h-3 bg-accent" />
+
+          <button
+            onClick={handleClose}
+            className="popup-close-btn absolute top-6 right-6 z-10 bg-white/90 hover:bg-white text-black p-2 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-110"
+            aria-label="Close popup"
+          >
+            <X size={24} strokeWidth={2.5} />
+          </button>
+
+          <div className="p-1 text-center">
+            <div className="popup-image-wrap mb-1 flex justify-center">
+              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl shadow-xl">
+                <Image
+                  src={popupData.imageUrl}
+                  alt="Shivtirth Water Park"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+
+            <div className="popup-button-wrap">
+              <InteractiveHoverButton
+                href={"/offers"}
+                onClick={handleClose}
+                className="inline-block w-full"
+              >
+                Book Now
+              </InteractiveHoverButton>
             </div>
           </div>
-
-          {/* Title */}
-          <h2 className="text-xl md:text-xl font-black text-black mb-2 leading-tight">
-            {popupData.title}
-          </h2>
-
-          {/* Divider - Yellow */}
-          <div className="w-20 h-1 bg-accent rounded-full mx-auto mb-6" />
-
-          {/* Highlight with yellow dot */}
-          <div className="bg-accent rounded-xl p-3 mb-4">
-            <p className="text-xs md:text-xs font-bold text-black flex items-center justify-center gap-2">
-              <span className="inline-block w-3 h-3 bg-accent rounded-full" />
-              {popupData.description}
-              <span className="inline-block w-3 h-3 bg-accent rounded-full" />
-            </p>
-          </div>
-
-          {/* Button */}
-          <InteractiveHoverButton
-            href={"/offers"}
-            onClick={handleClose}
-            className="inline-block w-full"
-          >
-            Book Now
-          </InteractiveHoverButton>
-
-          {/* Footer Text */}
-          <p className="text-xs text-slate-500 text-center mt-4">
-            Terms and conditions apply.
-          </p>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

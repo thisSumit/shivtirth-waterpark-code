@@ -1,12 +1,13 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from 'next/image';
+import Link from 'next/link';
 import type { Metadata } from "next";
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
+import { BadgeCheck, Sparkles, Tag } from 'lucide-react';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder-project-id.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key'
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder-project-id.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type Package = {
   name: string;
@@ -45,9 +46,9 @@ type TicketOption = {
 };
 
 export const metadata: Metadata = {
-  title: "Latest Offers | Shivtirth Water Park",
+  title: "Latest Offers & Packages | Shivtirth Water Park",
   description:
-    "Discover exclusive offers at Shivtirth Water Park including Tadka Thursday, Exam Offer, Student Offer, and Ladies Special. Book now and save big!",
+    "Discover exclusive offers at Shivtirth Water Park including Monsoon Picnic, Ladies Special, and Combo Packages. Book now for maximum savings!",
   keywords: [
     "shivtirth water park offers",
     "water park offers nagpur",
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
     "ladies special water park",
   ],
   openGraph: {
-    title: "Exclusive Offers at Shivtirth Water Park",
+    title: "Exclusive Offers & Packages at Shivtirth Water Park",
     description:
       "Special deals for students, families, and groups. Enjoy Waterpark + Amusement + Adventure with huge discounts.",
     siteName: "Shivtirth Water Park",
@@ -89,7 +90,7 @@ const defaultOffers = [
     image: '/offers/banner3.jpeg',
     alt: 'Ladies special offer at Shivtirth Water Park',
     highlight: '🎟️ Ladies Only',
-    description: '',
+    description: 'Special group offer for a memorable day out with friends.',
     oldPrice: '₹790',
     newPrice: '₹550',
     badge: 'अपनी सहेलियों के साथ, एक यादगार दिन।',
@@ -133,7 +134,7 @@ const defaultPackages = [
     originalPrice: "₹1280",
     discountedPrice: "₹890",
     tag: "Best Value",
-    description: "Waterpark Package + Boating Park Package Activities- The perfect combination for exciting fun",
+    description: "Waterpark Package + Boating Park Package Activities - The perfect combination for exciting fun",
     inclusions: ["All Water Park activities", "All Boating rides (7 rides)", "Full day access"],
     cta: "Book Silver Combo",
     link: '/billing?planId=silver-combo',
@@ -147,7 +148,7 @@ const defaultPackages = [
     discountedPrice: "₹1190",
     tag: "Premium",
     description: "Complete Enjoyment with Tasty Food",
-    inclusions: ["Waterpark Package", "Boating Package", "Food-(Breakfast, Lunch, Hi-Tea)"],
+    inclusions: ["Waterpark Package", "Boating Package", "Food - (Breakfast, Lunch, Hi-Tea)"],
     cta: "Book Golden Package",
     link: '/billing?planId=golden-package',
     singlePrice: null,
@@ -163,7 +164,7 @@ const defaultAccommodation = [
     discountedPrice: "₹2500",
     tag: "Ultimate Stay",
     description: "Extended stay with overnight camping experience & farmhouse stay options",
-    inclusions: ["Waterpark + Boating", "Stay Facilities- Camping stay / Farm House", "2 Meals included", "Bonfire & activities", "Breakfast next day"],
+    inclusions: ["Waterpark + Boating", "Stay Facilities - Camping stay / Farm House", "2 Meals included", "Bonfire & activities", "Breakfast next day"],
     cta: "Book Stay Package",
     link: '/billing?planId=stay-package',
     singlePrice: null,
@@ -173,12 +174,12 @@ const defaultAccommodation = [
 
 const page = async () => {
   const resolveBillingLink = (planId: string | undefined, groupPrice?: number | null) => {
-    const link = planId ? `/billing?planId=${encodeURIComponent(planId)}` : '/billing'
+    const link = planId ? `/billing?planId=${encodeURIComponent(planId)}` : '/billing';
 
-    if (groupPrice == null) return link
-    const separator = link.includes('?') ? '&' : '?'
-    return `${link}${separator}groupPrice=${groupPrice}`
-  }
+    if (groupPrice == null) return link;
+    const separator = link.includes('?') ? '&' : '?';
+    return `${link}${separator}groupPrice=${groupPrice}`;
+  };
 
   let offerCards: OfferCard[] = [];
   let packageCards: Package[] = [];
@@ -285,90 +286,103 @@ const page = async () => {
   }
 
   return (
-    <main className="min-h-screen bg-linear-to-b from-slate-50 via-white to-slate-50 text-slate-900 pb-24">
+    <main className="min-h-screen bg-gradient-to-b from-cyan-950 via-slate-950 to-cyan-950 text-slate-100 pb-24">
       {/* Hero */}
-      <div className="relative overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
+      <div className="relative overflow-hidden bg-gradient-to-br from-cyan-950 via-slate-900 to-cyan-950 text-white border-b border-cyan-900/50">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-400 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-8 text-center">
-          <h1 className="inline-block px-4 py-2 rounded-full bg-accent/20 border border-accent/40 text-accent font-semibold mb-4 text-lg uppercase tracking-wider">
-            Offers & Packages
-          </h1>
-          {/* <h1 className="text-4xl uppercase md:text-6xl font-black mb-6 leading-tight">
-            Shivtirth Water Park<br className="hidden md:block" /> Best Deals & Discounts
+        <div className="relative max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-12 text-center">
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 font-bold mb-3 text-xs uppercase tracking-widest backdrop-blur-md">
+            <Tag className="w-3.5 h-3.5" /> Offers & Packages
+          </span>
+          {/* <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-md font-times uppercase tracking-wide mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            Shivtirth Best Deals & Ticket Packages
           </h1> */}
-          <p className="text-md font-medium text-slate-300">
+          <p className="text-xs md:text-sm font-normal text-slate-300 max-w-3xl mx-auto leading-relaxed">
             WATER PARK PACKAGE | ONLY BOATING PACKAGE | SILVER COMBO PACKAGE | GOLDEN FULL PACKAGE | DAY & NIGHT STAY PACKAGE | MEAL PACKAGE | FUNCTION PACKAGE
           </p>
         </div>
       </div>
 
-      {/* Special Offers Grid */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
+      {/* Special Offers Section */}
+      <section className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+        <div className="text-center mb-8">
+          <p className="text-xs font-bold uppercase tracking-widest text-amber-400">Featured Deals</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white font-times uppercase" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            Limited-Time Special Offers
+          </h2>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {offerCards.map((offer) => (
             <Link
               key={offer.title}
               href={offer.link}
               aria-label={offer.cta}
-              className="group flex h-full flex-col bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-lg transition"
+              className="group flex h-full flex-col bg-slate-900/90 rounded-2xl border border-slate-800 shadow-xl overflow-hidden hover:border-amber-400/60 transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="relative aspect-[3/2] overflow-hidden bg-slate-100">
+              <div className="relative aspect-[16/9] overflow-hidden bg-slate-950">
                 <Image
                   src={offer.image}
                   alt={offer.alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+                {offer.badge && (
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-bold shadow-md">
+                    {offer.badge}
+                  </div>
+                )}
               </div>
 
-              <div className="p-6 flex flex-1 flex-col">
-                {/* <p className="inline-block mb-3 rounded-full bg-accent/15 border border-accent/40 px-3 py-1 text-sm font-semibold max-w-fit">
-                  {offer.badge}
-                </p> */}
-                <h2 className="text-2xl font-black mb-2">{offer.title}</h2>
-                <p className="font-bold mb-2">{offer.highlight}</p>
-                <p className="text-slate-600 mb-4 text-sm">{offer.description}</p>
+              <div className="p-5 flex flex-1 flex-col justify-between text-white">
+                <div>
+                  <h3 className="text-xl md:text-2xl font-bold font-times mb-1 text-white" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                    {offer.title}
+                  </h3>
+                  <p className="font-bold text-amber-400 mb-1 text-xs md:text-sm">{offer.highlight}</p>
+                  <p className="text-slate-300 mb-3 text-xs md:text-sm leading-relaxed">{offer.description}</p>
 
-                {offer.groupPrice ? (
-                  <div className="space-y-1 mb-4">
-                    <div className="flex items-end gap-3">
-                      <span className="text-2xl font-medium text-slate-900">₹{offer.groupPrice}</span>
-                      <span className="text-xs font-bold text-slate-500 mb-1">per person (Group)</span>
-                      {!!offer.oldPrice && <span className="text-slate-400 line-through text-lg mb-0.5">{offer.oldPrice}</span>}
+                  {/* Pricing Box - High Visibility */}
+                  {offer.groupPrice ? (
+                    <div className="space-y-1 mb-4 bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                      <div className="flex items-end gap-2.5">
+                        <span className="text-2xl font-bold text-amber-400">₹{offer.groupPrice}</span>
+                        <span className="text-xs font-semibold text-amber-300/90 mb-1">per person (Group)</span>
+                        {!!offer.oldPrice && <span className="text-slate-400 line-through text-base mb-0.5">{offer.oldPrice}</span>}
+                      </div>
+                      {offer.singlePrice && (
+                        <p className="text-xs font-medium text-slate-300">Single Entry Price: ₹{offer.singlePrice}</p>
+                      )}
                     </div>
-                    {offer.singlePrice && (
-                      <p className="text-xs font-semibold text-slate-600">Single Entry Price: ₹{offer.singlePrice}</p>
-                    )}
-                  </div>
-                ) : (
-                  !!offer.newPrice && (
-                    <div className="flex items-end gap-3 mb-4">
-                      {!!offer.oldPrice && <span className="text-slate-400 line-through text-xl">{offer.oldPrice}</span>}
-                      <span className="text-2xl font-medium text-slate-900">{offer.newPrice}</span>
+                  ) : (
+                    !!offer.newPrice && (
+                      <div className="flex items-end gap-3 mb-4 bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                        <span className="text-2xl font-bold text-amber-400">{offer.newPrice}</span>
+                        {!!offer.oldPrice && <span className="text-slate-400 line-through text-base mb-0.5">{offer.oldPrice}</span>}
+                      </div>
+                    )
+                  )}
+
+                  {offer.title.includes('LADKI BAHIN') && (
+                    <div className="rounded-xl bg-amber-400/10 border border-amber-400/30 p-3 mb-4 text-xs text-amber-200 space-y-1">
+                      <p>• Waterpark + Amusement + Adventure (3 Parks = 1 Ticket)</p>
+                      <p>• Complimentary Welcome Drink</p>
+                      <p>• Group Offer: ₹550 per person</p>
+                      <p>• Perfect for friends&apos; day out</p>
                     </div>
-                  )
-                )}
+                  )}
+                </div>
 
-                {offer.title.includes('LADKI BAHIN') && (
-                  <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 mb-4 text-xs text-slate-700 space-y-1">
-                    <p>• Waterpark + Amusement + Adventure (3 Parks = 1 Ticket) </p>
-                    <p>• Complimentary Welcome Drink</p>
-                    <p>• Group Offer: ₹550 per person</p>
-                    <p>• Perfect for friends&apos; day out</p>
-                  </div>
-                )}
-
-                {/* {offer.footer && <p className="text-sm text-slate-500 mb-4">{offer.footer}</p>} */}
-
-                <div className="mt-auto pt-2">
-                  <span className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 font-bold text-black group-hover:opacity-90 transition">
+                <div className="px-5 pb-5 pt-1 text-slate-900">
+                  <InteractiveHoverButton>
                     BUY TICKETS
-                  </span>
+                  </InteractiveHoverButton>
                 </div>
               </div>
             </Link>
@@ -376,15 +390,18 @@ const page = async () => {
         </div>
       </section>
 
-      {/* Explore Packages Section */}
-      <section className="md:px-8 py-10 bg-slate-50/50 border-y border-slate-100">
+      {/* Standard Packages Section */}
+      <section className="py-12 bg-gradient-to-b from-slate-950/60 via-cyan-950/40 to-slate-950/60 border-y border-slate-800">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-black uppercase">Standard Packages</h2>
-          <p className="text-slate-600 text-sm">We have the perfect packages to match your plan and budget.</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-amber-400">All-Inclusive Packages</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white font-times uppercase" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            Standard Entry Packages
+          </h2>
+          <p className="text-slate-300 text-xs md:text-sm mt-1 max-w-xl mx-auto">Choose the perfect package to match your family plan and budget.</p>
         </div>
 
         <div id="packages-list" className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {packageCards.map((pkg) => {
               const originalVal = pkg.originalPrice ? parseInt(pkg.originalPrice.replace(/[^\d]/g, '')) : 0;
               const discountedVal = pkg.discountedPrice ? parseInt(pkg.discountedPrice.replace(/[^\d]/g, '')) : 0;
@@ -395,66 +412,67 @@ const page = async () => {
                 <Link
                   key={pkg.name}
                   href={pkg.link || "#"}
-                  className="group relative rounded-3xl overflow-hidden bg-white shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between"
+                  className="group relative rounded-2xl overflow-hidden bg-slate-900/90 border border-slate-800 shadow-xl hover:border-amber-400/60 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
                 >
                   <div>
                     {pkg.tag && (
-                      <div className="absolute top-4 right-4 z-10 px-4 py-1 rounded-full bg-accent text-black text-sm font-bold shadow-lg">
+                      <div className="absolute top-3 right-3 z-10 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-bold shadow-md">
                         {pkg.tag}
                       </div>
                     )}
 
-                    <div className="relative h-56 overflow-hidden bg-slate-200">
+                    <div className="relative h-48 overflow-hidden bg-slate-950">
                       <Image
                         src={pkg.image}
                         alt={pkg.name}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/10 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
                     </div>
 
-                    <div className="p-6">
-                      <h3 className="text-2xl font-black mb-2">{pkg.name}</h3>
-                      <p className="text-slate-600 mb-4 text-xs leading-relaxed">{pkg.description}</p>
+                    <div className="p-5 text-white">
+                      <h3 className="text-xl font-bold font-times mb-1 text-white" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                        {pkg.name}
+                      </h3>
+                      <p className="text-slate-300 mb-3 text-xs leading-relaxed">{pkg.description}</p>
 
-                      {pkg.groupPrice ? (
-                        <div className="space-y-1 mb-4">
-                          <div className="flex items-end gap-3">
-                            <div className="text-2xl font-black text-slate-900">₹{pkg.groupPrice}</div>
-                            <span className="text-xs font-bold text-slate-500 mb-1">per person (Group)</span>
-                            {pkg.originalPrice && <div className="text-xl text-slate-400 line-through mb-1">{pkg.originalPrice}</div>}
-                          </div>
-                          {pkg.singlePrice && (
-                            <p className="text-xs font-semibold text-slate-600">Single Entry Price: ₹{pkg.singlePrice}</p>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="flex items-end gap-3 mb-4">
-                          <div className="text-2xl font-medium text-slate-900">{pkg.discountedPrice}</div>
-                          {pkg.originalPrice && <div className="text-xl text-slate-400 line-through mb-1">{pkg.originalPrice}</div>}
-                          {hasSavings && (
-                            <div className="text-sm font-bold text-green-600 mb-1">
-                              Save {savingsPercent}%
+                      {/* Pricing Box */}
+                      <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 mb-4">
+                        {pkg.groupPrice ? (
+                          <div className="space-y-0.5">
+                            <div className="flex items-end gap-2">
+                              <div className="text-2xl font-bold text-amber-400">₹{pkg.groupPrice}</div>
+                              <span className="text-xs font-semibold text-amber-300/90 mb-0.5">per person (Group)</span>
+                              {pkg.originalPrice && <div className="text-sm text-slate-400 line-through mb-0.5">{pkg.originalPrice}</div>}
                             </div>
-                          )}
-                        </div>
-                      )}
-
-                      <p className="text-xs text-slate-500 mb-4">Per person pricing</p>
-
-                      <div className="mb-2 rounded-lg">
-                        <p className="text-xs font-bold text-slate-900">Package Includes</p>
-                        {/* {pkg.name.includes("Water Park") && <p className="text-xs text-slate-600">✓ Best for water lovers</p>}
-                        {pkg.name.includes("Boating") && <p className="text-xs text-slate-600">✓ Perfect for thrill seekers</p>}
-                        {pkg.name.includes("Silver") && <p className="text-xs text-slate-600">✓ Water + Boating combo • Maximum fun</p>}
-                        {pkg.name.includes("Golden") && <p className="text-xs text-slate-600">✓ Meals included • Best for families</p>} */}
+                            {pkg.singlePrice && (
+                              <p className="text-[11px] font-medium text-slate-300">Single Entry: ₹{pkg.singlePrice}</p>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-end gap-2">
+                            <div className="text-2xl font-bold text-amber-400">{pkg.discountedPrice}</div>
+                            {pkg.originalPrice && <div className="text-sm text-slate-400 line-through mb-0.5">{pkg.originalPrice}</div>}
+                            {hasSavings && (
+                              <div className="text-[11px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30 mb-0.5">
+                                Save {savingsPercent}%
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <p className="text-[10px] text-slate-400 mt-1">Per person pricing</p>
                       </div>
 
-                      <ul className="space-y-2 mb-6">
+                      {/* Inclusions */}
+                      <div className="mb-2">
+                        <p className="text-xs font-bold text-amber-300 uppercase tracking-wide">Package Includes</p>
+                      </div>
+
+                      <ul className="space-y-1.5 mb-4">
                         {pkg.inclusions.map((item) => (
-                          <li key={item} className="flex items-start gap-2 text-sm text-slate-600">
-                            <span className="text-accent text-lg">✓</span>
+                          <li key={item} className="flex items-start gap-2 text-xs text-slate-200">
+                            <span className="text-amber-400 font-bold">✓</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -462,7 +480,7 @@ const page = async () => {
                     </div>
                   </div>
 
-                  <div className="px-6 pb-6 pt-2">
+                  <div className="px-5 pb-5 pt-1 text-slate-900">
                     <InteractiveHoverButton>
                       BUY TICKETS
                     </InteractiveHoverButton>
@@ -474,15 +492,18 @@ const page = async () => {
         </div>
       </section>
 
-      {/* Stay & Accommodation Packages Section */}
+      {/* Stay & Accommodation Section */}
       {accommodationCards.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-black uppercase">Stay & Accommodation Packages</h2>
-            <p className="text-slate-600 text-sm">Extend your stay with peaceful campfire nights and luxury camping accommodations</p>
+        <section className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+          <div className="text-center mb-8">
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-400">Overnight Experience</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white font-times uppercase" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              Stay & Accommodation Packages
+            </h2>
+            <p className="text-slate-300 text-xs md:text-sm mt-1">Extend your stay with peaceful campfire nights and luxury camping accommodations</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
             {accommodationCards.map((pkg) => {
               const originalVal = pkg.originalPrice ? parseInt(pkg.originalPrice.replace(/[^\d]/g, '')) : 0;
               const discountedVal = pkg.discountedPrice ? parseInt(pkg.discountedPrice.replace(/[^\d]/g, '')) : 0;
@@ -493,49 +514,52 @@ const page = async () => {
                 <Link
                   key={pkg.name}
                   href={pkg.link || "#"}
-                  className="group relative rounded-3xl overflow-hidden bg-white shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between mx-auto w-full"
+                  className="group relative rounded-2xl overflow-hidden bg-slate-900/90 border border-slate-800 shadow-xl hover:border-amber-400/60 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between mx-auto w-full"
                 >
                   <div>
                     {pkg.tag && (
-                      <div className="absolute top-4 right-4 z-10 px-4 py-1 rounded-full bg-accent text-black text-sm font-bold shadow-lg">
+                      <div className="absolute top-3 right-3 z-10 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-bold shadow-md">
                         {pkg.tag}
                       </div>
                     )}
 
-                    <div className="relative h-56 overflow-hidden bg-slate-200">
+                    <div className="relative h-48 overflow-hidden bg-slate-950">
                       <Image
                         src={pkg.image}
                         alt={pkg.name}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/10 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
                     </div>
 
-                    <div className="p-6">
-                      <h3 className="text-2xl font-black mb-2">{pkg.name}</h3>
-                      <p className="text-slate-600 mb-4 text-xs leading-relaxed">{pkg.description}</p>
+                    <div className="p-5 text-white">
+                      <h3 className="text-xl font-bold font-times mb-1 text-white" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                        {pkg.name}
+                      </h3>
+                      <p className="text-slate-300 mb-3 text-xs leading-relaxed">{pkg.description}</p>
 
-                      <div className="flex items-end gap-3 mb-4">
-                        <div className="text-2xl font-medium text-slate-900">{pkg.discountedPrice}</div>
-                        {pkg.originalPrice && <div className="text-xl text-slate-400 line-through mb-1">{pkg.originalPrice}</div>}
-                        {hasSavings && (
-                          <div className="text-sm font-bold text-green-600 mb-1">
-                            Save {savingsPercent}%
-                          </div>
-                        )}
+                      <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 mb-4">
+                        <div className="flex items-end gap-2">
+                          <div className="text-2xl font-bold text-amber-400">{pkg.discountedPrice}</div>
+                          {pkg.originalPrice && <div className="text-sm text-slate-400 line-through mb-0.5">{pkg.originalPrice}</div>}
+                          {hasSavings && (
+                            <div className="text-[11px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30 mb-0.5">
+                              Save {savingsPercent}%
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-slate-400 mt-1">Per person / night pricing</p>
                       </div>
 
-                      <p className="text-xs text-slate-500 mb-4">Per person / night pricing</p>
-
-                      <div className="mb-2 rounded-lg">
-                        <p className="text-xs font-bold text-slate-900">Package Includes</p>
+                      <div className="mb-2">
+                        <p className="text-xs font-bold text-amber-300 uppercase tracking-wide">Package Includes</p>
                       </div>
 
-                      <ul className="space-y-2 mb-6">
+                      <ul className="space-y-1.5 mb-4">
                         {pkg.inclusions.map((item) => (
-                          <li key={item} className="flex items-start gap-2 text-sm text-slate-600">
-                            <span className="text-accent text-lg">✓</span>
+                          <li key={item} className="flex items-start gap-2 text-xs text-slate-200">
+                            <span className="text-amber-400 font-bold">✓</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -543,7 +567,7 @@ const page = async () => {
                     </div>
                   </div>
 
-                  <div className="px-6 pb-6 pt-2">
+                  <div className="px-5 pb-5 pt-1 text-slate-900">
                     <InteractiveHoverButton>
                       BUY TICKETS
                     </InteractiveHoverButton>
@@ -554,12 +578,6 @@ const page = async () => {
           </div>
         </section>
       )}
-
-      {/* <div className="mt-8 text-center">
-        <Link href="/packages" className="inline-flex items-center rounded-full border border-slate-300 px-6 py-3 font-bold text-slate-800 hover:bg-slate-100 transition shadow-xs">
-          View Detailed Package Table
-        </Link>
-      </div> */}
     </main>
   );
 };

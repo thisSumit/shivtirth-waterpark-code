@@ -11,8 +11,8 @@ export type SiteSettings = {
 
 export const defaultSettings: SiteSettings = {
   whatsappNumber: "+91 82757 37579",
-  contactPhone: "+91 82757 37577",
-  contactEmail: "info@shivtirth.com",
+  contactPhone: "+91 8605362212",
+  contactEmail: "shivtirthtourism@gmail.com",
 };
 
 export function useSiteSettings() {

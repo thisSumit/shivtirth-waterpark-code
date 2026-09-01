@@ -77,23 +77,23 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "TouristAttraction",
-      "name": "Shivtirth Best Water Park",
-      "description":
-        "Best water park in Nagpur offering thrilling water slides, boating, dining and camping.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Nagpur, Chandrapur, Bhandara, Gadchiroli, Wardha, Yavatmal, Umred, Saoner",
-        "addressRegion": "MH",
-        "addressCountry": "IN",
-      },
-    }),
-  }}
-/>
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "TouristAttraction",
+              "name": "Shivtirth Best Water Park",
+              "description":
+                "Best water park in Nagpur offering thrilling water slides, boating, dining and camping.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Nagpur, Chandrapur, Bhandara, Gadchiroli, Wardha, Yavatmal, Umred, Saoner",
+                "addressRegion": "MH",
+                "addressCountry": "IN",
+              },
+            }),
+          }}
+        />
 
       </head>
       <body
