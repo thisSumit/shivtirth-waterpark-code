@@ -158,7 +158,7 @@ const WaterParkPage = () => {
 
       <InteractiveHoverButton
         href={'/offers'}
-        className='flex fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold'
+        className='text-slate-900 flex fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold'
       >
         BOOK NOW
       </InteractiveHoverButton>
@@ -248,7 +248,7 @@ const WaterParkPage = () => {
             <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Frequently Asked Questions
             </h3>
-            <Accordion type="single" collapsible className="w-full space-y-2">
+            <Accordion type="single" collapsible className="w-full">
               {waterParkFaqs.map((faq, idx) => (
                 <AccordionItem key={idx} value={`water-faq-${idx}`} className="border-slate-200">
                   <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-cyan-600 text-left">

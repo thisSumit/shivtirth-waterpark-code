@@ -105,7 +105,7 @@ const AmusementParkPage = () => {
   ];
 
   return (
-    <main id="about-park" className="bg-gradient-to-b from-amber-950 via-slate-900 to-amber-950 text-slate-100">
+    <main id="about-park" className="bg-gradient-to-b from-[#fff95b] via-amber-800 to-[#FFBF00] text-slate-100">
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
           <Image
@@ -115,7 +115,7 @@ const AmusementParkPage = () => {
             className="object-cover object-center"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-amber-950 via-amber-950/40 to-black/60 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-amber-950 via-orange-500/10 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
@@ -138,7 +138,7 @@ const AmusementParkPage = () => {
       </InteractiveHoverButton>
 
       {/* Attractions Section - Customized Carnival Warm Gold Gradient */}
-      <section className="py-10 md:py-14 bg-gradient-to-br from-[#582f0e] via-[#7f4f24] to-[#2c1808] text-white">
+      <section className="py-10 md:py-14 bg-gradient-to-br from-[#ff930f] via-[#fbcf00] to-[#fff95b] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
@@ -222,7 +222,7 @@ const AmusementParkPage = () => {
             <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Frequently Asked Questions
             </h3>
-            <Accordion type="single" collapsible className="w-full space-y-2">
+            <Accordion type="single" collapsible className="w-full">
               {amusementFaqs.map((faq, idx) => (
                 <AccordionItem key={idx} value={`amusement-faq-${idx}`} className="border-slate-200">
                   <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-amber-700 text-left">

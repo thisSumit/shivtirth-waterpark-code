@@ -246,7 +246,7 @@ const BoatingParkPage = () => {
             <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Frequently Asked Questions
             </h3>
-            <Accordion type="single" collapsible className="w-full space-y-2">
+            <Accordion type="single" collapsible className="w-full">
               {boatingFaqs.map((faq, idx) => (
                 <AccordionItem key={idx} value={`boating-faq-${idx}`} className="border-slate-200">
                   <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-teal-600 text-left">
