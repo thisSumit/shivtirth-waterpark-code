@@ -7,11 +7,6 @@ const Logos = () => {
         <p className="text-xs uppercase tracking-[0.2em] text-black">Approved & Certified by</p>
         <div className="flex flex-wrap items-center justify-center gap-4 md:gap-10">
           <img
-            src="/mah.png"
-            alt="Maharashtra Tourism"
-            className="h-12 md:h-18 w-auto object-contain"
-          />
-          <img
             src="/lokmat.png"
             alt="ISO Certification"
             className="h-12 md:h-18 w-auto object-contain"

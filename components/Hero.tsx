@@ -154,7 +154,7 @@ const Hero = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-xs md:text-sm px-1 text-slate-200"
+                className="text-sm px-1 text-slate-200"
               >
                 {item.name} |
               </a>
