@@ -29,7 +29,7 @@ const CommonFR = () => {
         subtitle="Everything you need for a comfortable, safe, and enjoyable visit."
       />
 
-      <div className="mt-6 rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-cyan-100">
+      <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-cyan-100">
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {facilities.map((facility) => (
             <li

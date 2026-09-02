@@ -20,15 +20,9 @@ const FAQ = () => {
               Why do people love Shivtirth Water Park?
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-slate-600">
-              <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed">
-                <li>Very reasonable pricing starting from ₹690.</li>
-                <li>Government-authorized and ISO-certified picnic center.</li>
-                <li>All enjoyments under one roof.</li>
-                <li>Satpuda nature-based picnic spot on a hill station surrounded by dam, forest, and valley views.</li>
-                <li>National Highway touch location, just 47 km from Nagpur.</li>
-                <li>Strong priority on safety and quality.</li>
-                <li>Experienced and helpful staff support.</li>
-              </ul>
+              <p>
+               All enjoyments under one roof, in reasonable rates, with many facilities and specialities.
+              </p>
             </AccordionContent>
           </AccordionItem>
 
@@ -38,7 +32,7 @@ const FAQ = () => {
             </AccordionTrigger>
             <AccordionContent className="text-slate-600 text-sm leading-relaxed">
               <p>
-                Shivtirth Water Park is located at Umari Dam, near Saoner, Nagpur, surrounded by the scenic Satpuda mountains for a refreshing escape into nature.
+                Shivtirth Water Park is located at Umari Dam, near Saoner, Nagpur, on Nagpur Pandhurna/Baitul Highway, 47 km from Nagpur, surrounded by the scenic Satpuda mountains for a refreshing escape into nature.
               </p>
             </AccordionContent>
           </AccordionItem>

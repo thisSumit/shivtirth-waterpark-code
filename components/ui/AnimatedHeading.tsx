@@ -69,14 +69,14 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
   };
 
   return (
-    <div className={cn("flex flex-col mb-6", alignClass, className)}>
+    <div className={cn("flex flex-col mb-2", alignClass, className)}>
       <motion.h2
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         className={cn(
-          "text-2xl md:text-3xl font-bold uppercase tracking-tight text-slate-900 font-times",
+          "text-2xl md:text-3xl font-bold uppercase tracking-tight text-[#288382] font-times",
           titleClassName
         )}
         style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}

@@ -122,7 +122,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link href={`tel:${settings.contactPhone}`} className="hover:text-accent transition">
-                  {settings.contactPhone}
+                  {settings.contactPhone} | +91 8275737579
                 </Link>
               </li>
               <li>

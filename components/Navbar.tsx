@@ -117,18 +117,19 @@ const Navbar = () => {
     { name: 'Amusement Park', href: '/amusement-park' },
     { name: 'Bird Park', href: '/bird-park' },
     { name: 'School Picnic', href: '/school-picnic' },
+    { name: 'Accommodation', href: '/accommodation' },
     { name: 'Offers & Packages', href: '/offers' },
     { name: 'Other Activities/Parks', href: '/parks-experiences', hasDropdown: true },
-    {
-      name: 'Other Links',
-      dropdownItems: [
-        { name: 'About Us', href: '/about' },
-        { name: 'Contact Us', href: '/contact' },
-        // { name: 'Accommodation', href: '/accommodation' },
-        { name: 'Influencer Collaboration', href: '/influencer-collab' },
-        { name: 'Gallery', href: 'https://www.instagram.com/shivtirthbestwaterpark/' },
-      ],
-    },
+    // {
+    //   name: 'Other Links',
+    //   dropdownItems: [
+    //     { name: 'About Us', href: '/about' },
+    //     { name: 'Contact Us', href: '/contact' },
+    //     // { name: 'Accommodation', href: '/accommodation' },
+    //     { name: 'Influencer Collaboration', href: '/influencer-collab' },
+    //     { name: 'Gallery', href: 'https://www.instagram.com/shivtirthbestwaterpark/' },
+    //   ],
+    // },
   ];
 
   const scrollingMessages = [

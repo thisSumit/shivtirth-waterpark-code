@@ -19,12 +19,12 @@ const specialties = [
   { text: 'Surrounded by dam valley and forest', icon: CheckCircle2 },
 ];
 
-const Speciallity = () => {
+const CommonRules = () => {
   return (
     <section className="mx-auto max-w-6xl px-4 py-8">
       <AnimatedHeading
-        title="Our Speciality"
-        subtitle="A unique blend of fun, nature, and trusted hospitality that makes every visit unforgettable."
+        title="Common Rules & Regulations"
+        subtitle="Follow the Rules & Regulations for a Safe and Enjoyable Experience at Shivtirth Water Park"
       />
 
       <ScrollReveal direction="up" delay={0.2} duration={0.5}>
@@ -56,8 +56,11 @@ const Speciallity = () => {
           })}
         </div>
       </ScrollReveal>
+      <p className="text-sm border border-black rounded-md p-2 text-slate-500">
+       Rather than above Rules and Regulations of other parks/activities are mentioned separately in their respective sections. Please read them carefully before visiting the park or participating in any activities.
+      </p>
     </section>
   );
 };
 
-export default Speciallity;
+export default CommonRules;

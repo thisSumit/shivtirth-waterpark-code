@@ -1,6 +1,7 @@
 'use client';
 import Venue from "@/components/Celebration";
 import CommonFacilitiesRules from '@/components/CommonFacilitiesRules';
+import CommonRules from "@/components/CommonRules";
 import Description from "@/components/Description";
 import FAQ from "@/components/FAQ";
 import Gallery from "@/components/Gallery";
@@ -28,6 +29,7 @@ export default function Home() {
       {/* <Venue/> */}
       {/* <Description/> */}
       <Gallery/>
+      <CommonRules/>
       
       <FAQ/>
     </main>

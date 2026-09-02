@@ -559,8 +559,33 @@ const Page = async () => {
       {/* =====================================================
           HERO
       ===================================================== */}
+      <div className="relative">
+              <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
+                <Image
+                  src="/Water-Park.jpg"
+                  alt="Water Park"
+                  fill
+                  className="object-cover object-center"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-cyan-950 via-cyan-950/40 to-black/60 pointer-events-none" />
+      
+                <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
+                  <div className="max-w-3xl text-center">
+                    <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                      Offer & Packages
+                    </h1>
+                    <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
+                      WATER PARK PACKAGE | ONLY BOATING PACKAGE | SILVER COMBO PACKAGE |
+            GOLDEN FULL PACKAGE | DAY & NIGHT STAY PACKAGE | MEAL PACKAGE |
+            FUNCTION PACKAGE
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      <div className="relative overflow-hidden bg-gradient-to-br from-cyan-950 via-slate-900 to-cyan-950 text-white border-b border-cyan-900/50">
+      {/* <div className="relative overflow-hidden bg-gradient-to-br from-cyan-950 via-slate-900 to-cyan-950 text-white border-b border-cyan-900/50">
 
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-400 rounded-full blur-3xl" />
@@ -581,7 +606,7 @@ const Page = async () => {
           </p>
 
         </div>
-      </div>
+      </div> */}
 
       {/* =====================================================
           SPECIAL OFFERS
