@@ -23,11 +23,12 @@ export default function Home() {
       {/* <OfferSection/> */}
       <Testimonials/>
       <Speciallity />
+      <CommonFacilitiesRules />
       {/* <Package/> */}
       {/* <Venue/> */}
       {/* <Description/> */}
       <Gallery/>
-      <CommonFacilitiesRules />
+      
       <FAQ/>
     </main>
   );

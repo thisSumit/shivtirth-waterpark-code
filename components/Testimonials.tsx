@@ -96,7 +96,7 @@ const Testimonials = () => {
 												{stat.value}
 											</span>
 										</div>
-										<p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-slate-600 group-hover:text-slate-900">
+										<p className="mt-1 text-sm font-semibold uppercase tracking-wider text-slate-600 group-hover:text-slate-900">
 											{stat.label}
 										</p>
 									</a>

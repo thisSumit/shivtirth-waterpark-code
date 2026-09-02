@@ -7,14 +7,15 @@ import { CheckCircle2, Award, Trees, MapPin, ShieldCheck, Mountain, Compass, Sta
 
 const specialties = [
   { text: 'All enjoyment under one roof', icon: Flame },
+  { text: 'ISO & Icons of Central India Awarded', icon: Award },
+  { text: '1st preference of people with highest rating & reviews', icon: Star },
+  { text: 'Natural Hill Station on Satpuda Mountain surrounded by Dam, Forest, Valley', icon: Mountain },
+  { text: 'Separate Zones for Fun Food & Relaxation', icon: Flame },
   { text: 'Large area spread across 150 Acres', icon: Trees },
   { text: 'Free Savari from every activity point', icon: Bus },
-  { text: '1st preference of people with highest rating & reviews', icon: Star },
   { text: 'Easily accessible on National Highway touch', icon: MapPin },
   { text: '47 km from Nagpur City', icon: Compass },
   { text: 'Government authorized tourism center', icon: ShieldCheck },
-  { text: 'ISO & Icons of Central India Awarded', icon: Award },
-  { text: 'Hill station of plateau of Satpuda Mountain', icon: Mountain },
   { text: 'Surrounded by dam valley and forest', icon: CheckCircle2 },
 ];
 
