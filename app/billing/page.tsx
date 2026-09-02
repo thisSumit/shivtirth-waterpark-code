@@ -12,9 +12,9 @@ type PackagePlan = {
 }
 
 const packagePlans: PackagePlan[] = [
-  { id: 'monsoon-picninic-hungama', name: 'Monsoon Picnic Hungama', price: 590 },
+  { id: 'monsoon-picninic-hungama', name: 'Monsoon Picnic Hungama', price: 690 },
   { id: 'ladki-bahin-special', name: 'Ladki Bahin Special Offer', price: 690, groupPrice: 550 },
-  { id: 'waterpark-package', name: 'Water Park Package', price: 590 },
+  { id: 'waterpark-package', name: 'Water Park Package', price: 690 },
   { id: 'boating-package', name: 'Boating Package', price: 690 },
   { id: 'silver-combo', name: 'Silver Combo Package', price: 890 },
   { id: 'golden-package', name: 'Golden Full Package', price: 1190 },

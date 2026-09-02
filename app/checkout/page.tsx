@@ -41,7 +41,7 @@ const plans: Plan[] = [
   //   highlight: '3 Parks in 1 Ticket',
   //   covers: ['Waterpark', 'Amusement', 'Adventure'],
   //   rules: ['3 parks in 1 ticket', 'Offer price valid for selected visit date only'],
-  //   ticketOptions: [{ id: 'regular', label: 'Entry Ticket', price: 590 }],
+  //   ticketOptions: [{ id: 'regular', label: 'Entry Ticket', price: 690 }],
   // },
   // {
   //   id: 'final-exam-offer',
@@ -69,7 +69,7 @@ const plans: Plan[] = [
   //   ],
   //   consentText: 'I confirm student is between 16–25 years and required IDs will be shown at entry.',
   //   ticketOptions: [
-  //     { id: 'single', label: 'Single Entry', price: 590 },
+  //     { id: 'single', label: 'Single Entry', price: 690 },
   //     { id: 'group', label: 'Group Entry', price: 475 },
   //   ],
   // },
@@ -81,7 +81,7 @@ const plans: Plan[] = [
     highlight: 'Free Pakoda & High Tea',
     covers: ['Waterpark access', 'Adventure park', 'Amusement park', 'Safari', 'Agro activities'],
     rules: ['Limited period offer'],
-    ticketOptions: [{ id: 'regular', label: 'Per Person', price: 590 }],
+    ticketOptions: [{ id: 'regular', label: 'Per Person', price: 690 }],
   },
   {
     id: 'ladki-bahin-special',
@@ -105,7 +105,7 @@ const plans: Plan[] = [
     highlight: 'Complete water fun package',
     covers: ['Waterpark access', 'Adventure park', 'Amusement park', 'Safari', 'Agro activities'],
     rules: ['Includes adventure + amusement + safari + agro activities'],
-    ticketOptions: [{ id: 'regular', label: 'Per Person', price: 590 }],
+    ticketOptions: [{ id: 'regular', label: 'Per Person', price: 690 }],
   },
   {
     id: 'boating-package',
@@ -235,7 +235,7 @@ const CheckoutPageContent = () => {
             consentText: item.consent_text || undefined,
             ticketOptions: Array.isArray(item.ticket_options) 
               ? item.ticket_options 
-              : [{ id: 'regular', label: 'Entry Ticket', price: Number(item.discounted_price) || 590 }],
+              : [{ id: 'regular', label: 'Entry Ticket', price: Number(item.discounted_price) || 690 }],
           }))
 
           // Merge any fallback hardcoded plans not present in database yet

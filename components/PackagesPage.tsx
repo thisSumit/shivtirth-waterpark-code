@@ -26,7 +26,7 @@ const packages: Package[] = [
     name: "Water Park Package",
     image: "/waterpark-1.jpg",
     originalPrice: "₹790",
-    discountedPrice: "₹590",
+    discountedPrice: "₹690",
     tag: "Most Popular",
     description: "Complete water park experience with adventure activities",
     inclusions: ["Waterpark access", "Adventure park & 3d show", "Amusement park", "Safari experience", "Agro activities"],

@@ -98,7 +98,7 @@ const defaultOffers: OfferCard[] = [
     description:
       '🎟️ Waterpark + Amusement + Adventure + Bird Park (1 Ticket 4 Parks)',
     oldPrice: '₹620',
-    newPrice: '₹590',
+    newPrice: '₹690',
     badge: 'Free Pakoda & High Tea',
     cta: '👉 Book Monsoon Picnic',
     link: '/billing?planId=monsoon-picninic-hungama',
@@ -135,7 +135,7 @@ const defaultPackages: Package[] = [
     name: "Water Park Package",
     image: "/waterpark-1.jpg",
     originalPrice: "₹790",
-    discountedPrice: "₹590",
+    discountedPrice: "₹690",
     tag: "Most Popular",
     description:
       "Enjoy Various Park with nature of Great Satpuda Mountain",

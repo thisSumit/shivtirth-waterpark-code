@@ -156,7 +156,7 @@ const BoatingParkPage = () => {
 
       <InteractiveHoverButton
         href={"/offers"}
-        className="flex fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold"
+        className="flex text-slate-900 fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold"
       >
         BOOK NOW
       </InteractiveHoverButton>

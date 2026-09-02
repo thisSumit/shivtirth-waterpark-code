@@ -21,7 +21,7 @@ const FAQ = () => {
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-slate-600">
               <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed">
-                <li>Very reasonable pricing starting from ₹590.</li>
+                <li>Very reasonable pricing starting from ₹690.</li>
                 <li>Government-authorized and ISO-certified picnic center.</li>
                 <li>All enjoyments under one roof.</li>
                 <li>Satpuda nature-based picnic spot on a hill station surrounded by dam, forest, and valley views.</li>

@@ -132,7 +132,7 @@ const AmusementParkPage = () => {
 
       <InteractiveHoverButton
         href={"/offers"}
-        className="flex fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold"
+        className="flex text-slate-900 fixed bottom-6 left-1/2 -translate-x-1/2 items-center z-50 px-7 py-2.5 shadow-2xl text-xs md:text-sm font-bold"
       >
         BOOK NOW
       </InteractiveHoverButton>
@@ -164,7 +164,7 @@ const AmusementParkPage = () => {
                     </div>
                   </div>
                   <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    <h3 className="text-lg md:text-xl font-bold text-amber-300 font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                    <h3 className="text-lg md:text-xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                       {slide.title}
                     </h3>
                     <p className="text-xs md:text-sm text-amber-50 leading-relaxed font-normal">{slide.description}</p>
