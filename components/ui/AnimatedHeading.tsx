@@ -99,7 +99,7 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.4, delay: 0.2 }}
           className={cn(
-            "max-w-2xl text-lg leading-relaxed text-orange-500 font-medium",
+            "max-w-2xl text-md leading-relaxed text-amber-700 font-medium",
             subtitleClassName
           )}
         >

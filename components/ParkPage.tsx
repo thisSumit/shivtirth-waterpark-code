@@ -219,7 +219,7 @@ export const ParkPage = () => {
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center">
             <div className="max-w-4xl text-center">
               <h1
-                className="text-2xl md:text-4xl font-bold text-amber-400 drop-shadow-lg uppercase tracking-wide"
+                className="text-4xl font-bold text-accent drop-shadow-lg uppercase tracking-wide"
                 style={{
                   fontFamily:
                     "'Times New Roman', Times, Georgia, serif",
@@ -228,7 +228,7 @@ export const ParkPage = () => {
                 Parks & Experiences
               </h1>
 
-              <p className="mt-2 text-xs md:text-sm text-cyan-100/90 drop-shadow-sm font-medium">
+              <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
                 Water Park | Adventure Park | Amusement Park | Agro Park |
                 Bird Park | Boating | Air Tourism | Accommodation | Events
               </p>
@@ -243,7 +243,7 @@ export const ParkPage = () => {
           {/* SECTION HEADING */}
           <ScrollReveal direction="up" delay={0.1}>
             <h2
-              className="text-2xl md:text-3xl font-bold text-white mb-2"
+              className="text-2xl font-bold text-white mb-2"
               style={{
                 fontFamily:
                   "'Times New Roman', Times, Georgia, serif",
@@ -252,7 +252,7 @@ export const ParkPage = () => {
               Parks & Experiences
             </h2>
 
-            <p className="text-cyan-100/90 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
+            <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
               Explore exciting attractions, entertainment experiences,
               adventure activities and memorable moments at Shivtirth.
             </p>
@@ -294,7 +294,7 @@ export const ParkPage = () => {
                       }`}
                   >
                     <h3
-                      className="text-lg md:text-xl font-bold text-amber-300 mb-2"
+                      className="text-2xl font-bold text-white mb-2"
                       style={{
                         fontFamily:
                           "'Times New Roman', Times, Georgia, serif",
@@ -303,7 +303,7 @@ export const ParkPage = () => {
                       {park.name}
                     </h3>
 
-                    <p className="text-xs md:text-sm text-cyan-50 leading-relaxed font-normal">
+                    <p className="text-sm text-cyan-50 leading-relaxed font-normal">
                       {park.description}
                     </p>
 
@@ -326,7 +326,7 @@ export const ParkPage = () => {
                       {park.href ? (
                         <Link
                           href={park.href}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-slate-950 font-bold text-xs md:text-sm uppercase tracking-wider hover:bg-amber-500 transition shadow-md"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-slate-950 font-bold text-sm uppercase tracking-wider hover:bg-amber-500 transition shadow-md"
                         >
                           View Accommodation Stay
                         </Link>
@@ -334,7 +334,7 @@ export const ParkPage = () => {
 
                       <Link
                         href="tel:+918605362212"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-xs md:text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
                       >
                         Call to Plan & Book
                       </Link>

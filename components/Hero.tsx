@@ -132,7 +132,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className='flex flex-wrap justify-center items-center gap-2 mt-2 text-amber-300 font-semibold text-xs md:text-sm tracking-wide'
+            className='flex flex-wrap justify-center items-center gap-2 mt-2 text-accent font-semibold text-sm tracking-wide'
           >
             <span className="bg-black/35 backdrop-blur-sm px-2.5 py-1 rounded-md border border-amber-500/30">
               Central India's Unique Picnic Spot
@@ -148,7 +148,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
-            className='text-xs md:text-sm leading-relaxed text-slate-300 max-w-2xl font-normal mt-1 tracking-normal normal-case opacity-90'
+            className='text-sm leading-relaxed text-slate-300 max-w-2xl font-normal mt-1 tracking-normal normal-case opacity-90'
           >
             {attractions.map((item) => (
               <a

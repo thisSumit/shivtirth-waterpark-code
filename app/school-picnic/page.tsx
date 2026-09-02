@@ -119,7 +119,7 @@ const SchoolPicnicPage = () => {
             <div className="max-w-4xl text-center">
 
               <h1
-                className="text-2xl md:text-4xl font-bold text-amber-400 drop-shadow-lg uppercase tracking-wide"
+                className="text-4xl font-bold text-accent drop-shadow-lg uppercase tracking-wide"
                 style={{
                   fontFamily:
                     "'Times New Roman', Times, Georgia, serif",
@@ -128,7 +128,7 @@ const SchoolPicnicPage = () => {
                 School Picnic
               </h1>
 
-              <p className="mt-2 text-xs md:text-sm text-violet-100/90 drop-shadow-sm font-medium">
+              <p className="mt-2 text-sm text-violet-100/90 drop-shadow-sm font-medium">
                 Water Park | Adventure Park | Amusement Park | Agro Park |
                 Bird Park | Boating | Team Activities | Educational Experiences
               </p>
@@ -151,7 +151,7 @@ const SchoolPicnicPage = () => {
 
           <ScrollReveal direction="up" delay={0.1}>
             <h2
-              className="text-2xl md:text-3xl font-bold text-white mb-2"
+              className="text-2xl font-bold text-white mb-2"
               style={{
                 fontFamily:
                   "'Times New Roman', Times, Georgia, serif",
@@ -160,7 +160,7 @@ const SchoolPicnicPage = () => {
               School Picnic Experiences
             </h2>
 
-            <p className="text-violet-100/90 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
+            <p className="text-violet-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
               A complete school outing combining fun, adventure, education,
               teamwork and memorable experiences in one destination.
             </p>
@@ -197,7 +197,7 @@ const SchoolPicnicPage = () => {
                       }`}
                   >
                     <h3
-                      className="text-lg md:text-xl font-bold text-amber-300 mb-2"
+                      className="text-2xl font-bold text-white mb-2"
                       style={{
                         fontFamily:
                           "'Times New Roman', Times, Georgia, serif",
@@ -206,7 +206,7 @@ const SchoolPicnicPage = () => {
                       {zone.title}
                     </h3>
 
-                    <p className="text-xs md:text-sm text-violet-50 leading-relaxed">
+                    <p className="text-sm text-violet-50 leading-relaxed">
                       {zone.description}
                     </p>
                   </div>

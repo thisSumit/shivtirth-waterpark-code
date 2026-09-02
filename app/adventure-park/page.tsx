@@ -139,10 +139,10 @@ const AdventureParkPage = () => {
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
-              <h1 className="text-2xl md:text-4xl font-bold text-amber-400 drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Adventure Park
               </h1>
-              <p className="mt-2 text-xs md:text-sm text-emerald-100/90 drop-shadow-sm font-medium">
+              <p className="mt-2 text-sm text-emerald-100/90 drop-shadow-sm font-medium">
                 Zip Line | Rope Bridges | Tyre Bridges | Burma Bridges | Obstacle Courses | Net Climbing | Commando Tower | Tree House | 3D Show | Butterfly Garden
               </p>
             </div>
@@ -161,10 +161,10 @@ const AdventureParkPage = () => {
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#1b4332] via-[#2d6a4f] to-[#081c15] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Adventure Park Thrills & Obstacles
             </h2>
-            <p className="text-emerald-100/90 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
+            <p className="text-emerald-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
               Unleash your inner explorer with Mowgli-inspired adventures packed with adrenaline, physical challenges, and unforgettable outdoor experiences.
             </p>
           </ScrollReveal>
@@ -179,10 +179,10 @@ const AdventureParkPage = () => {
                     </div>
                   </div>
                   <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    <h3 className="text-lg md:text-xl font-bold text-amber-300 font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                    <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                       {slide.title}
                     </h3>
-                    <p className="text-xs md:text-sm text-emerald-50 leading-relaxed font-normal">{slide.description}</p>
+                    <p className="text-sm text-emerald-50 leading-relaxed font-normal">{slide.description}</p>
                   </div>
                 </div>
               </ScrollReveal>
@@ -196,7 +196,7 @@ const AdventureParkPage = () => {
         <ScrollReveal direction="up" delay={0.2}>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-emerald-100">
-              <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-emerald-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Facilities
               </h3>
               <ul className="space-y-2.5">
@@ -212,7 +212,7 @@ const AdventureParkPage = () => {
             </div>
 
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-emerald-100">
-              <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-emerald-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">

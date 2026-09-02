@@ -181,13 +181,13 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
         {/* Content Column */}
         <div className={`order-2 ${isEven ? "md:order-2" : "md:order-1"} flex flex-col justify-center space-y-3`}>
           <h3
-            className="text-lg md:text-xl font-bold text-slate-900"
+            className="text-2xl font-bold text-slate-900"
             style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
           >
             {item.name}
           </h3>
 
-          <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm text-slate-600 leading-relaxed font-normal">
             {item.description}
           </p>
 
@@ -197,7 +197,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
               {item.features.map((feature, fIdx) => (
                 <span
                   key={`${item.name}-feature-${fIdx}`}
-                  className="inline-block px-2.5 py-1 bg-amber-50 border border-amber-300/60 rounded-full text-xs font-semibold text-slate-800 hover:bg-amber-100 transition"
+                  className="inline-block px-2.5 py-1 bg-amber-50 border border-amber-300/60 rounded-full text-sm font-semibold text-slate-800 hover:bg-amber-100 transition"
                 >
                   {feature}
                 </span>
@@ -209,7 +209,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
           <div className="flex flex-wrap gap-3 pt-2">
             <Link
               href="tel:+918605362212"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-xs md:text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
             >
               Call to Plan & Book
             </Link>
@@ -305,12 +305,12 @@ export default function AccommodationPage() {
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center">
             <div className="max-w-4xl text-center">
               <h1
-                className="text-2xl md:text-4xl font-bold text-amber-400 drop-shadow-lg uppercase tracking-wide"
+                className="text-4xl font-bold text-accent drop-shadow-lg uppercase tracking-wide"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
                 Accommodation & Night Stays
               </h1>
-              <p className="mt-2 text-xs md:text-sm text-cyan-100/90 drop-shadow-sm font-medium">
+              <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
                 Farmhouse Bungalows | Camping Tents | Dormitory Cottages | Deluxe AC Rooms | Bonfire & Music
               </p>
             </div>
@@ -323,12 +323,12 @@ export default function AccommodationPage() {
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <h2
-              className="text-2xl md:text-3xl font-bold text-slate-900 mb-2"
+              className="text-2xl font-bold text-slate-900 mb-2"
               style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
             >
               Stay Facilities & Night Experiences
             </h2>
-            <p className="text-slate-600 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
+            <p className="text-slate-600 mb-8 text-sm leading-relaxed max-w-2xl">
               Why let the fun end at sunset? Trade the long drive home for a night under the stars with our range of cozy, rustic, and luxury accommodations.
             </p>
           </ScrollReveal>
@@ -348,10 +348,10 @@ export default function AccommodationPage() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200">
                 <h3
-                  className="text-lg md:text-xl font-bold text-slate-900 mb-4"
+                  className="text-lg md:text-xl font-bold text-amber-700 mb-4"
                   style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
                 >
-                  Facilities & Amenities
+                  Facilities
                 </h3>
                 <ul className="space-y-3">
                   {accommodationFacilities.map((facility) => (
@@ -367,10 +367,10 @@ export default function AccommodationPage() {
 
               <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200">
                 <h3
-                  className="text-lg md:text-xl font-bold text-slate-900 mb-4"
+                  className="text-lg md:text-xl font-bold text-emerald-700 mb-4"
                   style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
                 >
-                  Rules & Guidelines
+                  Rules & Regulations
                 </h3>
                 <ul className="space-y-3">
                   {accommodationRules.map((rule) => (

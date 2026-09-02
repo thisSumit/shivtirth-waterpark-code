@@ -143,10 +143,10 @@ const BoatingParkPage = () => {
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
-              <h1 className="text-2xl md:text-4xl font-bold text-amber-400 drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Boating Park
               </h1>
-              <p className="mt-2 text-xs md:text-sm text-teal-100/90 drop-shadow-sm font-medium">
+              <p className="mt-2 text-sm text-teal-100/90 drop-shadow-sm font-medium">
                 Banana Boat | Sofa Boat | Speed Boat | Shikara Boat | Train Boat | Dragon Boat | Disco Boat | Octopus Boat | Kayak Boat | Pedal Boat
               </p>
             </div>
@@ -165,10 +165,10 @@ const BoatingParkPage = () => {
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e57] via-[#006d77] to-[#002e34] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Boating Park Activities
             </h2>
-            <p className="text-teal-100/90 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
+            <p className="text-teal-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
               Step beyond the ordinary and discover boating experiences built for excitement and scenic relaxation on the water.
             </p>
           </ScrollReveal>
@@ -188,10 +188,10 @@ const BoatingParkPage = () => {
                     </div>
                   </div>
                   <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    <h3 className="text-lg md:text-xl font-bold text-amber-300 font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                    <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                       {slide.title}
                     </h3>
-                    <p className="text-xs md:text-sm text-teal-50 leading-relaxed font-normal">{slide.description}</p>
+                    <p className="text-sm text-teal-50 leading-relaxed font-normal">{slide.description}</p>
                   </div>
                 </div>
               </ScrollReveal>
@@ -205,7 +205,7 @@ const BoatingParkPage = () => {
         <ScrollReveal direction="up" delay={0.2}>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-teal-100">
-              <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Facilities
               </h3>
               <ul className="space-y-2.5">
@@ -221,7 +221,7 @@ const BoatingParkPage = () => {
             </div>
 
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-teal-100">
-              <h3 className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">
