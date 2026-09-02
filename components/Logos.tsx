@@ -4,7 +4,7 @@ const Logos = () => {
   return (
     <div className="w-full bg-white">
       <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-4 px-4 py-4">
-        <p className="text-xs uppercase tracking-[0.2em] text-black">Approved & Certified by</p>
+        <p className="max-w-2xl text-md leading-relaxed text-amber-700 font-medium">Approved & Certified by</p>
         <div className="flex flex-wrap items-center justify-center gap-4 md:gap-10">
           <img
             src="/lokmat.png"

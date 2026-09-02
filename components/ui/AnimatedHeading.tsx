@@ -69,7 +69,7 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
   };
 
   return (
-    <div className={cn("flex flex-col mb-6 md:mb-8", alignClass, className)}>
+    <div className={cn("flex flex-col mb-6", alignClass, className)}>
       <motion.h2
         variants={containerVariants}
         initial="hidden"
@@ -107,7 +107,7 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
         </motion.p>
       )}
 
-      {underline && (
+      {/* {underline && (
         <motion.div
           variants={lineVariants}
           initial="hidden"
@@ -115,7 +115,7 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
           viewport={{ once: true, amount: 0.3 }}
           className="h-1 w-12 md:w-16 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-full mt-3 origin-center"
         />
-      )}
+      )} */}
     </div>
   );
 };

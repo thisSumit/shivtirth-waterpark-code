@@ -32,12 +32,22 @@ const Speciallity = () => {
           {specialties.map((item, index) => {
             const Icon = item.icon;
             return (
+              // <ScrollStaggerItem key={index}>
+              //   <div className="group flex items-center gap-3 p-3 rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm shadow-xs hover:shadow-md hover:border-amber-400/50 hover:bg-amber-50/30 transition-all duration-300 transform hover:-translate-y-0.5">
+              //     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+              //       <Icon className="h-4 w-4" />
+              //     </div>
+              //     <span className="text-xs md:text-sm font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">
+              //       {item.text}
+              //     </span>
+              //   </div>
+              // </ScrollStaggerItem>
               <ScrollStaggerItem key={index}>
-                <div className="group flex items-center gap-3 p-3 rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur-sm shadow-xs hover:shadow-md hover:border-amber-400/50 hover:bg-amber-50/30 transition-all duration-300 transform hover:-translate-y-0.5">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
-                    <Icon className="h-4 w-4" />
+                <div className="group flex items-center gap-2">
+                  <div className="flex h-3 w-3 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+                    <Icon className="h-2 w-2" />
                   </div>
-                  <span className="text-xs md:text-sm font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">
+                  <span className="flex items-start gap-2.5 text-sm text-slate-700">
                     {item.text}
                   </span>
                 </div>

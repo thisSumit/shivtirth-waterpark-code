@@ -286,20 +286,20 @@ const AboutPage = () => {
             Adventure, Learning & Natural Beauty
           </h2>
 
-          <p className="mt-2 text-sm leading-7 text-slate-700 md:text-base">
+          <p className="mt-2 text-sm text-slate-700 md:text-base">
             Shivtirth is an entertainment and learning destination combining
             Aadishakti Water Park, Thrill Power Boating Park, Mowgali Adventure
             Park, Amusement, Agriculture and Nature.
           </p>
 
-          <p className="mt-2 text-sm leading-7 text-slate-700 md:text-base">
+          <p className="mt-2 text-sm text-slate-700 md:text-base">
             Located at Umari (Dam), Saoner, Nagpur, Shivtirth is surrounded by
             the Satpuda mountain range, forests, dam and peaceful valley.
             Situated approximately 47 km from Nagpur on Betul National Highway
             (NH 47), it provides an ideal escape from the city.
           </p>
 
-          <p className="mt-2 text-sm leading-7 text-slate-700 md:text-base">
+          <p className="mt-2 text-sm text-slate-700 md:text-base">
             Shivtirth welcomes school picnics, family outings, group picnics,
             corporate events, weddings, birthdays, anniversaries,
             pre-wedding shoots and educational programs.

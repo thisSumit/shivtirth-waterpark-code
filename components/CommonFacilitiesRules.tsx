@@ -30,14 +30,13 @@ const CommonFR = () => {
       />
 
       <div className="mt-6 rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-cyan-100">
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {facilities.map((facility) => (
             <li
               key={facility}
               className="flex items-start gap-2.5 text-sm text-slate-700"
             >
-              <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-100 text-cyan-700 shrink-0">
-                <BadgeCheck className="h-3.5 w-3.5" />
+              <span className="mt-1.5 flex h-2 w-2 items-center justify-center rounded-full bg-[#288382] text-cyan-700 shrink-0">
               </span>
               <span>{facility}</span>
             </li>

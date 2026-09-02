@@ -15,7 +15,7 @@ const FAQ = () => {
 
       <ScrollReveal direction="up" delay={0.2} duration={0.6}>
         <Accordion type="single" collapsible className="w-full space-y-3">
-          {/* <AccordionItem value="item-0" className="border border-slate-200/80 rounded-xl px-4 bg-white/80 shadow-sm transition-all duration-300 hover:border-amber-400/60">
+          <AccordionItem value="item-0" className="border border-slate-200/80 rounded-xl px-4 bg-white/80 shadow-sm transition-all duration-300 hover:border-amber-400/60">
             <AccordionTrigger className="font-semibold text-slate-800 hover:text-amber-600 text-left">
               Why do people love Shivtirth Water Park?
             </AccordionTrigger>
@@ -30,7 +30,7 @@ const FAQ = () => {
                 <li>Experienced and helpful staff support.</li>
               </ul>
             </AccordionContent>
-          </AccordionItem> */}
+          </AccordionItem>
 
           <AccordionItem value="item-1" className="border border-slate-200/80 rounded-xl px-4 bg-white/80 shadow-sm transition-all duration-300 hover:border-amber-400/60">
             <AccordionTrigger className="font-semibold text-slate-800 hover:text-amber-600 text-left">
