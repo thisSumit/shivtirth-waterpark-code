@@ -29,7 +29,7 @@ export default function Home() {
       {/* <Venue/> */}
       {/* <Description/> */}
       <Gallery/>
-      <CommonRules/>
+      {/* <CommonRules/> */}
       
       <FAQ/>
     </main>

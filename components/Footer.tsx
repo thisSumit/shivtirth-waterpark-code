@@ -37,13 +37,12 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-bold text-white mb-4">Quick Links</h4>
-            <ul className="space-y-3 text-slate-300">
-              {/* <li><Link href="/" className="hover:text-accent transition">Home</Link></li>
+            <h4 className="text-lg font-bold text-white mb-2">Quick Links</h4>
+            <ul className="space-y-2 text-sm text-slate-300">
               <li><Link href="/about" className="hover:text-accent transition">About Us</Link></li>
-              <li><Link href="/offers" className="hover:text-accent transition">Offers</Link></li>
-              <li><Link href="/parks-experiences" className="hover:text-accent transition">Park</Link></li> */}
-              {/* <li><Link href="/contact" className="hover:text-accent transition">Contact Us</Link></li> */}
+              <li><Link href="/contact" className="hover:text-accent transition">Contact Us</Link></li>
+              <li><Link href="/influencer-collab" className="hover:text-accent transition">Influncer Collaboration</Link></li>
+              <li><Link href="https://www.instagram.com/shivtirthbestwaterpark/" className="hover:text-accent transition">Gallery</Link></li>
             </ul>
             <div className="mt-6 flex items-center gap-3">
               <a
