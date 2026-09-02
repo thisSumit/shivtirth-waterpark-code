@@ -221,14 +221,14 @@ const AboutPage = () => {
           <div className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-amber-400 blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 py-24 text-center md:px-8 md:py-32">
+        <div className="relative mx-auto max-w-6xl px-4 pb-6 text-center md:px-8 pt-36">
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-100 backdrop-blur-sm">
             <Sparkles className="h-3 w-3 text-amber-300" />
             About Shivtirth
           </span>
 
           <h1
-            className="text-4xl font-bold uppercase leading-tight tracking-wide text-white md:text-6xl"
+            className="text-2xl font-bold uppercase leading-tight tracking-wide text-white md:text-3xl"
             style={{
               fontFamily: "'Times New Roman', Times, Georgia, serif",
             }}
@@ -236,37 +236,19 @@ const AboutPage = () => {
             Best Water Park & Picnic Spot in Nagpur
           </h1>
 
-          <p className="mx-auto mt-5 max-w-4xl text-sm leading-relaxed text-cyan-50/90 md:text-base">
+          <p className="mx-auto max-w-4xl text-sm leading-relaxed text-cyan-50/90">
             Discover Shivtirth — a unique destination where adventure,
             entertainment, learning and natural beauty come together. From
             water parks and boating to adventure, amusement, agriculture and
             nature experiences, Shivtirth offers something for everyone.
           </p>
-
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/offers"
-              className="inline-flex items-center justify-center rounded-full bg-amber-400 px-7 py-3 text-xs font-bold uppercase tracking-wider text-slate-950 shadow-lg transition hover:bg-amber-300 hover:scale-105"
-            >
-              Explore Shivtirth
-            </Link>
-
-            <Link
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-7 py-3 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm transition hover:bg-white/20"
-            >
-              Plan Your Visit
-            </Link>
-          </div>
         </div>
       </section>
 
       {/* =========================
           INTRODUCTION
       ========================== */}
-      <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-14 md:px-8 md:py-20 lg:grid-cols-5">
+      <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-8 md:px-8 lg:grid-cols-5">
 
         <div className="relative h-[300px] overflow-hidden rounded-3xl shadow-2xl md:h-[440px] lg:col-span-2">
           <Image
@@ -296,7 +278,7 @@ const AboutPage = () => {
           </span>
 
           <h2
-            className="mt-2 text-3xl font-bold leading-tight text-slate-900 md:text-4xl"
+            className="text-2xl font-bold leading-tight text-slate-900"
             style={{
               fontFamily: "'Times New Roman', Times, Georgia, serif",
             }}
@@ -304,31 +286,36 @@ const AboutPage = () => {
             Adventure, Learning & Natural Beauty
           </h2>
 
-          <p className="mt-5 text-sm leading-7 text-slate-700 md:text-base">
+          <p className="mt-2 text-sm leading-7 text-slate-700 md:text-base">
             Shivtirth is an entertainment and learning destination combining
             Aadishakti Water Park, Thrill Power Boating Park, Mowgali Adventure
             Park, Amusement, Agriculture and Nature.
           </p>
 
-          <p className="mt-4 text-sm leading-7 text-slate-700 md:text-base">
+          <p className="mt-2 text-sm leading-7 text-slate-700 md:text-base">
             Located at Umari (Dam), Saoner, Nagpur, Shivtirth is surrounded by
             the Satpuda mountain range, forests, dam and peaceful valley.
             Situated approximately 47 km from Nagpur on Betul National Highway
             (NH 47), it provides an ideal escape from the city.
           </p>
 
-          <p className="mt-4 text-sm leading-7 text-slate-700 md:text-base">
+          <p className="mt-2 text-sm leading-7 text-slate-700 md:text-base">
             Shivtirth welcomes school picnics, family outings, group picnics,
             corporate events, weddings, birthdays, anniversaries,
             pre-wedding shoots and educational programs.
           </p>
 
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {/* <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              "Aqua",
-              "Adventure",
-              "Agro",
+              "Waterpark",
+              "Adventure Park",
+              "Amusement Park",
+              "Boating Park",
+              "Agro Tourism",
               "Air Tourism",
+              "Jungle Safari",
+              "Bird Watching",
+              "Camping"
             ].map((item) => (
               <div
                 key={item}
@@ -337,23 +324,23 @@ const AboutPage = () => {
                 {item}
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
       {/* =========================
           EXPERIENCE
       ========================== */}
-      <section className="bg-gradient-to-br from-[#004e64] via-[#007f8b] to-[#023047] py-14 text-white md:py-20">
+      {/* <section className="bg-gradient-to-br from-[#004e64] via-[#007f8b] to-[#023047] py-8 text-white">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
 
-          <div className="mb-10 text-center">
+          <div className="mb-2 text-center">
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300">
               One Destination
             </span>
 
             <h2
-              className="mt-2 text-3xl font-bold uppercase md:text-4xl"
+              className="text-2xl font-bold uppercase"
               style={{
                 fontFamily: "'Times New Roman', Times, Georgia, serif",
               }}
@@ -361,7 +348,7 @@ const AboutPage = () => {
               Many Experiences
             </h2>
 
-            <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-cyan-50/80 md:text-sm">
+            <p className="mx-auto max-w-2xl text-sm leading-relaxed text-cyan-50/80">
               From thrilling rides to peaceful nature experiences, Shivtirth
               brings recreation, adventure and learning together under one roof.
             </p>
@@ -389,7 +376,7 @@ const AboutPage = () => {
                     {experience.title}
                   </h3>
 
-                  <p className="mt-2 text-xs leading-relaxed text-cyan-50/75">
+                  <p className="text-xs leading-relaxed text-cyan-50/75">
                     {experience.description}
                   </p>
                 </div>
@@ -397,20 +384,20 @@ const AboutPage = () => {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* =========================
           MISSION & VISION
       ========================== */}
-      <section className="mx-auto max-w-6xl px-4 py-14 md:px-8 md:py-20">
+      <section className="mx-auto max-w-6xl px-4 py-8 md:px-8">
 
-        <div className="mb-10 text-center">
+        <div className="mb-6 text-center">
           <span className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">
             Our Purpose
           </span>
 
           <h2
-            className="mt-2 text-3xl font-bold text-slate-900 md:text-4xl"
+            className="text-2xl font-bold text-slate-900"
             style={{
               fontFamily: "'Times New Roman', Times, Georgia, serif",
             }}
@@ -423,12 +410,12 @@ const AboutPage = () => {
 
           {/* Mission */}
           <div className="rounded-3xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-sky-100 p-7 shadow-lg md:p-9">
-            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-600 text-white shadow-md">
+            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-600 text-white shadow-md">
               <GraduationCap className="h-6 w-6" />
             </div>
 
             <h3
-              className="text-2xl font-bold text-slate-900 md:text-3xl"
+              className="text-2xl font-bold text-slate-900"
               style={{
                 fontFamily: "'Times New Roman', Times, Georgia, serif",
               }}
@@ -436,14 +423,14 @@ const AboutPage = () => {
               Our Mission
             </h3>
 
-            <p className="mt-4 text-sm leading-7 text-slate-700 md:text-base">
+            <p className="text-sm leading-7 text-slate-700 md:text-base">
               To provide a transformative outdoor learning experience that
               connects children with nature and agriculture, fostering courage,
               confidence and creativity through hands-on activities and
               educational programs.
             </p>
 
-            <div className="mt-6 space-y-2">
+            <div className="mt-2 space-y-2">
               {[
                 "Connect children with nature",
                 "Promote agricultural learning",
@@ -463,12 +450,12 @@ const AboutPage = () => {
 
           {/* Vision */}
           <div className="rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-100 p-7 shadow-lg md:p-9">
-            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md">
+            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md">
               <Leaf className="h-6 w-6" />
             </div>
 
             <h3
-              className="text-2xl font-bold text-slate-900 md:text-3xl"
+              className="text-2xl font-bold text-slate-900"
               style={{
                 fontFamily: "'Times New Roman', Times, Georgia, serif",
               }}
@@ -476,14 +463,14 @@ const AboutPage = () => {
               Our Vision
             </h3>
 
-            <p className="mt-4 text-sm leading-7 text-slate-700 md:text-base">
+            <p className="text-sm leading-7 text-slate-700 md:text-base">
               To inspire the next generation to embrace environmental
               stewardship and agricultural knowledge, nurturing a deep
               appreciation for nature and empowering them to thrive in a
               rapidly changing world.
             </p>
 
-            <div className="mt-6 space-y-2">
+            <div className="mt-2 space-y-2">
               {[
                 "Encourage environmental responsibility",
                 "Promote agricultural awareness",
@@ -636,7 +623,7 @@ const AboutPage = () => {
       {/* =========================
           WHY SHIVTIRTH
       ========================== */}
-      <section className="bg-gradient-to-br from-[#e8f8fa] via-white to-[#e7f6f3] py-14 md:py-20">
+      {/* <section className="bg-gradient-to-br from-[#e8f8fa] via-white to-[#e7f6f3] py-14 md:py-20">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
 
           <div className="mb-10 text-center">
@@ -685,12 +672,12 @@ const AboutPage = () => {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* =========================
           LOCATION
       ========================== */}
-      <section className="mx-auto max-w-6xl px-4 py-14 md:px-8 md:py-20">
+      {/* <section className="mx-auto max-w-6xl px-4 py-14 md:px-8 md:py-20">
 
         <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#023047] via-[#005f73] to-[#004e64] text-white shadow-2xl">
 
@@ -761,20 +748,20 @@ const AboutPage = () => {
 
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* =========================
           AFFILIATIONS
       ========================== */}
-      <section className="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-20">
+      <section className="mx-auto max-w-6xl px-4 pb-8 md:px-8">
 
-        <div className="mb-10 text-center">
+        <div className="mb-8 text-center">
           <span className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">
             Trust & Recognition
           </span>
 
           <h2
-            className="mt-2 text-3xl font-bold text-slate-900 md:text-4xl"
+            className="text-2xl font-bold text-slate-900"
             style={{
               fontFamily: "'Times New Roman', Times, Georgia, serif",
             }}
@@ -782,7 +769,7 @@ const AboutPage = () => {
             Our Affiliations & Recognition
           </h2>
 
-          <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
+          <p className="mx-auto max-w-3xl text-sm leading-relaxed text-slate-600">
             Shivtirth continues to focus on safety, quality, educational
             experiences, eco-friendly recreation and memorable hospitality.
           </p>
@@ -795,10 +782,10 @@ const AboutPage = () => {
             return (
               <div
                 key={item.title}
-                className={`rounded-2xl border ${item.border} bg-gradient-to-br ${item.bg} p-6 shadow-md transition hover:-translate-y-1 hover:shadow-lg`}
+                className={`rounded-2xl border ${item.border} bg-gradient-to-br ${item.bg} p-4 shadow-md transition hover:-translate-y-1 hover:shadow-lg`}
               >
                 <div
-                  className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${item.iconBg} ${item.iconColor}`}
+                  className={`mb-2 flex h-11 w-11 items-center justify-center rounded-xl ${item.iconBg} ${item.iconColor}`}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
@@ -813,7 +800,7 @@ const AboutPage = () => {
                   {item.title}
                 </h3>
 
-                <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                <p className="text-sm leading-relaxed text-slate-700">
                   {item.description}
                 </p>
               </div>

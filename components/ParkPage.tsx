@@ -336,7 +336,7 @@ export const ParkPage = () => {
                         href="tel:+918605362212"
                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-xs md:text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
                       >
-                        Call to Plan
+                        Call to Plan & Book
                       </Link>
                     </div>
                   </div>
