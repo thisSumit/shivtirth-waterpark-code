@@ -148,7 +148,7 @@ const WaterParkPage = () => {
               <h1 className="text-4xl font-bold text-amber-400 drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Water Park
               </h1>
-              <p className="mt-2 text-xs md:text-sm text-cyan-100/90 drop-shadow-sm font-medium">
+              <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
                 Various Water Pools | Waterfall | Family Slides | Body & Tube Slides | Multiplay Station | Various Rain Dances | Splash Buckets | Foam Dance | Glass Floor Dance | Fog & Bubble Dance
               </p>
             </div>
@@ -170,7 +170,7 @@ const WaterParkPage = () => {
             <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Water Park Attractions & Rides
             </h2>
-            <p className="text-cyan-100/90 mb-8 text-xs md:text-sm leading-relaxed max-w-2xl">
+            <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
               Explore experiences crafted for every mood, from calm relaxing pools to high-energy slides designed for safety, comfort, and unforgettable memories.
             </p>
           </ScrollReveal>
@@ -190,7 +190,7 @@ const WaterParkPage = () => {
                     </div>
                   </div>
                   <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    <h3 className="text-xl font-bold text-amber-300 font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                    <h3 className="text-2xl font-bold text-amber-300 font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                       {slide.title}
                     </h3>
                     <p className="text-sm text-cyan-50 leading-relaxed font-normal">{slide.description}</p>
