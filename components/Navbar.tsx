@@ -155,16 +155,19 @@ const Navbar = () => {
     <>
       {/* Scrolling Banner */}
       <div className="fixed top-0 left-0 right-0 z-[9999] bg-accent text-black py-2 overflow-hidden shadow-sm">
-        <div className="flex animate-scroll whitespace-nowrap">
-          {[...scrollingMessages, ...scrollingMessages].map((message, index) => (
-            <span key={index} className="inline-flex items-center mx-6 text-xs md:text-sm font-semibold">
-              <span className="mr-2">✨</span>
-              {message}
-              <span className="ml-2">✨</span>
-            </span>
-          ))}
-        </div>
-      </div>
+  <div className="flex w-max animate-scroll whitespace-nowrap">
+    {[...scrollingMessages, ...scrollingMessages].map((message, index) => (
+      <span
+        key={index}
+        className="inline-flex shrink-0 items-center mx-6 text-xs md:text-sm font-semibold"
+      >
+        <span className="mr-2">✨</span>
+        {message}
+        <span className="ml-2">✨</span>
+      </span>
+    ))}
+  </div>
+</div>
 
       {/* Navbar */}
       <nav className={`fixed top-8 left-0 right-0 z-[999] transition-all duration-300 ${scrolled || isOpen ? 'bg-white shadow-lg border-b border-slate-100' : 'bg-transparent'}`}>
