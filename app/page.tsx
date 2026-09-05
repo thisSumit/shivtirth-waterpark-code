@@ -19,7 +19,7 @@ export default function Home() {
       <h1 className="hidden">Best Water Park in Nagpur Shivtirth Water Park</h1>
       <p className="hidden">Looking for the best water park in Nagpur? Shivtirth Water Park near Umari Dam offers thrilling rides, boating, dining and camping for families and groups.</p>
       <Hero/>
-      <Logos/>
+      {/* <Logos/> */}
       {/* <Description/> */}
       {/* <OfferSection/> */}
       {/* <Speciallity />
