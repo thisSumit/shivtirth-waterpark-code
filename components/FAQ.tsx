@@ -9,7 +9,7 @@ const FAQ = () => {
   return (
     <section className='px-4 md:px-8 py-8 max-w-6xl mx-auto'>
       <AnimatedHeading
-        title="Frequently Asked Questions"
+        title="FAQ"
         subtitle="Find answers to common questions about Shivtirth Water Park"
       />
 

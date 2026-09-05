@@ -22,16 +22,15 @@ export default function Home() {
       <Logos/>
       {/* <Description/> */}
       {/* <OfferSection/> */}
-      <Testimonials/>
       <Speciallity />
       <CommonFacilitiesRules />
       {/* <Package/> */}
       {/* <Venue/> */}
       {/* <Description/> */}
       <Gallery/>
-      {/* <CommonRules/> */}
-      
+      <Testimonials/>
       <FAQ/>
+      <CommonRules/>
     </main>
   );
 }

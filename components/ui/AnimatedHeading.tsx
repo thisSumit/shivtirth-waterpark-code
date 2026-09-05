@@ -92,7 +92,7 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
         ))}
       </motion.h2>
 
-      {subtitle && (
+      {/* {subtitle && (
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -105,7 +105,7 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
         >
           {subtitle}
         </motion.p>
-      )}
+      )} */}
 
       {/* {underline && (
         <motion.div

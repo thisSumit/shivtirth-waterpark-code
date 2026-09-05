@@ -40,6 +40,7 @@ const Footer = () => {
             <h4 className="text-lg font-bold text-white mb-2">Quick Links</h4>
             <ul className="space-y-2 text-sm text-slate-300">
               <li><Link href="/about" className="hover:text-accent transition">About Us</Link></li>
+              <li><Link href="/facilities-rules" className="hover:text-accent transition">Facilities & Rules</Link></li>
               <li><Link href="/contact" className="hover:text-accent transition">Contact Us</Link></li>
               <li><Link href="/influencer-collab" className="hover:text-accent transition">Influncer Collaboration</Link></li>
               <li><Link href="https://www.instagram.com/shivtirthbestwaterpark/" className="hover:text-accent transition">Gallery</Link></li>
