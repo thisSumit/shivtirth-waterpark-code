@@ -9,6 +9,8 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 type ParkItem = {
   name: string;
   image: string;
+  video?: string;
+  video_url?: string;
   description: string;
   features: string[];
   href?: string;
@@ -142,7 +144,7 @@ export const ParkPage = () => {
       try {
         const { data, error } = await supabase
           .from("activities")
-          .select("title, image, description, features, is_hidden")
+          .select("title, image, video, video_url, description, features, is_hidden")
           .eq("is_hidden", false)
           .order("display_order", { ascending: true });
 
@@ -155,6 +157,8 @@ export const ParkPage = () => {
           const dbParks: ParkItem[] = data.map((item) => ({
             name: item.title || "",
             image: item.image || "",
+            video: item.video,
+            video_url: item.video_url,
             description: item.description || "",
             features: Array.isArray(item.features) ? item.features : [],
             href: item.title?.toLowerCase().includes("accommodation")
@@ -260,52 +264,68 @@ export const ParkPage = () => {
 
           {/* PARK LIST */}
           <div className="space-y-8 md:space-y-10">
-            {activeParks.map((park, idx) => (
-              <ScrollReveal
-                key={park.name}
-                direction="up"
-                delay={0.1}
-                duration={0.6}
-              >
-                <div
-                  id={getParkSectionId(park.name)}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-cyan-400/20"
+            {activeParks.map((park, idx) => {
+              const videoSrc = park.video || park.video_url || (
+                park.image && (park.image.endsWith('.mp4') || park.image.endsWith('.webm') || park.image.endsWith('.ogg') || park.image.includes('/video/'))
+                  ? park.image
+                  : null
+              );
+
+              return (
+                <ScrollReveal
+                  key={park.name}
+                  direction="up"
+                  delay={0.1}
+                  duration={0.6}
                 >
-                  {/* IMAGE */}
                   <div
-                    className={`order-1 ${idx % 2 === 1 ? "md:order-2" : "md:order-1"
-                      }`}
+                    id={getParkSectionId(park.name)}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-cyan-400/20"
                   >
-                    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
-                      <Image
-                        src={park.image}
-                        alt={park.name}
-                        fill
-                        className="object-cover object-center hover:scale-105 transition duration-500"
-                        sizes="(min-width: 768px) 50vw, 100vw"
-                        priority={idx === 0}
-                      />
-                    </div>
-                  </div>
-
-                  {/* CONTENT */}
-                  <div
-                    className={`order-2 ${idx % 2 === 1 ? "md:order-1" : "md:order-2"
-                      }`}
-                  >
-                    <h3
-                      className="text-2xl font-bold text-white mb-2"
-                      style={{
-                        fontFamily:
-                          "'Times New Roman', Times, Georgia, serif",
-                      }}
+                    {/* MEDIA */}
+                    <div
+                      className={`order-1 ${idx % 2 === 1 ? "md:order-2" : "md:order-1"
+                        }`}
                     >
-                      {park.name}
-                    </h3>
+                      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
+                        {videoSrc ? (
+                          <video
+                            src={videoSrc}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                          />
+                        ) : (
+                          <Image
+                            src={park.image}
+                            alt={park.name}
+                            fill
+                            className="object-cover object-center hover:scale-105 transition duration-500"
+                            sizes="(min-width: 768px) 50vw, 100vw"
+                            priority={idx === 0}
+                          />
+                        )}
+                      </div>
+                    </div>
 
-                    <p className="text-sm text-cyan-50 leading-relaxed font-normal">
-                      {park.description}
-                    </p>
+                    {/* CONTENT */}
+                    <div
+                      className={`order-2 ${idx % 2 === 1 ? "md:order-1" : "md:order-2"
+                        }`}
+                    >
+                      <h3
+                        className="text-2xl font-bold text-white font-times mb-2"
+                        style={{
+                          fontFamily:
+                            "'Times New Roman', Times, Georgia, serif",
+                        }}
+                      >
+                        {park.name}
+                      </h3>
+
+                      <p className="text-sm text-cyan-50">{park.description}</p>
 
                     {/* DATABASE FEATURES */}
                     {park.features && park.features.length > 0 && (
@@ -342,8 +362,9 @@ export const ParkPage = () => {
                   </div>
                 </div>
               </ScrollReveal>
-            ))}
-          </div>
+            );
+          })}
+        </div>
         </div>
       </section>
 

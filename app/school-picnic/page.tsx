@@ -167,53 +167,73 @@ const SchoolPicnicPage = () => {
           </ScrollReveal>
 
           <div className="space-y-8 md:space-y-10">
-            {attractionZones.map((zone, index) => (
-              <ScrollReveal
-                key={zone.title}
-                direction="up"
-                delay={0.1}
-                duration={0.5}
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-violet-300/20">
+            {attractionZones.map((zone: { title: string; image: string; video?: string; video_url?: string; description: string }, index) => {
+              const videoSrc = zone.video || zone.video_url || (
+                zone.image && (zone.image.endsWith('.mp4') || zone.image.endsWith('.webm') || zone.image.endsWith('.ogg') || zone.image.includes('/video/'))
+                  ? zone.image
+                  : null
+              );
 
-                  {/* IMAGE */}
-                  <div
-                    className={`order-1 ${index % 2 === 1 ? "md:order-2" : ""
-                      }`}
-                  >
-                    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
-                      <Image
-                        src={zone.image}
-                        alt={zone.title}
-                        fill
-                        className="object-cover hover:scale-105 transition duration-500"
-                      />
-                    </div>
-                  </div>
+              return (
+                <ScrollReveal
+                  key={zone.title}
+                  direction="up"
+                  delay={0.1}
+                  duration={0.5}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-violet-300/20">
 
-                  {/* CONTENT */}
-                  <div
-                    className={`order-2 ${index % 2 === 1 ? "md:order-1" : ""
-                      }`}
-                  >
-                    <h3
-                      className="text-2xl font-bold text-white mb-2"
-                      style={{
-                        fontFamily:
-                          "'Times New Roman', Times, Georgia, serif",
-                      }}
+                    {/* MEDIA */}
+                    <div
+                      className={`order-1 ${index % 2 === 1 ? "md:order-2" : ""
+                        }`}
                     >
-                      {zone.title}
-                    </h3>
+                      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
+                        {videoSrc ? (
+                          <video
+                            src={videoSrc}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                          />
+                        ) : (
+                          <Image
+                            src={zone.image}
+                            alt={zone.title}
+                            fill
+                            className="object-cover hover:scale-105 transition duration-500"
+                            sizes="(min-width: 768px) 50vw, 100vw"
+                          />
+                        )}
+                      </div>
+                    </div>
 
-                    <p className="text-sm text-violet-50 leading-relaxed">
-                      {zone.description}
-                    </p>
+                    {/* CONTENT */}
+                    <div
+                      className={`order-2 ${index % 2 === 1 ? "md:order-1" : ""
+                        }`}
+                    >
+                      <h3
+                        className="text-2xl font-bold text-white font-times mb-2"
+                        style={{
+                          fontFamily:
+                            "'Times New Roman', Times, Georgia, serif",
+                        }}
+                      >
+                        {zone.title}
+                      </h3>
+
+                      <p className="text-sm text-cyan-50 leading-relaxed font-normal">
+                        {zone.description}
+                      </p>
+                    </div>
+
                   </div>
-
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>

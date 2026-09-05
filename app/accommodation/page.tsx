@@ -12,6 +12,8 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 type AccommodationItem = {
   name: string;
   image: string;
+  video?: string;
+  video_url?: string;
   description: string;
   features: string[];
 };
@@ -153,6 +155,11 @@ interface AccommodationCardProps {
 
 const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) => {
   const isEven = index % 2 === 0;
+  const videoSrc = item.video || item.video_url || (
+    item.image && (item.image.endsWith('.mp4') || item.image.endsWith('.webm') || item.image.endsWith('.ogg') || item.image.includes('/video/'))
+      ? item.image
+      : null
+  );
 
   return (
     <ScrollReveal direction="up" delay={0.1} duration={0.6}>
@@ -160,28 +167,39 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
         id={getSectionId(item.name)}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-slate-50 border border-slate-200 p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md transition"
       >
-        {/* Image Column */}
+        {/* Media Column */}
         <div className={`order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
-          <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
-            <Image
-              src={
-                item.image.startsWith("http") || item.image.startsWith("/")
-                  ? item.image
-                  : `/${item.image}`
-              }
-              alt={item.name}
-              fill
-              className="object-cover object-center hover:scale-105 transition duration-500"
-              sizes="(min-width: 768px) 50vw, 100vw"
-              priority={index === 0}
-            />
+          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
+            {videoSrc ? (
+              <video
+                src={videoSrc}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover hover:scale-105 transition duration-500"
+              />
+            ) : (
+              <Image
+                src={
+                  item.image.startsWith("http") || item.image.startsWith("/")
+                    ? item.image
+                    : `/${item.image}`
+                }
+                alt={item.name}
+                fill
+                className="object-cover object-center hover:scale-105 transition duration-500"
+                sizes="(min-width: 768px) 50vw, 100vw"
+                priority={index === 0}
+              />
+            )}
           </div>
         </div>
 
         {/* Content Column */}
         <div className={`order-2 ${isEven ? "md:order-2" : "md:order-1"} flex flex-col justify-center space-y-3`}>
           <h3
-            className="text-2xl font-bold text-slate-900"
+            className="text-2xl font-bold text-slate-900 font-times mb-2"
             style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
           >
             {item.name}
@@ -229,7 +247,7 @@ export default function AccommodationPage() {
       try {
         const { data } = await supabase
           .from("activities")
-          .select("title, image, description, features, park_type, is_hidden")
+          .select("title, image, video, video_url, description, features, park_type, is_hidden")
           .eq("is_hidden", false)
           .order("display_order", { ascending: true });
 

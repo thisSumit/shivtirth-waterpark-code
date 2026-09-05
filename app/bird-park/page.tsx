@@ -8,8 +8,16 @@ import { supabase } from '@/lib/supabase';
 import { BadgeCheck, ShieldCheck } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
+interface BirdSlide {
+  title: string;
+  description: string;
+  image?: string;
+  video?: string;
+  video_url?: string;
+}
+
 const BirdParkPage = () => {
-  const birdSlides = [
+  const birdSlides: BirdSlide[] = [
     {
       title: 'Guineafowls',
       description: 'Guineafowls are distinctive birds known for their spotted feathers and unique appearance. Their lively nature makes them an interesting attraction for children and families.',
@@ -52,14 +60,14 @@ const BirdParkPage = () => {
     },
   ];
 
-  const [slides, setSlides] = useState(birdSlides);
+  const [slides, setSlides] = useState<BirdSlide[]>(birdSlides);
 
   useEffect(() => {
     async function fetchAttractions() {
       try {
         const { data } = await supabase
           .from('attractions')
-          .select('title, description, image')
+          .select('title, description, image, video, video_url')
           .eq('park_type', 'bird-park')
           .eq('is_hidden', false)
           .order('display_order', { ascending: true });
@@ -170,28 +178,48 @@ const BirdParkPage = () => {
           </ScrollReveal>
 
           <div className="space-y-8 md:space-y-10">
-            {slides.map((slide, idx) => (
-              <ScrollReveal key={idx} direction="up" delay={0.15 * (idx % 2)} duration={0.5}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-emerald-400/20">
-                  <div className={`order-1 ${idx % 2 === 1 ? 'md:order-2' : ''}`}>
-                    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
-                      <Image
-                        src={slide.image}
-                        alt={slide.title}
-                        fill
-                        className="object-cover object-center hover:scale-105 transition duration-500"
-                      />
+            {slides.map((slide, idx) => {
+              const videoSrc = slide.video || slide.video_url || (
+                slide.image && (slide.image.endsWith('.mp4') || slide.image.endsWith('.webm') || slide.image.endsWith('.ogg') || slide.image.includes('/video/'))
+                  ? slide.image
+                  : null
+              );
+
+              return (
+                <ScrollReveal key={idx} direction="up" delay={0.15 * (idx % 2)} duration={0.5}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-emerald-400/20">
+                    <div className={`order-1 ${idx % 2 === 1 ? 'md:order-2' : ''}`}>
+                      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
+                        {videoSrc ? (
+                          <video
+                            src={videoSrc}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                          />
+                        ) : (
+                          <Image
+                            src={slide.image || '/Bird-Park.jpg'}
+                            alt={slide.title}
+                            fill
+                            className="object-cover object-center hover:scale-105 transition duration-500"
+                            sizes="(min-width: 768px) 50vw, 100vw"
+                          />
+                        )}
+                      </div>
+                    </div>
+                    <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
+                      <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+                        {slide.title}
+                      </h3>
+                      <p className="text-sm text-emerald-50 leading-relaxed font-normal">{slide.description}</p>
                     </div>
                   </div>
-                  <div className={`order-2 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-                      {slide.title}
-                    </h3>
-                    <p className="text-sm text-emerald-50 leading-relaxed font-normal">{slide.description}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>
