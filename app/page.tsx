@@ -6,6 +6,7 @@ import Description from "@/components/Description";
 import FAQ from "@/components/FAQ";
 import Gallery from "@/components/Gallery";
 import Hero from "@/components/Hero";
+import Attractions from "@/components/Attractions";
 import Logos from "@/components/Logos";
 import OfferSection from "@/components/OfferSection";
 import Package from "@/components/Package";
@@ -18,18 +19,19 @@ export default function Home() {
     <main className="overflow-x-hidden">
       <h1 className="hidden">Best Water Park in Nagpur Shivtirth Water Park</h1>
       <p className="hidden">Looking for the best water park in Nagpur? Shivtirth Water Park near Umari Dam offers thrilling rides, boating, dining and camping for families and groups.</p>
-      <Hero/>
+      <Hero />
       {/* <Logos/> */}
       {/* <Description/> */}
       {/* <OfferSection/> */}
-      {/* <Speciallity />
-      <CommonFacilitiesRules /> */}
+      {/* <Speciallity /> */}
+      <Attractions />
+      {/* <CommonFacilitiesRules /> */}
       {/* <Package/> */}
       {/* <Venue/> */}
       {/* <Description/> */}
-      <Gallery/>
-      <Testimonials/>
-      <FAQ/>
+      <Gallery />
+      <Testimonials />
+      <FAQ />
       {/* <CommonRules/> */}
     </main>
   );
