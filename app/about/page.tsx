@@ -233,7 +233,7 @@ const AboutPage = () => {
               fontFamily: "'Times New Roman', Times, Georgia, serif",
             }}
           >
-            Best Water Park & Picnic Spot in Nagpur
+            Your Ultimate Destination for Fun, Learning, Food, and Natural Beauty!
           </h1>
 
           <p className="mx-auto max-w-4xl text-sm leading-relaxed text-cyan-50/90">
@@ -273,7 +273,7 @@ const AboutPage = () => {
         </div>
 
         <div className="lg:col-span-3">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">
+          {/* <span className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">
             Discover Shivtirth
           </span>
 
@@ -284,26 +284,23 @@ const AboutPage = () => {
             }}
           >
             Adventure, Learning & Natural Beauty
-          </h2>
+          </h2> */}
 
-          <p className="mt-2 text-sm text-slate-700 md:text-base">
+          {/* <p className="mt-2 text-sm text-slate-700 md:text-base">
             Shivtirth is an entertainment and learning destination combining
             Aadishakti Water Park, Thrill Power Boating Park, Mowgali Adventure
             Park, Amusement, Agriculture and Nature.
-          </p>
+          </p> */}
 
           <p className="mt-2 text-sm text-slate-700 md:text-base">
-            Located at Umari (Dam), Saoner, Nagpur, Shivtirth is surrounded by
-            the Satpuda mountain range, forests, dam and peaceful valley.
-            Situated approximately 47 km from Nagpur on Betul National Highway
-            (NH 47), it provides an ideal escape from the city.
+           Our place Shivtirth is the God gift, amazing, natural place at Umari (Dam) Saoner, Nagpur (M.S.) well known for Agro, Aqua, Adventure, Air Tourism. It is located on ranges of Satpuda mountain & is surrounded by Dam, Forest and Valley. It is the destination for School Picnic family, Composate Corporate Picnic and Funtions on Hill Station and is just 47 km away from Nagpur on Baitul National High Way no. 47.
           </p>
 
-          <p className="mt-2 text-sm text-slate-700 md:text-base">
+          {/* <p className="mt-2 text-sm text-slate-700 md:text-base">
             Shivtirth welcomes school picnics, family outings, group picnics,
             corporate events, weddings, birthdays, anniversaries,
             pre-wedding shoots and educational programs.
-          </p>
+          </p> */}
 
           {/* <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
@@ -423,14 +420,11 @@ const AboutPage = () => {
               Our Mission
             </h3>
 
-            <p className="text-sm leading-7 text-slate-700 md:text-base">
-              To provide a transformative outdoor learning experience that
-              connects children with nature and agriculture, fostering courage,
-              confidence and creativity through hands-on activities and
-              educational programs.
+            <p className="text-sm text-slate-700 md:text-base">
+              Our Mission is to give every family of Vidarbha a clean, safe, and affordable world-class npicnic experience where fun, safety, and nature come together - Because at Shivtirth, we don't just sell tickets, we create happy family memories.
             </p>
 
-            <div className="mt-2 space-y-2">
+            {/* <div className="mt-2 space-y-2">
               {[
                 "Connect children with nature",
                 "Promote agricultural learning",
@@ -445,7 +439,7 @@ const AboutPage = () => {
                   {item}
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Vision */}
@@ -463,14 +457,11 @@ const AboutPage = () => {
               Our Vision
             </h3>
 
-            <p className="text-sm leading-7 text-slate-700 md:text-base">
-              To inspire the next generation to embrace environmental
-              stewardship and agricultural knowledge, nurturing a deep
-              appreciation for nature and empowering them to thrive in a
-              rapidly changing world.
+            <p className="text-sm text-slate-700 md:text-base">
+              To be Central India's No.1 Most Loved, Enjoyable, Safest & Nature based Family Picnic Destination - Where every people  says "Mauj Masti Chahiye to Shivtirth Ayeeye!"
             </p>
 
-            <div className="mt-2 space-y-2">
+            {/* <div className="mt-2 space-y-2">
               {[
                 "Encourage environmental responsibility",
                 "Promote agricultural awareness",
@@ -485,7 +476,7 @@ const AboutPage = () => {
                   {item}
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
         </div>
