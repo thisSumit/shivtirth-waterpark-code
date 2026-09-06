@@ -137,31 +137,31 @@ const Attractions: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/20 transition-opacity duration-300 group-hover:from-slate-950 group-hover:via-slate-900/60" />
 
                 {/* Top ParkTag Badge & Action Button */}
-                <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10 gap-2">
+                <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10 gap-2">
                   {/* ParkTag with glassmorphism backdrop-blur background */}
                   <span className="text-[10px] sm:text-[11px] font-medium tracking-wider uppercase bg-black/40 backdrop-blur-md border border-white/20 text-slate-100 px-3 py-1 rounded-full shadow-xs">
                     {item.parkTag}
                   </span>
 
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md transition-all duration-300 group-hover:bg-accent group-hover:border-amber-400 group-hover:text-slate-950 group-hover:scale-110 shadow-md">
-                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300" />
                   </div>
                 </div>
 
                 {/* Bottom Content Container */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col justify-end text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-4 z-10 flex flex-col justify-end text-white">
                   {/* Subtitle above title without background */}
-                  <span className="text-xs sm:text-sm font-semibold tracking-wider uppercase text-white drop-shadow-md mb-0.5">
+                  <span className="text-sm uppercase text-white drop-shadow-md mb-0.5">
                     {item.subtitle}
                   </span>
 
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-accent transition-colors duration-300 drop-shadow-sm">
+                  <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-accent transition-colors duration-300 drop-shadow-sm">
                     {item.title}
                   </h3>
 
                   {/* Description: Hidden by default, shown smoothly on hover */}
                   <div className="max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-in-out overflow-hidden">
-                    <p className="text-xs sm:text-sm text-slate-200 pt-2 line-clamp-3 leading-relaxed font-normal drop-shadow-xs">
+                    <p className="text-sm text-slate-200 pt-2 line-clamp-3 drop-shadow-xs">
                       {item.description}
                     </p>
                   </div>
