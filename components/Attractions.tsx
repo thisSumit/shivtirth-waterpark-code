@@ -40,7 +40,7 @@ const attractionsData: AttractionItem[] = [
     description:
       "Challenge yourself with high rope bridges, zip line, climbing towers, and obstacles.",
     href: "/adventure-park",
-    videoUrl: "/main.mp4",
+    videoUrl: "",
     posterUrl: "/Adventure-Park.jpg",
     gridClass: "col-span-1 md:col-start-3 md:col-span-1 md:row-start-1 md:row-span-1 min-h-[300px] md:min-h-[240px]",
   },
@@ -52,7 +52,7 @@ const attractionsData: AttractionItem[] = [
     description:
       "Classic Columbus rides, spinning swings, bumper cars, and carnival fun for everyone.",
     href: "/amusement-park",
-    videoUrl: "/main.mp4",
+    videoUrl: "",
     posterUrl: "/amusement.jpg",
     gridClass: "col-span-1 md:col-start-3 md:col-span-1 md:row-start-2 md:row-span-1 min-h-[300px] md:min-h-[240px]",
   },
@@ -88,7 +88,7 @@ const attractionsData: AttractionItem[] = [
     description:
       "Enjoy peaceful pedal boats, family shikara boats, and scenic lake views.",
     href: "/boating-park",
-    videoUrl: "/main.mp4",
+    videoUrl: "",
     posterUrl: "/Boating-Park.jpg",
     gridClass: "col-span-1 md:col-start-2 md:col-span-2 md:row-start-3 md:row-span-2 min-h-[340px] md:min-h-[500px]",
   },
