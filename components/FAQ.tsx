@@ -7,7 +7,7 @@ import { ScrollReveal } from './ui/ScrollReveal';
 
 const FAQ = () => {
   return (
-    <section className='px-4 md:px-8 py-8 max-w-6xl mx-auto'>
+    <section className='px-4 md:px-8 py-8 max-w-7xl mx-auto'>
       <AnimatedHeading
         title="FAQ"
         subtitle="Find answers to common questions about Shivtirth Water Park"
@@ -21,7 +21,7 @@ const FAQ = () => {
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-slate-600">
               <p>
-               All enjoyments under one roof, in reasonable rates, with many facilities and specialities.
+                All enjoyments under one roof, in reasonable rates, with many facilities and specialities.
               </p>
             </AccordionContent>
           </AccordionItem>
