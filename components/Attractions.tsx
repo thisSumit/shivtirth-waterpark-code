@@ -33,6 +33,18 @@ const attractionsData: AttractionItem[] = [
     gridClass: "col-span-1 md:col-start-1 md:col-span-2 md:row-start-1 md:row-span-2 min-h-[340px] md:min-h-[500px]",
   },
   {
+    id: "boating-park",
+    title: "Boating Park",
+    subtitle: "Serene Waterways",
+    parkTag: "Shivtirth Boating Lake",
+    description:
+      "Enjoy peaceful pedal boats, family shikara boats, and scenic lake views.",
+    href: "/boating-park",
+    videoUrl: "",
+    posterUrl: "/Boating-Park.jpg",
+    gridClass: "col-span-1 md:col-start-2 md:col-span-2 md:row-start-3 md:row-span-2 min-h-[340px] md:min-h-[500px]",
+  },
+  {
     id: "adventure-park",
     title: "Adventure Park",
     subtitle: "Heart-Pumping Thrills",
@@ -79,18 +91,6 @@ const attractionsData: AttractionItem[] = [
     videoUrl: "/main.mp4",
     posterUrl: "/Stay-Facilities.jpg",
     gridClass: "col-span-1 md:col-start-1 md:col-span-1 md:row-start-4 md:row-span-1 min-h-[300px] md:min-h-[240px]",
-  },
-  {
-    id: "boating-park",
-    title: "Boating Park",
-    subtitle: "Serene Waterways",
-    parkTag: "Shivtirth Boating Lake",
-    description:
-      "Enjoy peaceful pedal boats, family shikara boats, and scenic lake views.",
-    href: "/boating-park",
-    videoUrl: "",
-    posterUrl: "/Boating-Park.jpg",
-    gridClass: "col-span-1 md:col-start-2 md:col-span-2 md:row-start-3 md:row-span-2 min-h-[340px] md:min-h-[500px]",
   },
 ];
 
