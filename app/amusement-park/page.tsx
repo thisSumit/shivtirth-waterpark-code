@@ -149,11 +149,11 @@ const AmusementParkPage = () => {
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#ff930f] via-[#fbcf00] to-[#fff95b] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Amusement Park Rides & Entertainment
-            </h2>
+            </h2> */}
             <p className="text-amber-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Discover a range of rides and entertainment experiences across the amusement zone, each designed to keep the atmosphere lively and enjoyable.
+              Get Ready for Non-Stop Thrills! From High-Speed Thrill Rides to Fun-Filled Family & Kids Rides - The Ultimate Entertainment Destination for Everyone !
             </p>
           </ScrollReveal>
 

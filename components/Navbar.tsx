@@ -39,7 +39,7 @@ const defaultParksDropdownItems: ActivityItem[] = [
   // { name: "Bird Park", id: getParkSectionId("Bird Park") },
   { name: "Agro Park", id: getParkSectionId("Agro Park") },
   { name: "Air Tourism", id: getParkSectionId("Air Tourism") },
-  { name: "Accommodation", href: "/accommodation" },
+  // { name: "Accommodation", href: "/accommodation" },
   {
     name: "Wedding Celebrations",
     id: getParkSectionId("Wedding Celebrations"),
@@ -215,8 +215,8 @@ const Navbar = () => {
       href: "/offers",
     },
     {
-      name: "Other Activities/Parks",
-      href: "/parks-experiences",
+      name: "Other Activities",
+      href: "/other-activities",
       hasDropdown: true,
     },
 
@@ -261,7 +261,7 @@ const Navbar = () => {
      Scroll to Activity Section
   -------------------------------- */
   const handleScrollToSection = (id: string) => {
-    router.push("/parks-experiences");
+    router.push("/other-activities");
 
     setTimeout(() => {
       const el = document.getElementById(id);
@@ -303,11 +303,10 @@ const Navbar = () => {
           NAVBAR
       ================================= */}
       <nav
-        className={`fixed top-8 left-0 right-0 z-[999] transition-all duration-300 ${
-          scrolled || isOpen
-            ? "bg-white shadow-lg border-b border-slate-100"
-            : "bg-transparent"
-        }`}
+        className={`fixed top-8 left-0 right-0 z-[999] transition-all duration-300 ${scrolled || isOpen
+          ? "bg-white shadow-lg border-b border-slate-100"
+          : "bg-transparent"
+          }`}
       >
         <div className="max-w-8xl mx-auto px-3 xl:px-4">
           <div className="relative z-[1000] flex items-center justify-between h-20">
@@ -341,34 +340,32 @@ const Navbar = () => {
                   {link.href ? (
                     <Link
                       href={link.href}
-                      className={`shrink-0 whitespace-nowrap text-[11px] xl:text-[12.5px] font-bold uppercase tracking-tight flex items-center px-2 py-1.5 rounded-md transition ${
-                        scrolled
-                          ? "text-slate-800"
-                          : "text-white"
-                      } hover:text-amber-500 hover:bg-amber-500/10`}
+                      className={`shrink-0 whitespace-nowrap text-[11px] xl:text-[12.5px] font-bold uppercase tracking-tight flex items-center px-2 py-1.5 rounded-md transition ${scrolled
+                        ? "text-slate-800"
+                        : "text-white"
+                        } hover:text-amber-500 hover:bg-amber-500/10`}
                     >
                       {link.name}
 
                       {(link.hasDropdown ||
                         link.dropdownItems?.length) && (
-                        <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
-                      )}
+                          <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
+                        )}
                     </Link>
                   ) : (
                     <button
                       type="button"
-                      className={`shrink-0 whitespace-nowrap text-[11px] xl:text-[12.5px] font-bold uppercase tracking-tight flex items-center gap-0.5 px-1.5 py-1.5 rounded-md transition ${
-                        scrolled
-                          ? "text-slate-800"
-                          : "text-white"
-                      } hover:text-amber-500 hover:bg-amber-500/10`}
+                      className={`shrink-0 whitespace-nowrap text-[11px] xl:text-[12.5px] font-bold uppercase tracking-tight flex items-center gap-0.5 px-1.5 py-1.5 rounded-md transition ${scrolled
+                        ? "text-slate-800"
+                        : "text-white"
+                        } hover:text-amber-500 hover:bg-amber-500/10`}
                     >
                       {link.name}
 
                       {(link.hasDropdown ||
                         link.dropdownItems?.length) && (
-                        <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
-                      )}
+                          <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
+                        )}
                     </button>
                   )}
 
@@ -439,11 +436,10 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsOpen((prev) => !prev)}
-              className={`lg:hidden relative z-[1001] p-2.5 rounded-lg transition-colors ${
-                isOpen || scrolled
-                  ? "text-slate-900 bg-slate-100/80"
-                  : "text-white bg-black/30 backdrop-blur-sm"
-              }`}
+              className={`lg:hidden relative z-[1001] p-2.5 rounded-lg transition-colors ${isOpen || scrolled
+                ? "text-slate-900 bg-slate-100/80"
+                : "text-white bg-black/30 backdrop-blur-sm"
+                }`}
               aria-label={
                 isOpen ? "Close menu" : "Open menu"
               }
@@ -462,11 +458,10 @@ const Navbar = () => {
             MOBILE MENU
         ================================= */}
         <div
-          className={`lg:hidden fixed inset-0 top-28 bg-white z-[998] overflow-y-auto transition-all duration-300 ${
-            isOpen
-              ? "opacity-100 visible pointer-events-auto"
-              : "opacity-0 invisible pointer-events-none"
-          }`}
+          className={`lg:hidden fixed inset-0 top-28 bg-white z-[998] overflow-y-auto transition-all duration-300 ${isOpen
+            ? "opacity-100 visible pointer-events-auto"
+            : "opacity-0 invisible pointer-events-none"
+            }`}
         >
           <div className="px-5 py-6 space-y-3 pb-24">
             {navLinks.map((link) => (

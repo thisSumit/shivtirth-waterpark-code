@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "things to do in nagpur",
   ],
   openGraph: {
-    title: "Parks & Experiences | Best Park in Nagpur",
+    title: "Other Activities | Best Park in Nagpur",
     description:
       "Explore thrilling rides, water attractions, and unforgettable experiences at Shivtirth,  the best park in Nagpur.",
     siteName: "Shivtirth Water Park",

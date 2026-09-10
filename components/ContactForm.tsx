@@ -18,7 +18,7 @@ const ContactForm = () => {
 
   // IMPORTANT: Replace this with your actual Google Apps Script Web App URL
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxY9ulYygp1MMUuf6_aXQdQuFnMDwLILjPmtEXwUlE43wbITkX0Avr0FB-PZtfA7t03gQ/exec";
-  
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -43,7 +43,7 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
-    
+
     try {
       // 1. Submit to Supabase
       try {
@@ -67,12 +67,12 @@ const ContactForm = () => {
         },
         body: JSON.stringify(formData),
       });
-      
+
       // Note: with 'no-cors' mode, we can't read the response
       // but if no error is thrown, we can assume success
       setSubmitted(true);
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-      
+
       // Scroll to success message
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
@@ -87,12 +87,12 @@ const ContactForm = () => {
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900">
       {/* Top spacer under fixed navbar */}
 
-<div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-16 text-center">
           <h1 className="inline-block px-4 py-2 rounded-full bg-accent/20 border border-accent/40 text-accent font-semibold mb-4">
             Contact Shivtirth Water Park
@@ -164,13 +164,9 @@ const ContactForm = () => {
                           <path d="M12 8a4 4 0 100 8 4 4 0 000-8zm8-2h-3.17A3 3 0 0014 4h-4a3 3 0 00-2.83 2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2z" />
                         </svg>
                       </span>
-                      <span>
-                        <p className="text-sm text-slate-500 mb-1">⁠Water Park:</p>
-                        <p className="font-medium">10:00 AM – 04:00 PM</p>
-                        <p className="text-sm text-slate-500 mb-1">⁠Boating Park:</p>
-                        <p className="font-medium">10:00 AM – 02:00 PM</p>
-                        <p className="text-sm text-slate-500 mb-1">⁠Amusement / Adventure Park:</p>
-                        <p className="font-medium">04:00 PM – 06:00 PM</p>⁠  
+                      <span className="flex flex-col">
+                        <a href="https://www.instagram.com/shivtirthbestwaterpark/" className="hover:text-slate-400">Instagram</a>
+                        <a href="https://www.google.com/search?sca_esv=1e6d41c8364089b5&sxsrf=APpeQnvJ6UuT6MT9v1csGVUiSTAU5oitaQ:1787810058124&q=shivtirth+picnic+spot+reviews&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_xz60olg8NsrlK-yAeEzNJFQcRLmVJLLcSNze2fTmHlJdQPVdvNoSSWMa8GEagktFSpcdPrq118Qtm2qUCFGrcOEH-k_pV1ANNqzeZFyuBnpyprU3w%3D%3D&sa=X&sqi=2&ved=2ahUKEwjGx8K7j8CWAxVJha8BHb3aJ-EQyNoBKAB6BAgZEAA&ictx=1&biw=1536&bih=695&dpr=1.25" className="hover:text-slate-400">Google Reviews</a>
                       </span>
                     </div>
                   </div>

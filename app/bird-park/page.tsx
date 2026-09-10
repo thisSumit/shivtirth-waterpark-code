@@ -169,11 +169,11 @@ const BirdParkPage = () => {
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#386641] via-[#6a994e] to-[#1a3a2a] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Birds & Animals at Sai Bird Park
-            </h2>
+            </h2> */}
             <p className="text-emerald-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Discover the colorful world of birds and nature at Bird Park, Shivtirth. Meet different varieties of birds in a peaceful sanctuary setting.
+              Introducing Vidarbha's Most Beautiful Bird Park, bringing you closer to nature having exotic and domestic bird species in a spacious, natural habitat designed for education, conservation, and family enjoyment with feeding zone.
             </p>
           </ScrollReveal>
 

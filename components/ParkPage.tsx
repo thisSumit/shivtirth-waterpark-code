@@ -204,7 +204,7 @@ export const ParkPage = () => {
 
   return (
     <main
-      id="parks-experiences"
+      id="other-activities"
       className="min-h-screen bg-gradient-to-b from-[#8ECAE6] via-[#219EBC] to-[#023047] text-slate-900"
     >
       {/* ================= HERO ================= */}
@@ -229,7 +229,7 @@ export const ParkPage = () => {
                     "'Times New Roman', Times, Georgia, serif",
                 }}
               >
-                Parks & Experiences
+                Other Activities
               </h1>
 
               <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
@@ -253,12 +253,11 @@ export const ParkPage = () => {
                   "'Times New Roman', Times, Georgia, serif",
               }}
             >
-              Parks & Experiences
+              Other Activities
             </h2>
 
             <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Explore exciting attractions, entertainment experiences,
-              adventure activities and memorable moments at Shivtirth.
+              Beyond the main Park attractions, enjoy a wide range of engaging activities making it a complete learning and fun destination for all purposes and age groups. One Place, Unlimited Entertainment!
             </p>
           </ScrollReveal>
 
@@ -327,44 +326,44 @@ export const ParkPage = () => {
 
                       <p className="text-sm text-cyan-50">{park.description}</p>
 
-                    {/* DATABASE FEATURES */}
-                    {park.features && park.features.length > 0 && (
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {park.features.map((feature, fIdx) => (
-                          <span
-                            key={`${park.name}-feature-${fIdx}`}
-                            className="inline-block px-2 py-1 bg-amber-50 border border-amber-300/60 rounded-full text-xs font-semibold text-slate-800 hover:bg-amber-100 transition"
+                      {/* DATABASE FEATURES */}
+                      {park.features && park.features.length > 0 && (
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          {park.features.map((feature, fIdx) => (
+                            <span
+                              key={`${park.name}-feature-${fIdx}`}
+                              className="inline-block px-2 py-1 bg-amber-50 border border-amber-300/60 rounded-full text-xs font-semibold text-slate-800 hover:bg-amber-100 transition"
+                            >
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* BUTTONS */}
+                      <div className="flex flex-wrap gap-3 pt-3">
+                        {park.href ? (
+                          <Link
+                            href={park.href}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-slate-950 font-bold text-sm uppercase tracking-wider hover:bg-amber-500 transition shadow-md"
                           >
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                            View Accommodation Stay
+                          </Link>
+                        ) : null}
 
-                    {/* BUTTONS */}
-                    <div className="flex flex-wrap gap-3 pt-3">
-                      {park.href ? (
                         <Link
-                          href={park.href}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-slate-950 font-bold text-sm uppercase tracking-wider hover:bg-amber-500 transition shadow-md"
+                          href="tel:+918605362212"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
                         >
-                          View Accommodation Stay
+                          Call to Plan & Book
                         </Link>
-                      ) : null}
-
-                      <Link
-                        href="tel:+918605362212"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
-                      >
-                        Call to Plan & Book
-                      </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ScrollReveal>
-            );
-          })}
-        </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
         </div>
       </section>
 

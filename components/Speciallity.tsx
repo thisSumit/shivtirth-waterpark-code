@@ -44,8 +44,7 @@ const Speciallity = () => {
               // </ScrollStaggerItem>
               <ScrollStaggerItem key={index}>
                 <div className="group flex items-center gap-2">
-                  <div className="flex h-3 w-3 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
-                    <Icon className="h-2 w-2" />
+                  <div className="flex h-2 w-2 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
                   </div>
                   <span className="flex items-start gap-2.5 text-sm text-slate-700">
                     {item.text}

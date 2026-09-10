@@ -173,11 +173,11 @@ const BoatingParkPage = () => {
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e57] via-[#006d77] to-[#002e34] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Boating Park Activities
-            </h2>
+            </h2> */}
             <p className="text-teal-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Step beyond the ordinary and discover boating experiences built for excitement and scenic relaxation on the water.
+              Introducing Vidarbha's Biggest, Safest & Most Thrilling Government-Authorized Boating Center - Bringing the Mumbai & Goa Experience to You !
             </p>
           </ScrollReveal>
 

@@ -175,11 +175,8 @@ const WaterParkPage = () => {
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e64] via-[#00a5cf] to-[#003440] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-              Water Park Attractions & Rides
-            </h2>
             <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Explore experiences crafted for every mood, from calm relaxing pools to high-energy slides designed for safety, comfort, and unforgettable memories.
+              The waterpark has been created carefully keeping in mind the full enjoyment with new ideas for thrill seekers, families, kids and seniors.
             </p>
           </ScrollReveal>
 

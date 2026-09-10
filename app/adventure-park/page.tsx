@@ -169,11 +169,11 @@ const AdventureParkPage = () => {
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#1b4332] via-[#2d6a4f] to-[#081c15] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
               Adventure Park Thrills & Obstacles
-            </h2>
+            </h2> */}
             <p className="text-emerald-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Unleash your inner explorer with Mowgli-inspired adventures packed with adrenaline, physical challenges, and unforgettable outdoor experiences.
+              Introducing Vidarbha's Safest and Most Enjoyable Adventure Center, bringing you the thrilling experience of Jungle, Mountains, and Valleys all in one place.
             </p>
           </ScrollReveal>
 

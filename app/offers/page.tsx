@@ -470,9 +470,7 @@ const Page = async () => {
                 Offer & Packages
               </h1>
               <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
-                WATER PARK PACKAGE | ONLY BOATING PACKAGE | SILVER COMBO PACKAGE |
-                GOLDEN FULL PACKAGE | DAY & NIGHT STAY PACKAGE | MEAL PACKAGE |
-                FUNCTION PACKAGE
+                Customized and Affordable Various packages designed for every age group having special discounts.
               </p>
             </div>
           </div>

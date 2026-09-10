@@ -228,10 +228,7 @@ const AboutPage = () => {
           </span>
 
           <h1
-            className="text-2xl font-bold uppercase leading-tight tracking-wide text-white md:text-3xl"
-            style={{
-              fontFamily: "'Times New Roman', Times, Georgia, serif",
-            }}
+            className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
           >
             Your Ultimate Destination for Fun, Learning, Food, and Natural Beauty!
           </h1>
@@ -240,7 +237,7 @@ const AboutPage = () => {
             Discover Shivtirth — a unique destination where adventure,
             entertainment, learning and natural beauty come together. From
             water parks and boating to adventure, amusement, agriculture and
-            nature experiences, Shivtirth offers something for everyone.
+            nature experiences, Shivtirth offers everything for everyone.
           </p>
         </div>
       </section>

@@ -131,10 +131,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>Park Timing: 09:00 AM – 06:00 PM</li>
-              <li>Water Park: 09:00 AM – 06:00 PM</li>
+              <li>Breakfast: 09:00 AM – 11:30 AM</li>
+              <li>Water Park: 10:00 AM – 04:00 PM</li>
               <li>Boating Park: 10:00 AM – 02:00 PM</li>
               <li>Lunch: 02:00 PM – 04:00 PM</li>
-              <li>Amusement / Adventure Park: 04:00 PM – 06:00 PM</li>
+              <li>Adventure / Amusement Park: 04:00 PM – 06:00 PM</li>
               <li>High Tea: 05:00 PM – 06:00 PM</li>
             </ul>
           </div>

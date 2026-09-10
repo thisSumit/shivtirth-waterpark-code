@@ -340,14 +340,14 @@ export default function AccommodationPage() {
       <section className="py-10 md:py-14 bg-white text-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <h2
+            {/* <h2
               className="text-2xl font-bold text-slate-900 mb-2"
               style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
             >
               Stay Facilities & Night Experiences
-            </h2>
+            </h2> */}
             <p className="text-slate-600 mb-8 text-sm leading-relaxed max-w-2xl">
-              Why let the fun end at sunset? Trade the long drive home for a night under the stars with our range of cozy, rustic, and luxury accommodations.
+              From Cozy Deluxe Rooms to Spacious Family Cottages/Dormitory & Premium Villas - Your Perfect Getaway! Enjoy Modern Comforts, Lush Green, Dam Views, Delicious Food, Team Games and Warm Hospitality, All at One Place.
             </p>
           </ScrollReveal>
 

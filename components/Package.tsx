@@ -46,7 +46,7 @@ const packages = [
   {
     id: 5,
     title: 'Dining',
-    link: '/parks-experiences#dining',
+    link: '/other-activities#dining',
     subtitle: 'TASTE THE FLAVOUR OF FUN',
     description: 'Refuel your adventure with delicious cuisines, refreshing beverages, and treats that satisfy every craving.',
     image: '/dining-shivtirth.png',
@@ -55,7 +55,7 @@ const packages = [
   {
     id: 6,
     title: 'Camping Stay',
-    link: '/parks-experiences#stay-facilities',
+    link: '/other-activities#stay-facilities',
     subtitle: 'STAY, RELAX & RECHARGE',
     description: 'Extend the fun with cozy camping stays, surrounded by nature, comfort, and unforgettable night-time experiences.',
     image: '/Stay-Facilities.jpg',
@@ -73,7 +73,7 @@ const Package = () => {
       <div className='relative z-10 max-w-7xl mx-auto'>
         {/* Header */}
         <ScrollReveal direction="up" delay={0.1} duration={0.6} className='text-center mb-14'>
-          <h2 
+          <h2
             className='text-4xl md:text-6xl font-bold uppercase tracking-tight text-white mb-4 leading-tight drop-shadow-xl font-times'
             style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
           >
@@ -111,15 +111,15 @@ const Package = () => {
                     <p className='text-amber-400 font-bold text-xs md:text-sm tracking-wider uppercase mb-1'>
                       {pkg.subtitle}
                     </p>
-                    <h3 
+                    <h3
                       className='text-2xl md:text-4xl font-bold text-white mb-4 font-times drop-shadow-md'
                       style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
                     >
                       {pkg.title}
                     </h3>
-                    
+
                     <Link href={pkg.link} className="w-fit">
-                      <motion.button 
+                      <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.98 }}
                         className='w-fit px-6 py-2.5 bg-amber-400 text-slate-950 font-bold text-xs md:text-sm rounded-full transition-all duration-300 shadow-lg hover:bg-amber-300 uppercase tracking-wide'

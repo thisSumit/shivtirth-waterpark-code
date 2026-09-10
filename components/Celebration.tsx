@@ -92,7 +92,7 @@ const Venue = () => {
 
   const goToParkSection = () => {
     if (!selectedVenue) return
-    router.push(`/parks-experiences#${selectedVenue.parkSectionId}`)
+    router.push(`/other-activities#${selectedVenue.parkSectionId}`)
     closeDetail()
   }
 
@@ -112,7 +112,7 @@ const Venue = () => {
               ) : (
                 <div className='w-full h-full bg-linear-to-br from-[#1b3d2c] to-[#2d5a47] flex items-center justify-center'>
                   <div className='w-full h-full object-cover '>
-                  <img src="/birthday-1.jpg" className='w-full h-full object-cover' alt="" />
+                    <img src="/birthday-1.jpg" className='w-full h-full object-cover' alt="" />
                   </div>
                 </div>
               )}
@@ -154,8 +154,8 @@ const Venue = () => {
                         {venue.name}
                       </span>
                     </div>
-                    <ChevronRight 
-                      className='w-5 h-5 text-foreground/40 group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300' 
+                    <ChevronRight
+                      className='w-5 h-5 text-foreground/40 group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300'
                     />
                   </button>
                 </div>
@@ -175,9 +175,8 @@ const Venue = () => {
       {/* Detail Modal/Overlay */}
       {isDetailOpen && selectedVenue && (
         <div
-          className={`fixed inset-0 z-999 flex items-center justify-center p-4 transition-opacity duration-300 ${
-            isDetailOpen ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`fixed inset-0 z-999 flex items-center justify-center p-4 transition-opacity duration-300 ${isDetailOpen ? 'opacity-100' : 'opacity-0'
+            }`}
           onClick={closeDetail}
         >
           {/* Backdrop */}
@@ -185,9 +184,8 @@ const Venue = () => {
 
           {/* Detail Card */}
           <div
-            className={`relative bg-background rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden transition-all duration-300 ${
-              isDetailOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-            }`}
+            className={`relative bg-background rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden transition-all duration-300 ${isDetailOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+              }`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
