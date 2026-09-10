@@ -26,7 +26,7 @@ const WaterParkPage = () => {
     {
       title: "Exciting Water Slides",
       description: "A wide collection of high-thrill slides and gentle water slides built for endless fun and adventure.",
-      image: "/adishakti-waterfall.jpg",
+      image: "/side-waterfall.jpeg",
     },
     {
       title: "Adishakti Waterfall",
