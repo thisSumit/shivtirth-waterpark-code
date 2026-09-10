@@ -12,7 +12,7 @@ const Hero = () => {
     title1: "Shivtirth",
     title2: "Best Water Park & Resorts",
     description: "Waterpark | Boating Park | Adventure Park | Amusement Park | Safari | Bird Park | Agro Park | Helicopter Ride | Wedding | Accommodation | Corporate Events | Festival Celebrations | Birthday Events | Special School Picnic",
-    videoUrl: "/main.mp4",
+    videoUrl: "/hero.mp4",
     posterUrl: "/p6.jpg",
     subTitle: "मौज मस्ती चाहिये, शिवतीर्थ आइए"
   });
@@ -73,7 +73,8 @@ const Hero = () => {
             muted
             playsInline
             className='h-full w-full object-cover'
-            src={heroData.videoUrl}
+            // src={heroData.videoUrl}
+            src="/hero.mp4"
             poster={heroData.posterUrl}
           />
           <div className='absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75' />
