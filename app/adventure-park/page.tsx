@@ -16,79 +16,84 @@ interface AdventureSlide {
   video_url?: string;
 }
 
-const AdventureParkPage = () => {
-  const adventureSlides: AdventureSlide[] = [
-    {
-      title: 'Zip Line',
-      description: 'Soar across the adventure zone and feel the rush of speed and height in one seamless ride. Designed for excitement and smooth movement, it offers a thrilling perspective from above.',
-      image: '/Adventure-Park.jpg',
-    },
-    {
-      title: 'Rope Bridges',
-      description: 'Test your balance as you make your way across suspended paths set above the ground. With every step, enjoy a mix of light challenge and scenic views.',
-      image: '/rope-bridges.jpg',
-    },
-    {
-      title: 'Obstacle Courses',
-      description: 'Take on a series of fun challenges that put your agility, focus, and determination to the test. Each section is designed to keep you active and engaged.',
-      image: '/obstacle-bridge.jpg',
-    },
-    {
-      title: 'Burma Bridges',
-      description: 'Take on a classic outdoor challenge as you balance your way across rope-supported bridges. With guided safety and a well-designed setup, it offers an authentic adventure experience.',
-      image: '/burma-bridges.jpg',
-    },
-    {
-      title: 'Net Climbing',
-      description: 'Climb secure net structures that combine physical activity and thrill for kids, youth, and adventure enthusiasts.',
-      image: '/net-climbing.jpeg',
-    },
-    {
-      title: 'Commando Tower',
-      description: 'Push your limits with a multi-activity challenge designed to build confidence and courage. With guided climbing and controlled descents under expert supervision.',
-      image: '/commando-tower.jpeg',
-    },
-    {
-      title: 'Target Shooting',
-      description: 'Test your focus and precision in a controlled, engaging setup designed for both fun and skill-building.',
-      image: '/target-shooting.jpg',
-    },
-    {
-      title: 'Tree House',
-      description: 'A peaceful spot set amidst nature, offering elevated views and a refreshing break from the activity around. Designed as a relaxing stay point.',
-      image: '/tree-house.jpg',
-    },
-    {
-      title: '3D Show',
-      description: 'Discover an immersive experience set within Mogli Park, where visuals, motion, and storytelling come together in a jungle-inspired setting.',
-      image: '/3d-show.jpeg',
-    },
-    {
-      title: 'Butterfly Garden',
-      description: 'A calm, nature-filled space designed for quiet moments and gentle exploration. Surrounded by greenery and vibrant butterflies.',
-      image: '/butterfly-garden.jpeg',
-    },
-  ];
+const defaultAdventureSlides: AdventureSlide[] = [
+  {
+    title: 'Zip Line',
+    description: 'Soar through the air on an exciting zip line ride that gives you a thrilling bird’s-eye view of the natural surroundings.',
+    image: '/mowgli-adventure.jpg',
+  },
+  {
+    title: 'Rope Bridges & Obstacles',
+    description: 'Challenge your balance and confidence across various elevated rope crossings designed for fun and adventure.',
+    image: '/high-rope.jpeg',
+  },
+  {
+    title: 'Commando Tower',
+    description: 'Test your strength and endurance as you climb up and conquer the commando tower obstacle.',
+    image: '/climbing.jpeg',
+  },
+  {
+    title: 'Tyre & Burma Bridges',
+    description: 'Navigate through suspended tyre bridges and classic Burma bridges for an authentic jungle adventure experience.',
+    image: '/mowgli-adventure.jpg',
+  },
+  {
+    title: 'Tree House & Nature Trail',
+    description: 'Explore nature walks leading up to elevated tree houses surrounded by lush green foliage.',
+    image: '/mowgli-adventure.jpg',
+  },
+  {
+    title: 'Butterfly Garden & 3D Show',
+    description: 'Relax in peaceful butterfly gardens and enjoy immersive 3D entertainment shows with your family.',
+    image: '/mowgli-adventure.jpg',
+  }
+];
 
-  const [slides, setSlides] = useState<AdventureSlide[]>(adventureSlides);
+const AdventureParkPage = () => {
+  const [slides, setSlides] = useState<AdventureSlide[]>(defaultAdventureSlides);
+  const [headerTitle, setHeaderTitle] = useState("Adventure Park");
+  const [headerSub, setHeaderSub] = useState(
+    "Zip Line | Rope Bridges | Tyre Bridges | Burma Bridges | Obstacle Courses | Net Climbing | Commando Tower | Tree House | 3D Show | Butterfly Garden"
+  );
+  const [headerDesc, setHeaderDesc] = useState(
+    "Challenge your balance, agility, and thrill-seeking spirit with our high rope bridges, zip line, climbing towers, and obstacle courses in the open air."
+  );
+  const [heroImage, setHeroImage] = useState("/mowgli-adventure.jpg");
+  const [heroVideo, setHeroVideo] = useState("");
 
   useEffect(() => {
-    async function fetchAttractions() {
+    async function fetchData() {
       try {
-        const { data } = await supabase
-          .from('attractions')
-          .select('title, description, image, video, video_url')
-          .eq('park_type', 'adventure-park')
-          .eq('is_hidden', false)
-          .order('display_order', { ascending: true });
-        if (data && data.length > 0) {
-          setSlides(data);
+        const { data: headerData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "park_header_adventure-park")
+          .single();
+
+        if (headerData && headerData.content) {
+          const c = headerData.content;
+          if (c.title) setHeaderTitle(c.title);
+          if (c.subDescription) setHeaderSub(c.subDescription);
+          if (c.mainDescription) setHeaderDesc(c.mainDescription);
+          if (c.imageUrl) setHeroImage(c.imageUrl);
+          if (c.videoUrl) setHeroVideo(c.videoUrl);
+        }
+
+        const { data: attractionData } = await supabase
+          .from("attractions")
+          .select("title, description, image, video, video_url")
+          .eq("park_type", "adventure-park")
+          .eq("is_hidden", false)
+          .order("display_order", { ascending: true });
+
+        if (attractionData && attractionData.length > 0) {
+          setSlides(attractionData);
         }
       } catch (err) {
-        console.error("Error loading attractions:", err);
+        console.error("Error loading adventure park content:", err);
       }
     }
-    fetchAttractions();
+    fetchData();
   }, []);
 
   const adventureFacilities = [
@@ -136,22 +141,33 @@ const AdventureParkPage = () => {
     <main id="about-park" className="bg-gradient-to-b from-emerald-950 via-slate-900 to-emerald-950 text-slate-100">
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/mowgli-adventure.jpg"
-            alt="Adventure Park"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={headerTitle}
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
               <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-                Adventure Park
+                {headerTitle}
               </h1>
               <p className="mt-2 text-sm text-emerald-100/90 drop-shadow-sm font-medium">
-                Zip Line | Rope Bridges | Tyre Bridges | Burma Bridges | Obstacle Courses | Net Climbing | Commando Tower | Tree House | 3D Show | Butterfly Garden
+                {headerSub}
               </p>
             </div>
           </div>
@@ -165,15 +181,12 @@ const AdventureParkPage = () => {
         BOOK NOW
       </InteractiveHoverButton>
 
-      {/* Attractions Section - Customized Mowgli Jungle Forest Green Gradient */}
+      {/* Attractions Section */}
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#1b4332] via-[#2d6a4f] to-[#081c15] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-              Adventure Park Thrills & Obstacles
-            </h2> */}
             <p className="text-emerald-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Introducing Vidarbha's Safest and Most Enjoyable Adventure Center, bringing you the thrilling experience of Jungle, Mountains, and Valleys all in one place.
+              {headerDesc}
             </p>
           </ScrollReveal>
 
@@ -201,7 +214,7 @@ const AdventureParkPage = () => {
                           />
                         ) : (
                           <Image
-                            src={slide.image || '/Adventure-Park.jpg'}
+                            src={slide.image || '/mowgli-adventure.jpg'}
                             alt={slide.title}
                             fill
                             className="object-cover object-[50%_18%] hover:scale-105 transition duration-500"
@@ -214,7 +227,7 @@ const AdventureParkPage = () => {
                       <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                         {slide.title}
                       </h3>
-                      <p className="text-sm text-emerald-50 leading-relaxed font-normal">{slide.description}</p>
+                      <p className="text-sm text-emerald-50">{slide.description}</p>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -229,7 +242,7 @@ const AdventureParkPage = () => {
         <ScrollReveal direction="up" delay={0.2}>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-emerald-100">
-              <h3 className="text-lg md:text-xl font-bold text-emerald-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-emerald-800 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Facilities
               </h3>
               <ul className="space-y-2.5">
@@ -245,13 +258,13 @@ const AdventureParkPage = () => {
             </div>
 
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-emerald-100">
-              <h3 className="text-lg md:text-xl font-bold text-emerald-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-emerald-800 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">
                 {adventureRules.map((rule) => (
                   <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-teal-100 text-teal-700 shrink-0">
                       <ShieldCheck className="h-3 w-3" />
                     </span>
                     <span>{rule}</span>
@@ -273,7 +286,7 @@ const AdventureParkPage = () => {
             <Accordion type="single" collapsible className="w-full">
               {adventureFaqs.map((faq, idx) => (
                 <AccordionItem key={idx} value={`adventure-faq-${idx}`} className="border-slate-200">
-                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-emerald-700 text-left">
+                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-emerald-600 text-left">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-xs md:text-sm text-slate-600 leading-relaxed">

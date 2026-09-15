@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import {
   buildBookingFromPayuCallback,
+  parseAddOnsFromSummary,
   submitBookingToDestinations,
 } from '@/lib/checkout-booking'
 
@@ -36,7 +37,49 @@ const isSuccessStatus = (status: string) => {
 }
 
 const processSuccessCallback = async (callbackPayload: Record<string, string>) => {
-  const booking = buildBookingFromPayuCallback(callbackPayload)
+  const txnid = callbackPayload.txnid || ''
+  let existingBooking: any = null
+
+  if (txnid) {
+    try {
+      const { supabaseAdmin } = await import('@/lib/supabaseAdmin')
+      const { data } = await supabaseAdmin.from('bookings').select('*').eq('txnid', txnid).maybeSingle()
+      existingBooking = data
+    } catch (e) {
+      console.error('Error querying existing booking on success callback:', e)
+    }
+  }
+
+  const callbackBooking = buildBookingFromPayuCallback(callbackPayload, txnid)
+
+  const booking = existingBooking
+    ? {
+        txnid: existingBooking.txnid || callbackBooking.txnid,
+        name: existingBooking.name || callbackBooking.name,
+        mobile: existingBooking.mobile || callbackBooking.mobile,
+        email: existingBooking.email || callbackBooking.email,
+        city: existingBooking.city || callbackBooking.city,
+        adultQty: Number(existingBooking.adult_qty || callbackBooking.adultQty || 1),
+        kids1Qty: Number(existingBooking.kid1_qty || callbackBooking.kids1Qty || 0),
+        kids2Qty: Number(existingBooking.kid2_qty || callbackBooking.kids2Qty || 0),
+        bookedDate: existingBooking.booked_date || callbackBooking.bookedDate,
+        visitDate: existingBooking.visit_date || callbackBooking.visitDate,
+        planName: existingBooking.plan_name || callbackBooking.planName,
+        ticketType: existingBooking.ticket_type || callbackBooking.ticketType,
+        ticketPrice: Number(existingBooking.ticket_price || callbackBooking.ticketPrice || 0),
+        ticketQty: Number(existingBooking.ticket_qty || callbackBooking.ticketQty || 1),
+        ticketSubtotal: Number(existingBooking.ticket_subtotal || callbackBooking.ticketSubtotal || 0),
+        addOns: callbackBooking.addOns?.length ? callbackBooking.addOns : (existingBooking.addon_summary ? parseAddOnsFromSummary(existingBooking.addon_summary) : []),
+        addOnSummary: (existingBooking.addon_summary && existingBooking.addon_summary !== 'None') ? existingBooking.addon_summary : callbackBooking.addOnSummary,
+        addOnSubtotal: Number(existingBooking.addon_subtotal || callbackBooking.addOnSubtotal || 0),
+        totalAmount: Number(existingBooking.total_amount || callbackBooking.totalAmount || 0),
+        rulesAccepted: Boolean(existingBooking.rules_accepted ?? true),
+        consentAccepted: Boolean(existingBooking.consent_accepted ?? true),
+        source: 'checkout-page' as const,
+        submittedAt: existingBooking.created_at || new Date().toISOString(),
+      }
+    : callbackBooking
+
   const meta = {
     gatewayTxnId: callbackPayload.mihpayid || callbackPayload.txnid || booking.txnid,
     gatewayStatus: callbackPayload.status || 'success',

@@ -6,7 +6,7 @@ import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { BadgeCheck, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { ScrollReveal, ScrollStaggerItem } from '@/components/ui/ScrollReveal';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface WaterParkSlide {
   title: string;
@@ -16,84 +16,96 @@ interface WaterParkSlide {
   video_url?: string;
 }
 
-const WaterParkPage = () => {
-  const waterParkSlides: WaterParkSlide[] = [
-    {
-      title: "Various Water Pools",
-      description: "Multiple spacious splash pools designed safely for all age groups, from primary school kids to high school students.",
-      image: "/adishakti-waterfall.jpg",
-    },
-    {
-      title: "Exciting Water Slides",
-      description: "A wide collection of high-thrill slides and gentle water slides built for endless fun and adventure.",
-      image: "/side-waterfall.jpeg",
-    },
-    {
-      title: "Adishakti Waterfall",
-      description: "Scenic waterfall setup over natural rock-like structures offering a cool, refreshing dip.",
-      image: "/adishakti-waterfall.jpg",
-    },
-    {
-      title: "Multiplay Station",
-      description: "Interactive aquatic play towers featuring mini slides, sprayers, and climbing platforms.",
-      image: "/thrill-slides.jpeg",
-    },
-    {
-      title: "Giant Splash Buckets",
-      description: "Massive overhead tipping buckets that pour down gallons of water at regular intervals.",
-      image: "/splash-bucket.jpeg",
-    },
-    {
-      title: "Rain Dance",
-      description: "High-energy rain dance zones accompanied by live DJ music systems for total group entertainment.",
-      image: "/rain-dance.jpeg",
-    },
-    {
-      title: "Foam Dance Party",
-      description: "Open-air dance pool covered in soft, light foam for high-spirited group celebrations.",
-      image: "/foam-dance.jpg",
-    },
-    {
-      title: "Rappelling (Upcoming)",
-      description: "Controlled adventure rappelling right along the waterfall for high-adrenaline thrill seekers.",
-      image: "/rappelling.png",
-    },
-    {
-      title: "Glass Floor Dance",
-      description: "A uniquely designed elevated glass-floored dance platform surrounded by water features.",
-      image: "/rappelling.png",
-    },
-    {
-      title: "Laser Light & Fog Dance",
-      description: "Immersive ambient light and fog effects paired with music to create an electric party atmosphere.",
-      image: "/rappelling.png",
-    },
-    {
-      title: "Bubble Dance Zone",
-      description: "Fun-filled bubble machines continuously creating visual splash zones while students dance.",
-      image: "/rappelling.png",
-    }
-  ];
+const defaultWaterParkSlides: WaterParkSlide[] = [
+  {
+    title: "Various Water Pools",
+    description: "Multiple spacious splash pools designed safely for all age groups, from primary school kids to high school students.",
+    image: "/adishakti-waterfall.jpg",
+  },
+  {
+    title: "Exciting Water Slides",
+    description: "A wide collection of high-thrill slides and gentle water slides built for endless fun and adventure.",
+    image: "/thrill-slides.jpeg",
+  },
+  {
+    title: "Adishakti Waterfall",
+    description: "Scenic waterfall setup over natural rock-like structures offering a cool, refreshing dip.",
+    image: "/adishakti-waterfall.jpg",
+  },
+  {
+    title: "Multiplay Station",
+    description: "Interactive aquatic play towers featuring mini slides, sprayers, and climbing platforms.",
+    image: "/thrill-slides.jpeg",
+  },
+  {
+    title: "Giant Splash Buckets",
+    description: "Massive overhead tipping buckets that pour down gallons of water at regular intervals.",
+    image: "/splash-bucket.jpeg",
+  },
+  {
+    title: "Rain Dance",
+    description: "High-energy rain dance zones accompanied by live DJ music systems for total group entertainment.",
+    image: "/rain-dance.jpeg",
+  },
+  {
+    title: "Foam Dance Party",
+    description: "Open-air dance pool covered in soft, light foam for high-spirited group celebrations.",
+    image: "/foam-dance.jpg",
+  },
+  {
+    title: "Rappelling (Upcoming)",
+    description: "Controlled adventure rappelling right along the waterfall for high-adrenaline thrill seekers.",
+    image: "/rappelling.png",
+  },
+];
 
-  const [slides, setSlides] = useState<WaterParkSlide[]>(waterParkSlides);
+const WaterParkPage = () => {
+  const [slides, setSlides] = useState<WaterParkSlide[]>(defaultWaterParkSlides);
+  const [headerTitle, setHeaderTitle] = useState("Water Park");
+  const [headerSub, setHeaderSub] = useState(
+    "Various Water Pools | Waterfall | Family Slides | Body & Tube Slides | Multiplay Station | Various Rain Dances | Splash Buckets | Foam Dance | Glass Floor Dance | Fog & Bubble Dance"
+  );
+  const [headerDesc, setHeaderDesc] = useState(
+    "The waterpark has been created carefully keeping in mind the full enjoyment with new ideas for thrill seekers, families, kids and seniors."
+  );
+  const [heroImage, setHeroImage] = useState("/Water-Park.jpg");
+  const [heroVideo, setHeroVideo] = useState("");
 
   useEffect(() => {
-    async function fetchAttractions() {
+    async function fetchData() {
       try {
-        const { data } = await supabase
-          .from('attractions')
-          .select('title, description, image, video, video_url')
-          .eq('park_type', 'water-park')
-          .eq('is_hidden', false)
-          .order('display_order', { ascending: true });
-        if (data && data.length > 0) {
-          setSlides(data);
+        // Fetch Header Copy from website_content
+        const { data: headerData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "park_header_water-park")
+          .single();
+
+        if (headerData && headerData.content) {
+          const c = headerData.content;
+          if (c.title) setHeaderTitle(c.title);
+          if (c.subDescription) setHeaderSub(c.subDescription);
+          if (c.mainDescription) setHeaderDesc(c.mainDescription);
+          if (c.imageUrl) setHeroImage(c.imageUrl);
+          if (c.videoUrl) setHeroVideo(c.videoUrl);
+        }
+
+        // Fetch Attraction Cards from attractions table
+        const { data: attractionData } = await supabase
+          .from("attractions")
+          .select("title, description, image, video, video_url")
+          .eq("park_type", "water-park")
+          .eq("is_hidden", false)
+          .order("display_order", { ascending: true });
+
+        if (attractionData && attractionData.length > 0) {
+          setSlides(attractionData);
         }
       } catch (err) {
-        console.error("Error loading attractions:", err);
+        console.error("Error loading water park content:", err);
       }
     }
-    fetchAttractions();
+    fetchData();
   }, []);
 
   const waterParkFacilities = [
@@ -142,22 +154,33 @@ const WaterParkPage = () => {
       {/* Hero Section */}
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/Water-Park.jpg"
-            alt="Water Park"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={headerTitle}
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-cyan-950 via-cyan-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
               <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-                Water Park
+                {headerTitle}
               </h1>
               <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
-                Various Water Pools | Waterfall | Family Slides | Body & Tube Slides | Multiplay Station | Various Rain Dances | Splash Buckets | Foam Dance | Glass Floor Dance | Fog & Bubble Dance
+                {headerSub}
               </p>
             </div>
           </div>
@@ -171,12 +194,12 @@ const WaterParkPage = () => {
         BOOK NOW
       </InteractiveHoverButton>
 
-      {/* Attractions Section - Customized Water Cyan Gradient */}
+      {/* Attractions Section */}
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e64] via-[#00a5cf] to-[#003440] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              The waterpark has been created carefully keeping in mind the full enjoyment with new ideas for thrill seekers, families, kids and seniors.
+              {headerDesc}
             </p>
           </ScrollReveal>
 

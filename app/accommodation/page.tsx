@@ -131,11 +131,6 @@ const accommodationFaqs = [
     answer:
       "Yes. Shivtirth accommodation is designed to provide a comfortable stay for families, couples, and group travellers.",
   },
-  {
-    question: "How can I book accommodation at Shivtirth?",
-    answer:
-      "Guests can contact the Shivtirth team directly or click the Call to Plan button to check availability and rates.",
-  },
 ];
 
 const getSectionId = (name: string): string => {
@@ -147,7 +142,6 @@ const getSectionId = (name: string): string => {
     .replace(/\s+/g, "-");
 };
 
-// --- Sub-component ---
 interface AccommodationCardProps {
   item: AccommodationItem;
   index: number;
@@ -238,66 +232,54 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
   );
 };
 
-// --- Main Page Component ---
 export default function AccommodationPage() {
   const [accommodations, setAccommodations] = useState<AccommodationItem[]>(defaultAccommodations);
+  const [headerTitle, setHeaderTitle] = useState("Accommodation & Night Stays");
+  const [headerSub, setHeaderSub] = useState(
+    "Farmhouse Bungalows | Camping Tents | Dormitory Cottages | Deluxe AC Rooms | Bonfire & Music"
+  );
+  const [headerDesc, setHeaderDesc] = useState(
+    "From Cozy Deluxe Rooms to Spacious Family Cottages/Dormitory & Premium Villas - Your Perfect Getaway! Enjoy Modern Comforts, Lush Green, Dam Views, Delicious Food, Team Games and Warm Hospitality, All at One Place."
+  );
+  const [heroImage, setHeroImage] = useState("/farmhouse.png");
+  const [heroVideo, setHeroVideo] = useState("");
 
   useEffect(() => {
     async function fetchAccommodations() {
       try {
-        const { data } = await supabase
-          .from("activities")
-          .select("title, image, video, video_url, description, features, park_type, is_hidden")
+        const { data: headerData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "park_header_accommodation")
+          .single();
+
+        if (headerData && headerData.content) {
+          const c = headerData.content;
+          if (c.title) setHeaderTitle(c.title);
+          if (c.subDescription) setHeaderSub(c.subDescription);
+          if (c.mainDescription) setHeaderDesc(c.mainDescription);
+          if (c.imageUrl) setHeroImage(c.imageUrl);
+          if (c.videoUrl) setHeroVideo(c.videoUrl);
+        }
+
+        const { data: attractionData } = await supabase
+          .from("attractions")
+          .select("title, description, image, video, video_url")
+          .eq("park_type", "accommodation")
           .eq("is_hidden", false)
           .order("display_order", { ascending: true });
 
-        if (data && data.length > 0) {
-          const stayKeywords = [
-            "stay",
-            "farmhouse",
-            "tent",
-            "camping",
-            "cottage",
-            "room",
-            "accommodation",
-          ];
-          const dbStayItems = data
-            .filter((item) => {
-              const titleLower = (item.title || "").toLowerCase();
-              const typeLower = (item.park_type || "").toLowerCase();
-              return stayKeywords.some(
-                (kw) => titleLower.includes(kw) || typeLower.includes(kw)
-              );
-            })
-            .map((item) => ({
+        if (attractionData && attractionData.length > 0) {
+          setAccommodations(
+            attractionData.map((item) => ({
               name: item.title,
               image: item.image,
+              video: item.video,
+              video_url: item.video_url,
               description: item.description,
-              features: Array.isArray(item.features) ? item.features : [],
-            }));
-
-          if (dbStayItems.length > 0) {
-            const merged = [...defaultAccommodations];
-            dbStayItems.forEach((dbItem) => {
-              const index = merged.findIndex(
-                (p) => p.name.toLowerCase().trim() === dbItem.name.toLowerCase().trim()
-              );
-              if (index !== -1) {
-                merged[index] = {
-                  ...merged[index],
-                  image: dbItem.image || merged[index].image,
-                  description: dbItem.description || merged[index].description,
-                  features:
-                    dbItem.features.length > 0
-                      ? dbItem.features
-                      : merged[index].features,
-                };
-              } else {
-                merged.push(dbItem);
-              }
-            });
-            setAccommodations(merged);
-          }
+              features: [],
+            }))
+          );
         }
       } catch (err) {
         console.error("Error fetching accommodation activities from Supabase:", err);
@@ -311,13 +293,24 @@ export default function AccommodationPage() {
       {/* Hero Section */}
       <section className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/farmhouse.png"
-            alt="Shivtirth Stay Facilities & Farmhouse"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={headerTitle}
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center">
@@ -326,10 +319,10 @@ export default function AccommodationPage() {
                 className="text-4xl font-bold text-accent drop-shadow-lg uppercase tracking-wide"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
-                Accommodation & Night Stays
+                {headerTitle}
               </h1>
               <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
-                Farmhouse Bungalows | Camping Tents | Dormitory Cottages | Deluxe AC Rooms | Bonfire & Music
+                {headerSub}
               </p>
             </div>
           </div>
@@ -340,102 +333,89 @@ export default function AccommodationPage() {
       <section className="py-10 md:py-14 bg-white text-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            {/* <h2
-              className="text-2xl font-bold text-slate-900 mb-2"
-              style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
-            >
-              Stay Facilities & Night Experiences
-            </h2> */}
             <p className="text-slate-600 mb-8 text-sm leading-relaxed max-w-2xl">
-              From Cozy Deluxe Rooms to Spacious Family Cottages/Dormitory & Premium Villas - Your Perfect Getaway! Enjoy Modern Comforts, Lush Green, Dam Views, Delicious Food, Team Games and Warm Hospitality, All at One Place.
+              {headerDesc}
             </p>
           </ScrollReveal>
 
-          <div className="space-y-8 md:space-y-10">
+          <div className="space-y-8">
             {accommodations.map((item, idx) => (
-              <AccommodationCard key={item.name || idx} item={item} index={idx} />
+              <AccommodationCard key={item.name} item={item} index={idx} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Facilities & Rules Section */}
-      <section className="bg-slate-50 py-10 md:py-14 border-t border-slate-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <ScrollReveal direction="up" delay={0.2}>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200">
-                <h3
-                  className="text-lg md:text-xl font-bold text-amber-700 mb-4"
-                  style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
-                >
-                  Facilities
-                </h3>
-                <ul className="space-y-3">
-                  {accommodationFacilities.map((facility) => (
-                    <li key={facility} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                      <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-amber-100 text-amber-700 shrink-0">
-                        <BadgeCheck className="h-3.5 w-3.5" />
-                      </span>
-                      <span>{facility}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200">
-                <h3
-                  className="text-lg md:text-xl font-bold text-emerald-700 mb-4"
-                  style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
-                >
-                  Rules & Regulations
-                </h3>
-                <ul className="space-y-3">
-                  {accommodationRules.map((rule) => (
-                    <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                      <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
-                        <ShieldCheck className="h-3.5 w-3.5" />
-                      </span>
-                      <span>{rule}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="bg-white py-10 md:py-14 border-t border-slate-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <ScrollReveal direction="up" delay={0.25}>
-            <div className="rounded-2xl bg-white p-6 md:p-8 shadow-sm border border-slate-200 max-w-4xl mx-auto">
+      {/* Facilities & Rules */}
+      <section className="mx-auto max-w-6xl px-4 pt-6 pb-6">
+        <ScrollReveal direction="up" delay={0.2}>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 shadow-sm border border-slate-200">
               <h3
-                className="text-lg md:text-xl font-bold text-slate-900 mb-4 text-center md:text-left"
+                className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
-                Frequently Asked Questions
+                Facilities
               </h3>
-              <Accordion type="single" collapsible className="w-full">
-                {accommodationFaqs.map((faq, idx) => (
-                  <AccordionItem key={idx} value={`accommodation-faq-${idx}`} className="border-slate-200">
-                    <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-amber-600 text-left">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-xs md:text-sm text-slate-600 leading-relaxed">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
+              <ul className="space-y-2.5">
+                {accommodationFacilities.map((facility) => (
+                  <li key={facility} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-amber-100 text-amber-700 shrink-0">
+                      <BadgeCheck className="h-3 w-3" />
+                    </span>
+                    <span>{facility}</span>
+                  </li>
                 ))}
-              </Accordion>
+              </ul>
             </div>
-          </ScrollReveal>
-        </div>
+
+            <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 shadow-sm border border-slate-200">
+              <h3
+                className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3"
+                style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
+              >
+                Rules & Regulations
+              </h3>
+              <ul className="space-y-2.5">
+                {accommodationRules.map((rule) => (
+                  <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
+                      <ShieldCheck className="h-3 w-3" />
+                    </span>
+                    <span>{rule}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </ScrollReveal>
       </section>
 
-      {/* Bottom Spacer */}
-      <div className="h-10 bg-slate-900" />
+      {/* FAQ */}
+      <section className="mx-auto max-w-6xl px-4 py-6 pb-12">
+        <ScrollReveal direction="up" delay={0.25}>
+          <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 md:p-6 shadow-sm border border-slate-200">
+            <h3
+              className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3"
+              style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
+            >
+              Frequently Asked Questions
+            </h3>
+            <Accordion type="single" collapsible className="w-full">
+              {accommodationFaqs.map((faq, idx) => (
+                <AccordionItem key={idx} value={`acc-faq-${idx}`} className="border-slate-200">
+                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-amber-600 text-left">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs md:text-sm text-slate-600 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </ScrollReveal>
+      </section>
     </main>
   );
 }

@@ -3,16 +3,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircle2, Printer } from 'lucide-react'
+import { CheckCircle2, Printer, Loader2 } from 'lucide-react'
 import {
   clearPendingBooking,
-  type CheckoutBooking,
+  readConfirmedBooking,
   readPendingBooking,
+  storeConfirmedBooking,
+  type CheckoutBooking,
 } from '@/lib/checkout-booking'
 
 export default function PaymentConfirmContent() {
   const searchParams = useSearchParams()
   const [booking, setBooking] = useState<CheckoutBooking | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const payuTxnId = useMemo(
     () => searchParams.get('txnid') || searchParams.get('mihpayid') || booking?.txnid || '',
@@ -20,14 +23,61 @@ export default function PaymentConfirmContent() {
   )
 
   useEffect(() => {
-    const pendingBooking = readPendingBooking()
-    setBooking(pendingBooking)
-    if (pendingBooking) {
-      clearPendingBooking()
+    let isMounted = true
+
+    async function loadBooking() {
+      const txnParam = searchParams.get('txnid') || searchParams.get('mihpayid')
+      let b: CheckoutBooking | null = null
+
+      if (txnParam) {
+        try {
+          const res = await fetch(`/api/booking?txnid=${encodeURIComponent(txnParam)}`)
+          if (res.ok) {
+            const data = await res.json()
+            if (data?.booking && data.booking.name) {
+              b = data.booking
+            }
+          }
+        } catch (err) {
+          console.error('Failed to fetch booking by txnid:', err)
+        }
+      }
+
+      if (!b || !b.name) {
+        b = readPendingBooking() || readConfirmedBooking()
+      }
+
+      if (!b || !b.name) {
+        try {
+          const res = await fetch('/api/booking')
+          if (res.ok) {
+            const data = await res.json()
+            if (data?.booking && data.booking.name) {
+              b = data.booking
+            }
+          }
+        } catch (err) {
+          console.error('Failed to fetch fallback booking:', err)
+        }
+      }
+
+      if (!isMounted) return
+
+      if (b) {
+        setBooking(b)
+        storeConfirmedBooking(b)
+        clearPendingBooking()
+      }
+
+      setLoading(false)
     }
 
-    window.alert('You have booked successfully.')
-  }, [])
+    loadBooking()
+
+    return () => {
+      isMounted = false
+    }
+  }, [searchParams])
 
   return (
     <section className="no-hover-effects relative min-h-screen overflow-hidden px-3 py-4 md:px-6 md:py-6 flex items-center justify-center print:min-h-0 print:p-0">
@@ -53,73 +103,80 @@ export default function PaymentConfirmContent() {
           </div>
 
           <div className="mt-4 rounded-2xl border border-white/15 bg-black/20 p-3.5 md:p-4 print:border-slate-200 print:bg-white">
-            <div className="grid grid-cols-1 gap-3 text-xs md:grid-cols-2 md:gap-x-5 md:gap-y-3.5 print:text-slate-800">
-              <div>
-                <p className="text-white/60 print:text-slate-500">Name</p>
-                <p className="mt-0.5 font-semibold">{booking?.name || 'Not available'}</p>
+            {loading ? (
+              <div className="py-8 flex flex-col items-center justify-center gap-2 text-white/80">
+                <Loader2 className="h-7 w-7 animate-spin text-accent" />
+                <p className="text-xs font-semibold">Loading ticket details...</p>
               </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Mobile</p>
-                <p className="mt-0.5 font-semibold">{booking?.mobile || 'Not available'}</p>
+            ) : (
+              <div className="grid grid-cols-1 gap-3 text-xs md:grid-cols-2 md:gap-x-5 md:gap-y-3.5 print:text-slate-800">
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Name</p>
+                  <p className="mt-0.5 font-semibold">{booking?.name || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Mobile</p>
+                  <p className="mt-0.5 font-semibold">{booking?.mobile || 'N/A'}</p>
+                </div>
+                <div className="md:col-span-2">
+                  <p className="text-white/60 print:text-slate-500">Email</p>
+                  <p className="mt-0.5 font-semibold break-all">{booking?.email || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Visit Date</p>
+                  <p className="mt-0.5 font-semibold">{booking?.visitDate || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Transaction ID</p>
+                  <p className="mt-0.5 font-semibold break-all">{payuTxnId || booking?.txnid || 'N/A'}</p>
+                </div>
+                <div className="md:col-span-2 border-t border-white/10 pt-3 print:border-slate-200 print:pt-3">
+                  <p className="text-white/60 print:text-slate-500">Selected Package</p>
+                  <p className="mt-0.5 font-semibold">{booking?.planName || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Ticket Type</p>
+                  <p className="mt-0.5 font-semibold">{booking?.ticketType || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">People / Quantity</p>
+                  <p className="mt-0.5 font-semibold">{booking?.ticketQty ?? 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Ticket Subtotal</p>
+                  <p className="mt-0.5 font-semibold">{booking ? `₹${booking.ticketSubtotal}` : '₹0'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Add-on Subtotal</p>
+                  <p className="mt-0.5 font-semibold">{booking ? `₹${booking.addOnSubtotal}` : '₹0'}</p>
+                </div>
+                <div className="md:col-span-2">
+                  <p className="text-white/60 print:text-slate-500">Add-ons</p>
+                  <p className="mt-0.5 font-semibold">{booking?.addOnSummary || 'None'}</p>
+                  {booking?.addOns?.length ? (
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {booking.addOns.map((addon) => (
+                        <span key={addon.name} className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-semibold print:border-slate-300 print:bg-slate-100">
+                          {addon.name} x {addon.qty}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="md:col-span-2 border-t border-white/10 pt-3 print:border-slate-200 print:pt-3">
+                  <p className="text-white/60 print:text-slate-500">Total Amount</p>
+                  <p className="mt-0.5 text-lg font-black text-emerald-300 print:text-emerald-700">{booking ? `₹${booking.totalAmount}` : '₹0'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Rules Accepted</p>
+                  <p className="mt-0.5 font-semibold">{booking?.rulesAccepted !== false ? 'Yes' : 'No'}</p>
+                </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">Policy / Consent Accepted</p>
+                  <p className="mt-0.5 font-semibold">{booking?.consentAccepted !== false ? 'Yes' : 'No'}</p>
+                </div>
               </div>
-              <div className="md:col-span-2">
-                <p className="text-white/60 print:text-slate-500">Email</p>
-                <p className="mt-0.5 font-semibold break-all">{booking?.email || 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Visit Date</p>
-                <p className="mt-0.5 font-semibold">{booking?.visitDate || 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Transaction ID</p>
-                <p className="mt-0.5 font-semibold break-all">{payuTxnId || 'Not available'}</p>
-              </div>
-              <div className="md:col-span-2 border-t border-white/10 pt-3 print:border-slate-200 print:pt-3">
-                <p className="text-white/60 print:text-slate-500">Selected Package</p>
-                <p className="mt-0.5 font-semibold">{booking?.planName || 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Ticket Type</p>
-                <p className="mt-0.5 font-semibold">{booking?.ticketType || 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">People / Quantity</p>
-                <p className="mt-0.5 font-semibold">{booking?.ticketQty || 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Ticket Subtotal</p>
-                <p className="mt-0.5 font-semibold">{booking ? `₹${booking.ticketSubtotal}` : 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Add-on Subtotal</p>
-                <p className="mt-0.5 font-semibold">{booking ? `₹${booking.addOnSubtotal}` : 'Not available'}</p>
-              </div>
-              <div className="md:col-span-2">
-                <p className="text-white/60 print:text-slate-500">Add-ons</p>
-                <p className="mt-0.5 font-semibold">{booking?.addOnSummary || 'None'}</p>
-                {booking?.addOns?.length ? (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {booking.addOns.map((addon) => (
-                      <span key={addon.name} className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-semibold print:border-slate-300 print:bg-slate-100">
-                        {addon.name} x {addon.qty}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-              <div className="md:col-span-2 border-t border-white/10 pt-3 print:border-slate-200 print:pt-3">
-                <p className="text-white/60 print:text-slate-500">Total Amount</p>
-                <p className="mt-0.5 text-lg font-black text-emerald-300 print:text-emerald-700">{booking ? `₹${booking.totalAmount}` : 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Rules Accepted</p>
-                <p className="mt-0.5 font-semibold">{booking?.rulesAccepted ? 'Yes' : 'Not available'}</p>
-              </div>
-              <div>
-                <p className="text-white/60 print:text-slate-500">Policy / Consent Accepted</p>
-                <p className="mt-0.5 font-semibold">{booking?.consentAccepted ? 'Yes' : 'Not available'}</p>
-              </div>
-            </div>
+            )}
           </div>
 
           <div className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 px-4 py-2.5 text-xs md:text-sm text-emerald-50 print:border-slate-200 print:bg-slate-50 print:text-slate-700">

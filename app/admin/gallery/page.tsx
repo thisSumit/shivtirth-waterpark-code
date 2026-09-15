@@ -191,10 +191,10 @@ export default function AdminGalleryPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-black text-white uppercase tracking-wide">
-            Gallery CMS
+            Watch Some Moments & Gallery CMS
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Manage photos, videos, and YouTube embeds with customizable category tags and visibility controls
+            Manage photos, videos, and YouTube clips displayed in the homepage &quot;Watch Some Moments&quot; carousel and full gallery page
           </p>
         </div>
         {!isEditing && (

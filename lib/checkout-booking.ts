@@ -82,6 +82,22 @@ const parseAddOnSubtotalFromSummary = (summary: string) => {
     }, 0)
 }
 
+export const parseAddOnsFromSummary = (summary: string): BookingAddon[] => {
+  if (!summary || summary === 'None') return []
+  return summary
+    .split(',')
+    .map((item) => item.trim())
+    .map((item) => {
+      const match = item.match(/^(.*)\s+x\s+(\d+)$/i)
+      if (!match) return null
+      return {
+        name: match[1].trim(),
+        qty: Number(match[2]),
+      }
+    })
+    .filter((addon): addon is BookingAddon => addon !== null && addon.qty > 0)
+}
+
 export const buildBookingFromPayuCallback = (
   payload: PayuCallbackPayload,
   fallbackTxnId: string = ''
@@ -137,7 +153,7 @@ export const buildBookingFromPayuCallback = (
     ticketPrice,
     ticketQty,
     ticketSubtotal,
-    addOns: [],
+    addOns: parseAddOnsFromSummary(addOnSummary),
     addOnSummary,
     addOnSubtotal,
     totalAmount,
@@ -149,6 +165,7 @@ export const buildBookingFromPayuCallback = (
 }
 
 const STORAGE_KEY = 'shivtirth.pendingCheckoutBooking'
+const CONFIRMED_STORAGE_KEY = 'shivtirth.lastConfirmedBooking'
 
 export const formatBookingStatusLabel = (status: BookingStatus, name: string) => {
   return `${status} (${name})`
@@ -156,7 +173,9 @@ export const formatBookingStatusLabel = (status: BookingStatus, name: string) =>
 
 export const storePendingBooking = (booking: CheckoutBooking) => {
   if (typeof window === 'undefined') return
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(booking))
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(booking))
+  } catch {}
 }
 
 export const readPendingBooking = () => {
@@ -172,9 +191,31 @@ export const readPendingBooking = () => {
   }
 }
 
+export const storeConfirmedBooking = (booking: CheckoutBooking) => {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.setItem(CONFIRMED_STORAGE_KEY, JSON.stringify(booking))
+  } catch {}
+}
+
+export const readConfirmedBooking = () => {
+  if (typeof window === 'undefined') return null
+
+  const raw = window.localStorage.getItem(CONFIRMED_STORAGE_KEY)
+  if (!raw) return null
+
+  try {
+    return JSON.parse(raw) as CheckoutBooking
+  } catch {
+    return null
+  }
+}
+
 export const clearPendingBooking = () => {
   if (typeof window === 'undefined') return
-  window.localStorage.removeItem(STORAGE_KEY)
+  try {
+    window.localStorage.removeItem(STORAGE_KEY)
+  } catch {}
 }
 
 export const buildSheetSubmissionPayload = (
@@ -251,33 +292,61 @@ export const submitBookingToSupabase = async (
       ? (await import('./supabaseAdmin')).supabaseAdmin
       : (await import('./supabase')).supabase
 
+    // 1. Fetch existing record if any to prevent wiping out pre-existing valid booking fields
+    let existing: any = null
+    if (booking.txnid) {
+      const { data } = await client
+        .from('bookings')
+        .select('*')
+        .eq('txnid', booking.txnid)
+        .maybeSingle()
+      existing = data
+    }
+
+    const finalName = booking.name || existing?.name || ''
+    const finalMobile = booking.mobile || existing?.mobile || ''
+    const finalEmail = booking.email || existing?.email || ''
+    const finalCity = booking.city || existing?.city || ''
+    const finalAdultQty = booking.adultQty || Number(existing?.adult_qty || 0)
+    const finalKid1Qty = booking.kids1Qty || Number(existing?.kid1_qty || 0)
+    const finalKid2Qty = booking.kids2Qty || Number(existing?.kid2_qty || 0)
+    const finalVisitDate = booking.visitDate || existing?.visit_date || ''
+    const finalPlanName = booking.planName || existing?.plan_name || ''
+    const finalTicketType = booking.ticketType || existing?.ticket_type || ''
+    const finalTicketPrice = booking.ticketPrice || Number(existing?.ticket_price || 0)
+    const finalTicketQty = booking.ticketQty || Number(existing?.ticket_qty || 1)
+    const finalTicketSubtotal = booking.ticketSubtotal || Number(existing?.ticket_subtotal || 0)
+    const finalAddonSummary = (booking.addOnSummary && booking.addOnSummary !== 'None') ? booking.addOnSummary : (existing?.addon_summary || 'None')
+    const finalAddonSubtotal = booking.addOnSubtotal || Number(existing?.addon_subtotal || 0)
+    const finalTotalAmount = booking.totalAmount || Number(existing?.total_amount || 0)
+
     const payload = {
       txnid: booking.txnid,
-      gateway_txnid: gatewayMeta.gatewayTxnId || null,
-      gateway_status: gatewayMeta.gatewayStatus || null,
-      gateway_response: gatewayMeta.gatewayResponse || null,
+      gateway_txnid: gatewayMeta.gatewayTxnId || existing?.gateway_txnid || null,
+      gateway_status: gatewayMeta.gatewayStatus || existing?.gateway_status || null,
+      gateway_response: gatewayMeta.gatewayResponse || existing?.gateway_response || null,
       payment_status: paymentStatus,
-      payment_status_label: formatBookingStatusLabel(paymentStatus, booking.name),
-      booked_date: booking.bookedDate || new Date().toISOString(),
-      name: booking.name,
-      mobile: booking.mobile,
-      email: booking.email,
-      city: booking.city || '',
-      adult_qty: booking.adultQty || 0,
-      kid1_qty: booking.kids1Qty || 0,
-      kid2_qty: booking.kids2Qty || 0,
-      visit_date: booking.visitDate,
-      plan_name: booking.planName,
-      ticket_type: booking.ticketType,
-      ticket_price: booking.ticketPrice,
-      ticket_qty: booking.ticketQty,
-      ticket_subtotal: booking.ticketSubtotal,
-      addon_summary: booking.addOnSummary || 'None',
-      addon_subtotal: booking.addOnSubtotal,
-      total_amount: booking.totalAmount,
-      source: booking.source || 'checkout-page',
-      rules_accepted: booking.rulesAccepted,
-      consent_accepted: booking.consentAccepted,
+      payment_status_label: formatBookingStatusLabel(paymentStatus, finalName),
+      booked_date: booking.bookedDate || existing?.booked_date || new Date().toISOString(),
+      name: finalName,
+      mobile: finalMobile,
+      email: finalEmail,
+      city: finalCity,
+      adult_qty: finalAdultQty,
+      kid1_qty: finalKid1Qty,
+      kid2_qty: finalKid2Qty,
+      visit_date: finalVisitDate,
+      plan_name: finalPlanName,
+      ticket_type: finalTicketType,
+      ticket_price: finalTicketPrice,
+      ticket_qty: finalTicketQty,
+      ticket_subtotal: finalTicketSubtotal,
+      addon_summary: finalAddonSummary,
+      addon_subtotal: finalAddonSubtotal,
+      total_amount: finalTotalAmount,
+      source: booking.source || existing?.source || 'checkout-page',
+      rules_accepted: booking.rulesAccepted ?? existing?.rules_accepted ?? true,
+      consent_accepted: booking.consentAccepted ?? existing?.consent_accepted ?? true,
     }
 
     const { error } = await client.from('bookings').upsert(payload, { onConflict: 'txnid' })

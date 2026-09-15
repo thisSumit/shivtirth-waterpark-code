@@ -11,43 +11,102 @@ type PackagePlan = {
   groupPrice?: number
 }
 
-const packagePlans: PackagePlan[] = [
-  { id: 'monsoon-picninic-hungama', name: 'Monsoon Picnic Hungama', price: 690 },
-  { id: 'ladki-bahin-special', name: 'Ladki Bahin Special Offer', price: 690, groupPrice: 550 },
+const defaultPackagePlans: PackagePlan[] = [
   { id: 'waterpark-package', name: 'Water Park Package', price: 690 },
   { id: 'boating-package', name: 'Boating Package', price: 690 },
+  { id: 'monsoon-picninic-hungama', name: 'Monsoon Picnic Hungama', price: 690 },
+  { id: 'ladki-bahin-special', name: 'Ladki Bahin Special Offer', price: 690, groupPrice: 550 },
   { id: 'silver-combo', name: 'Silver Combo Package', price: 890 },
   { id: 'golden-package', name: 'Golden Full Package', price: 1190 },
   { id: 'stay-package', name: 'Day & Night Package', price: 2500 },
 ]
 
+const findMatchingPlan = (plans: PackagePlan[], query: string): PackagePlan | undefined => {
+  if (!query) return undefined
+  const q = query.trim().toLowerCase()
+
+  return (
+    plans.find((p) => p.id === query) ||
+    plans.find((p) => p.id.toLowerCase() === q) ||
+    plans.find((p) => p.name.toLowerCase() === q) ||
+    plans.find((p) => q.includes(p.id.toLowerCase()) || p.id.toLowerCase().includes(q)) ||
+    plans.find((p) => q.includes(p.name.toLowerCase()) || p.name.toLowerCase().includes(q))
+  )
+}
+
 function BillingForm() {
   const searchParams = useSearchParams()
-  const planIdFromUrl = searchParams.get('planId') || 'waterpark-package'
+  const planIdFromUrl = searchParams.get('planId') || ''
   const groupPriceFromUrl = Number(searchParams.get('groupPrice'))
 
+  const [packagePlans, setPackagePlans] = useState<PackagePlan[]>(defaultPackagePlans)
   const [mealPrices, setMealPrices] = useState({ fullMeal: 300, lunch: 200 })
 
+  // Fetch live package plans and prices from Supabase
   useEffect(() => {
-    const loadMealPrices = async () => {
+    async function loadData() {
       try {
-        const { data, error } = await supabase.from('settings').select('key, value')
-        if (error) throw error
+        const { data: dbPackages } = await supabase
+          .from('packages')
+          .select('*')
+          .order('display_order', { ascending: true })
 
-        const fullMeal = data?.find((item) => item.key === 'meal_full_price')
-        const lunchMeal = data?.find((item) => item.key === 'meal_lunch_price')
+        if (dbPackages && dbPackages.length > 0) {
+          const mappedPlans: PackagePlan[] = dbPackages
+            .filter((item: any) => !item.is_hidden)
+            .map((item: any) => {
+              let price = Number(item.discounted_price || item.original_price || 690)
+              let groupPrice: number | undefined = undefined
 
-        setMealPrices({
-          fullMeal: Number(fullMeal?.value ?? 300) || 300,
-          lunch: Number(lunchMeal?.value ?? 200) || 200,
-        })
+              if (Array.isArray(item.ticket_options) && item.ticket_options.length > 0) {
+                const singleOpt = item.ticket_options.find((opt: any) => opt.id === 'single' || opt.id === 'regular')
+                const groupOpt = item.ticket_options.find((opt: any) => opt.id === 'group')
+                if (singleOpt && singleOpt.price) price = Number(singleOpt.price)
+                if (groupOpt && groupOpt.price) groupPrice = Number(groupOpt.price)
+              }
+
+              if (item.plan_id === 'ladki-bahin-special' && !groupPrice) {
+                groupPrice = 550
+              }
+
+              return {
+                id: item.plan_id,
+                name: item.name,
+                price,
+                groupPrice,
+              }
+            })
+
+          // Merge fallbacks if not present
+          const merged = [...mappedPlans]
+          defaultPackagePlans.forEach((def) => {
+            if (!merged.some((m) => m.id === def.id || m.name.toLowerCase() === def.name.toLowerCase())) {
+              merged.push(def)
+            }
+          })
+          setPackagePlans(merged)
+        }
+
+        const { data: settingsData } = await supabase.from('settings').select('key, value')
+        if (settingsData) {
+          const fullMeal = settingsData.find((item: any) => item.key === 'meal_full_price')
+          const lunchMeal = settingsData.find((item: any) => item.key === 'meal_lunch_price')
+          setMealPrices({
+            fullMeal: Number(fullMeal?.value ?? 300) || 300,
+            lunch: Number(lunchMeal?.value ?? 200) || 200,
+          })
+        }
       } catch (err) {
-        console.error('Failed to load meal prices:', err)
+        console.error('Error loading package plans or meal prices:', err)
       }
     }
 
-    loadMealPrices()
+    loadData()
   }, [])
+
+  const initialPlan = useMemo(() => {
+    return findMatchingPlan(packagePlans, planIdFromUrl) || packagePlans[0]
+  }, [packagePlans, planIdFromUrl])
 
   const [formData, setFormData] = useState({
     name: '',
@@ -55,7 +114,7 @@ function BillingForm() {
     email: '',
     city: '',
     visitDate: '',
-    packageId: packagePlans.some((plan) => plan.id === planIdFromUrl) ? planIdFromUrl : packagePlans[0].id,
+    packageId: initialPlan.id,
     adultQty: 1,
     kids1Qty: 0,
     kids2Qty: 0,
@@ -63,15 +122,23 @@ function BillingForm() {
     onlyLunch: false,
   })
 
-  const selectedPlan = useMemo(
-    () => {
-      const plan = packagePlans.find((item) => item.id === formData.packageId) || packagePlans[0]
-      return formData.packageId === planIdFromUrl && Number.isFinite(groupPriceFromUrl) && groupPriceFromUrl > 0
-        ? { ...plan, groupPrice: groupPriceFromUrl }
-        : plan
-    },
-    [formData.packageId, groupPriceFromUrl, planIdFromUrl]
-  )
+  // Update packageId if URL parameter arrives after initial render
+  useEffect(() => {
+    if (planIdFromUrl) {
+      const match = findMatchingPlan(packagePlans, planIdFromUrl)
+      if (match) {
+        setFormData((prev) => ({ ...prev, packageId: match.id }))
+      }
+    }
+  }, [planIdFromUrl, packagePlans])
+
+  const selectedPlan = useMemo(() => {
+    const plan = findMatchingPlan(packagePlans, formData.packageId) || packagePlans[0]
+    if (formData.packageId === planIdFromUrl && Number.isFinite(groupPriceFromUrl) && groupPriceFromUrl > 0) {
+      return { ...plan, groupPrice: groupPriceFromUrl }
+    }
+    return plan
+  }, [formData.packageId, packagePlans, groupPriceFromUrl, planIdFromUrl])
 
   const hasGroupOffer = selectedPlan.groupPrice != null
   const groupOfferActive = hasGroupOffer && formData.adultQty >= 3
@@ -272,18 +339,20 @@ function BillingForm() {
 
             <div className="space-y-4">
               <label className="block space-y-2">
-                <span className="text-sm font-semibold text-slate-700">Package Name</span>
+                <span className="text-sm font-semibold text-slate-700">Select Package / Plan</span>
                 <select
                   value={formData.packageId}
                   onChange={(e) => {
-                    const nextPackage = packagePlans.find((plan) => plan.id === e.target.value) || packagePlans[0]
-                    updateField('packageId', nextPackage.id)
+                    const matched = findMatchingPlan(packagePlans, e.target.value)
+                    if (matched) {
+                      updateField('packageId', matched.id)
+                    }
                   }}
-                  className={numericInputClass}
+                  className={`${numericInputClass} font-semibold text-slate-900`}
                 >
                   {packagePlans.map((plan) => (
                     <option key={plan.id} value={plan.id}>
-                      {plan.name}
+                      {plan.name} — ₹{plan.price}{plan.groupPrice ? ` (Group: ₹${plan.groupPrice})` : ''}
                     </option>
                   ))}
                 </select>
@@ -299,7 +368,7 @@ function BillingForm() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="font-semibold text-slate-800">Adult</p>
-                      <p className="text-xs text-slate-500">100% price of ticket</p>
+                      <p className="text-xs text-slate-500">100% price (₹{adultTicketPrice}/ticket)</p>
                     </div>
                     <div className="flex items-center rounded-xl border border-slate-300 bg-white">
                       <button type="button" onClick={() => updateQuantity('adultQty', -1)} className="px-3 py-2 text-lg font-bold text-slate-700" aria-label="Decrease adult quantity">-</button>
@@ -311,7 +380,7 @@ function BillingForm() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="font-semibold text-slate-800">Kids 1</p>
-                      <p className="text-xs text-slate-500">121 cm - 140 cm / 5 to 10 yrs</p>
+                      <p className="text-xs text-slate-500">121 cm - 140 cm / 5 to 10 yrs (₹{(selectedPlan.price * 0.75).toFixed(0)})</p>
                     </div>
                     <div className="flex items-center rounded-xl border border-slate-300 bg-white">
                       <button type="button" onClick={() => updateQuantity('kids1Qty', -1)} className="px-3 py-2 text-lg font-bold text-slate-700" aria-label="Decrease Kids 1 quantity">-</button>
@@ -323,7 +392,7 @@ function BillingForm() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="font-semibold text-slate-800">Kids 2</p>
-                      <p className="text-xs text-slate-500">100 cm - 120 cm / 3 to 5 yrs</p>
+                      <p className="text-xs text-slate-500">100 cm - 120 cm / 3 to 5 yrs (₹{(selectedPlan.price * 0.5).toFixed(0)})</p>
                     </div>
                     <div className="flex items-center rounded-xl border border-slate-300 bg-white">
                       <button type="button" onClick={() => updateQuantity('kids2Qty', -1)} className="px-3 py-2 text-lg font-bold text-slate-700" aria-label="Decrease Kids 2 quantity">-</button>
@@ -401,7 +470,7 @@ function BillingForm() {
 
           <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-700">
             <p>
-              <span className="font-semibold">Package:</span> {packagePlans.find((plan) => plan.id === formData.packageId)?.name || selectedPlan.name}
+              <span className="font-semibold">Selected Package:</span> {selectedPlan.name} (Base Price: ₹{selectedPlan.price}/person)
             </p>
             <p>
               <span className="font-semibold">Tickets:</span> {totalTickets} Total | Adult {formData.adultQty}, Kids 1 {formData.kids1Qty}, Kids 2 {formData.kids2Qty}
@@ -412,7 +481,7 @@ function BillingForm() {
               <p>Kids 2: {formData.kids2Qty} x ₹{(selectedPlan.price * 0.5).toFixed(2)} (50%) = ₹{kids2PackageTotal.toFixed(2)}</p>
               {formData.fullMeal && <p>Full Meal: Adult {formData.adultQty} x ₹{mealPrices.fullMeal} + Kids 1 {formData.kids1Qty} x ₹{(mealPrices.fullMeal * 0.75).toFixed(2)} + Kids 2 {formData.kids2Qty} x ₹{(mealPrices.fullMeal * 0.5).toFixed(2)} = ₹{((formData.adultQty * mealPrices.fullMeal) + (formData.kids1Qty * mealPrices.fullMeal * 0.75) + (formData.kids2Qty * mealPrices.fullMeal * 0.5)).toFixed(2)}</p>}
               {formData.onlyLunch && <p>Only Lunch: Adult {formData.adultQty} x ₹{mealPrices.lunch} + Kids 1 {formData.kids1Qty} x ₹{(mealPrices.lunch * 0.75).toFixed(2)} + Kids 2 {formData.kids2Qty} x ₹{(mealPrices.lunch * 0.5).toFixed(2)} = ₹{((formData.adultQty * mealPrices.lunch) + (formData.kids1Qty * mealPrices.lunch * 0.75) + (formData.kids2Qty * mealPrices.lunch * 0.5)).toFixed(2)}</p>}
-              <p className="pt-1 font-semibold text-slate-800">Total: Package ₹{packageTotal.toFixed(2)} + Meals ₹{mealTotal.toFixed(2)} = ₹{totalAmount.toFixed(2)}</p>
+              <p className="pt-1 font-semibold text-slate-800">Total Amount: Package ₹{packageTotal.toFixed(2)} + Meals ₹{mealTotal.toFixed(2)} = ₹{totalAmount.toFixed(2)}</p>
             </div>
           </div>
 

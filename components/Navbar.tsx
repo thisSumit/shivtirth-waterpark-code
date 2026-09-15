@@ -133,37 +133,15 @@ const Navbar = () => {
           return;
         }
 
-        const mapped: ActivityItem[] = data.map((act) => {
-          const title = act.title?.toLowerCase() || "";
-
-          if (
-            title.includes("accommodation") ||
-            title.includes("stay")
-          ) {
-            return {
-              name: "Accommodation",
-              href: "/accommodation",
-            };
-          }
-
-          return {
+        const mapped: ActivityItem[] = data
+          .filter((act) => {
+            const title = act.title?.toLowerCase() || "";
+            return !title.includes("accommodation") && !title.includes("stay");
+          })
+          .map((act) => ({
             name: act.title,
             id: getParkSectionId(act.title),
-          };
-        });
-
-        const hasAccommodation = mapped.some(
-          (item) =>
-            item.href === "/accommodation" ||
-            item.name.toLowerCase().includes("accommodation")
-        );
-
-        if (!hasAccommodation) {
-          mapped.splice(2, 0, {
-            name: "Accommodation",
-            href: "/accommodation",
-          });
-        }
+          }));
 
         setActivitiesList(mapped);
       } catch (err) {

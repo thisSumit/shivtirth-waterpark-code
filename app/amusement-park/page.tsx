@@ -16,122 +16,143 @@ interface AmusementSlide {
   video_url?: string;
 }
 
-const AmusementParkPage = () => {
-  const amusementSlides: AmusementSlide[] = [
-    {
-      title: 'Tora Tora Ride',
-      description: 'Feel the rush of fast spins and continuous motion as the ride swings and rotates in sync for a high-energy, action-packed experience.',
-      image: '/tora-tora.jpeg',
-    },
-    {
-      title: 'Columbus Ride',
-      description: 'Feel the thrill as the giant ship swings higher with every motion, building excitement and anticipation in a classic ride experience.',
-      image: '/columbus-ride.jpeg',
-    },
-    {
-      title: 'High Swing',
-      description: 'Rise above the ground and feel the thrill as the swing lifts you higher with every motion, offering a refreshing ride with height.',
-      image: '/high-swing.png',
-    },
-    {
-      title: 'Round Swing',
-      description: 'Enjoy a smooth, circular ride that brings together gentle spins and a cheerful atmosphere, relaxing for all ages.',
-      image: '/round-swing.jpg',
-    },
-    {
-      title: 'Jumper Ride',
-      description: 'Feel the excitement of quick lifts and rhythmic motion as the ride keeps you moving with energy and fun.',
-      image: '/jumper-ride.jpg',
-    },
-    {
-      title: 'Kids Play Zone',
-      description: 'A thoughtfully designed space where children can play, explore, and enjoy with ease in safe mini rides.',
-      image: '/kids-play-zone.png',
-    }
-  ];
+const defaultAmusementSlides: AmusementSlide[] = [
+  {
+    title: 'Tora Tora Ride',
+    description: 'Feel the rush of fast spins and continuous motion as the ride swings and rotates in sync for a high-energy, action-packed experience.',
+    image: '/tora-tora.jpeg',
+  },
+  {
+    title: 'Columbus Ride',
+    description: 'Feel the thrill as the giant ship swings higher with every motion, building excitement and anticipation in a classic ride experience.',
+    image: '/columbus-ride.jpeg',
+  },
+  {
+    title: 'High Swing',
+    description: 'Rise above the ground and feel the thrill as the swing lifts you higher with every motion, offering a refreshing ride with height.',
+    image: '/high-swing.png',
+  },
+  {
+    title: 'Round Swing',
+    description: 'Enjoy a smooth, circular ride that brings together gentle spins and a cheerful atmosphere, relaxing for all ages.',
+    image: '/round-swing.jpg',
+  },
+  {
+    title: 'Jumper Ride',
+    description: 'Feel the excitement of quick lifts and rhythmic motion as the ride keeps you moving with energy and fun.',
+    image: '/jumper-ride.jpg',
+  },
+  {
+    title: 'Kids Play Zone',
+    description: 'A thoughtfully designed space where children can play, explore, and enjoy with ease in safe mini rides.',
+    image: '/kids-play-zone.png',
+  }
+];
 
-  const [slides, setSlides] = useState<AmusementSlide[]>(amusementSlides);
+const AmusementParkPage = () => {
+  const [slides, setSlides] = useState<AmusementSlide[]>(defaultAmusementSlides);
+  const [headerTitle, setHeaderTitle] = useState("Amusement Park");
+  const [headerSub, setHeaderSub] = useState(
+    "Tora Tora Ride | Break Dance Ride | Columbus Ride | Round Up Ride | Swings | Play Zone | Jumper | Selfie Points"
+  );
+  const [headerDesc, setHeaderDesc] = useState(
+    "Get Ready for Non-Stop Thrills! From High-Speed Thrill Rides to Fun-Filled Family & Kids Rides - The Ultimate Entertainment Destination for Everyone !"
+  );
+  const [heroImage, setHeroImage] = useState("/amusement.jpg");
+  const [heroVideo, setHeroVideo] = useState("");
 
   useEffect(() => {
-    async function fetchAttractions() {
+    async function fetchData() {
       try {
-        const { data } = await supabase
-          .from('attractions')
-          .select('title, description, image, video, video_url')
-          .eq('park_type', 'amusement-park')
-          .eq('is_hidden', false)
-          .order('display_order', { ascending: true });
-        if (data && data.length > 0) {
-          setSlides(data);
+        const { data: headerData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "park_header_amusement-park")
+          .single();
+
+        if (headerData && headerData.content) {
+          const c = headerData.content;
+          if (c.title) setHeaderTitle(c.title);
+          if (c.subDescription) setHeaderSub(c.subDescription);
+          if (c.mainDescription) setHeaderDesc(c.mainDescription);
+          if (c.imageUrl) setHeroImage(c.imageUrl);
+          if (c.videoUrl) setHeroVideo(c.videoUrl);
+        }
+
+        const { data: attractionData } = await supabase
+          .from("attractions")
+          .select("title, description, image, video, video_url")
+          .eq("park_type", "amusement-park")
+          .eq("is_hidden", false)
+          .order("display_order", { ascending: true });
+
+        if (attractionData && attractionData.length > 0) {
+          setSlides(attractionData);
         }
       } catch (err) {
-        console.error("Error loading attractions:", err);
+        console.error("Error loading amusement park content:", err);
       }
     }
-    fetchAttractions();
+    fetchData();
   }, []);
 
-  const amusementFacilities = [
-    'Thrilling & Family Mechanical Rides - Tora Tora Ride, Break Dance Ride, Columbus Ride, and Round Up Ride',
-    'Kid-Friendly Play Zones & Swings - Dedicated play zone areas and traditional swings designed safely for younger children',
-    'Mowgli Jungle Safari & Animal/Bird Exhibits - Guided safari zones and interaction points featuring animals and birds',
-    'Oxygen Park & Scenic Walkways - Lush green gardens, fresh-air walking zones, and serene nature spots',
-    'Selfie Points & Photo Spots - Specifically designed decorative backdrops and scenic locations for group photos',
-    'Ride Operators & Marshals - Trained staff stationed at every mechanical ride for seating and safety support'
+  const amusementParkFacilities = [
+    'Trained Ride Operators - Dedicated staff ensuring safety compliance on all rides',
+    'Kids Safety Belts & Harnesses - Secure safety restraints for children on high-swing rides',
+    'Shaded Waiting Queues - Covered waiting lanes for guest comfort during peak hours',
+    'Clean Restrooms & Refreshments - Easy access to washrooms, water points, and snack kiosks'
   ];
 
-  const amusementRules = [
-    'Secure Lap Bars & Seatbelts: All safety bars, harnesses, and seatbelts must remain fully fastened until rides come to a complete stop',
-    'Height & Age Restrictions: Access to high-motion rides (Tora Tora, Break Dance, Round Up, Columbus) is subject to posted limits',
-    'Remain Seated During Rides: Standing, leaning out, or swinging arms outside ride cars while in motion is strictly prohibited',
-    'Health Warnings: Guests with motion sickness, heart conditions, back issues, or high blood pressure should avoid high-spinning rides',
-    'Respect Animals & Nature: Do not feed, tease, or disturb animals and birds in Mowgli Jungle Safari or damage plants',
-    'Child Supervision: Children must be supervised by guardians or adults at all times while in play zones and safari areas'
+  const amusementParkRules = [
+    'Height & Age Restrictions: Strictly follow height guidelines posted at ride entrances',
+    'Secure Personal Items: Remove loose footwear, glasses, and phones before boarding high-spin rides',
+    'Remain Seated: Keep arms and legs inside the ride vehicle at all times until completely stopped',
+    'Follow Operator Signals: Board and exit only when instructed by ride safety staff'
   ];
 
-  const amusementFaqs = [
+  const amusementParkFaqs = [
     {
-      question: 'What rides are available at Shivtirth Amusement Park?',
-      answer: 'Shivtirth Amusement Park features Tora Tora, Columbus, High Swing, Round Swing, Jumper Ride, Kids Play Zone and shooting games.'
+      question: 'What rides are available in the Amusement Park sector?',
+      answer: 'Shivtirth Amusement Park features Tora Tora, Columbus Giant Swing, High Swings, Round Swings, Jumper Ride, and dedicated Kids Play Zones.'
     },
     {
-      question: 'Is Shivtirth Amusement Park suitable for children?',
-      answer: 'Yes. The park includes a dedicated Kids Play Zone and other attractions suitable for children depending on individual ride restrictions.'
-    },
-    {
-      question: 'Are there height or age restrictions for amusement rides?',
-      answer: 'Yes. Some rides may have age, height or safety restrictions, and visitors should follow the instructions displayed for each attraction.'
-    },
-    {
-      question: 'Can I enjoy amusement rides along with the water park?',
-      answer: 'Yes, depending on the ticket or package selected and the attractions operating on the day of your visit.'
-    },
-    {
-      question: 'Is the Amusement Park good for a family picnic near Nagpur?',
-      answer: 'Yes. Shivtirth combines amusement rides with water, boating, adventure and other experiences for an excellent family day out.'
+      question: 'Are the amusement rides safe for young children?',
+      answer: 'Yes, we have designated kids rides and gentle swings equipped with safety harnesses and supervised by trained operators.'
     }
   ];
 
   return (
-    <main id="about-park" className="bg-gradient-to-b from-[#fff95b] via-amber-800 to-[#FFBF00] text-slate-100">
+    <main id="about-park" className="bg-gradient-to-b from-amber-950 via-slate-900 to-amber-950 text-slate-100">
+      {/* Hero Section */}
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/amusement.jpg"
-            alt="Amusement Park"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={headerTitle}
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-amber-950 via-orange-500/10 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
               <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-                Amusement Park
+                {headerTitle}
               </h1>
               <p className="mt-2 text-sm text-amber-100/90 drop-shadow-sm font-medium">
-                Tora Tora Ride | Break Dance Ride | Columbus Ride | Round Up Ride | Swings | Play Zone | Jumper | Selfie Points
+                {headerSub}
               </p>
             </div>
           </div>
@@ -145,15 +166,12 @@ const AmusementParkPage = () => {
         BOOK NOW
       </InteractiveHoverButton>
 
-      {/* Attractions Section - Customized Carnival Warm Gold Gradient */}
+      {/* Attractions Section */}
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#ff930f] via-[#fbcf00] to-[#fff95b] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-              Amusement Park Rides & Entertainment
-            </h2> */}
             <p className="text-amber-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Get Ready for Non-Stop Thrills! From High-Speed Thrill Rides to Fun-Filled Family & Kids Rides - The Ultimate Entertainment Destination for Everyone !
+              {headerDesc}
             </p>
           </ScrollReveal>
 
@@ -181,10 +199,10 @@ const AmusementParkPage = () => {
                           />
                         ) : (
                           <Image
-                            src={slide.image || '/amusement.jpg'}
+                            src={slide.image || '/tora-tora.jpeg'}
                             alt={slide.title}
                             fill
-                            className={`object-cover ${idx === 0 ? 'object-bottom' : ''} ${idx === 1 ? 'object-[50%_28%]' : ''} hover:scale-105 transition duration-500`}
+                            className="object-cover object-[50%_18%] hover:scale-105 transition duration-500"
                             sizes="(min-width: 768px) 50vw, 100vw"
                           />
                         )}
@@ -194,7 +212,7 @@ const AmusementParkPage = () => {
                       <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                         {slide.title}
                       </h3>
-                      <p className="text-sm text-amber-50 font-normal">{slide.description}</p>
+                      <p className="text-sm text-amber-50">{slide.description}</p>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -213,7 +231,7 @@ const AmusementParkPage = () => {
                 Facilities
               </h3>
               <ul className="space-y-2.5">
-                {amusementFacilities.map((facility) => (
+                {amusementParkFacilities.map((facility) => (
                   <li key={facility} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
                     <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-amber-100 text-amber-700 shrink-0">
                       <BadgeCheck className="h-3 w-3" />
@@ -229,9 +247,9 @@ const AmusementParkPage = () => {
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">
-                {amusementRules.map((rule) => (
+                {amusementParkRules.map((rule) => (
                   <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-orange-100 text-orange-700 shrink-0">
                       <ShieldCheck className="h-3 w-3" />
                     </span>
                     <span>{rule}</span>
@@ -251,9 +269,9 @@ const AmusementParkPage = () => {
               Frequently Asked Questions
             </h3>
             <Accordion type="single" collapsible className="w-full">
-              {amusementFaqs.map((faq, idx) => (
+              {amusementParkFaqs.map((faq, idx) => (
                 <AccordionItem key={idx} value={`amusement-faq-${idx}`} className="border-slate-200">
-                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-amber-700 text-left">
+                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-amber-600 text-left">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-xs md:text-sm text-slate-600 leading-relaxed">

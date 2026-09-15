@@ -139,6 +139,40 @@ export async function POST(request: NextRequest) {
       .update(hashString)
       .digest('hex')
 
+    // Save pending booking directly to Supabase so details are safely recorded
+    const pendingBooking = {
+      txnid,
+      name: firstname,
+      mobile: phone,
+      email,
+      city,
+      adultQty: Number(body.ticketQty || 1),
+      kids1Qty: 0,
+      kids2Qty: 0,
+      bookedDate: new Date().toISOString(),
+      visitDate: body.visitDate || '',
+      planName: body.planName || '',
+      ticketType: body.ticketType || '',
+      ticketPrice: body.ticketQty > 0 ? Math.round(Number(body.ticketSubtotal || 0) / Number(body.ticketQty || 1)) : 0,
+      ticketQty: Number(body.ticketQty || 1),
+      ticketSubtotal: Number(body.ticketSubtotal || 0),
+      addOns: body.addons || [],
+      addOnSummary: body.addOnSummary || 'None',
+      addOnSubtotal: Number(body.addOnSubtotal || 0),
+      totalAmount: Number(body.totalAmount || 0),
+      rulesAccepted: true,
+      consentAccepted: true,
+      source: 'checkout-page' as const,
+      submittedAt: new Date().toISOString(),
+    }
+
+    try {
+      const { submitBookingToSupabase } = await import('@/lib/checkout-booking')
+      await submitBookingToSupabase(pendingBooking, 'Not Paid', {}, true)
+    } catch (dbErr) {
+      console.error('Failed to pre-save pending booking:', dbErr)
+    }
+
     return NextResponse.json({
       action: payuPaymentUrl,
 

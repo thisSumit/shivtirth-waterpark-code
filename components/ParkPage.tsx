@@ -138,10 +138,31 @@ const getParkSectionId = (name: string) => {
 
 export const ParkPage = () => {
   const [activeParks, setActiveParks] = useState<ParkItem[]>(parks);
+  const [otherTitle, setOtherTitle] = useState("Other Activities");
+  const [otherSubDescription, setOtherSubDescription] = useState(
+    "Water Park | Adventure Park | Amusement Park | Agro Park | Bird Park | Boating | Air Tourism | Accommodation | Events"
+  );
+  const [otherMainDescription, setOtherMainDescription] = useState(
+    "Beyond the main Park attractions, enjoy a wide range of engaging activities making it a complete learning and fun destination for all purposes and age groups. One Place, Unlimited Entertainment!"
+  );
 
   useEffect(() => {
     async function fetchActivities() {
       try {
+        // Fetch Other Activities section copy
+        const { data: copyData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "other_activities")
+          .single();
+
+        if (copyData && copyData.content) {
+          const c = copyData.content;
+          if (c.title) setOtherTitle(c.title);
+          if (c.subDescription) setOtherSubDescription(c.subDescription);
+          if (c.mainDescription) setOtherMainDescription(c.mainDescription);
+        }
+
         const { data, error } = await supabase
           .from("activities")
           .select("title, image, video, video_url, description, features, is_hidden")
@@ -179,6 +200,8 @@ export const ParkPage = () => {
               merged[index] = {
                 ...merged[index],
                 image: dbItem.image || merged[index].image,
+                video: dbItem.video || dbItem.video_url || merged[index].video,
+                video_url: dbItem.video_url || dbItem.video || merged[index].video_url,
                 description:
                   dbItem.description || merged[index].description,
                 features:
@@ -229,12 +252,11 @@ export const ParkPage = () => {
                     "'Times New Roman', Times, Georgia, serif",
                 }}
               >
-                Other Activities
+                {otherTitle}
               </h1>
 
               <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
-                Water Park | Adventure Park | Amusement Park | Agro Park |
-                Bird Park | Boating | Air Tourism | Accommodation | Events
+                {otherSubDescription}
               </p>
             </div>
           </div>
@@ -246,18 +268,8 @@ export const ParkPage = () => {
         <div className="max-w-6xl mx-auto px-4">
           {/* SECTION HEADING */}
           <ScrollReveal direction="up" delay={0.1}>
-            <h2
-              className="text-2xl font-bold text-white mb-2"
-              style={{
-                fontFamily:
-                  "'Times New Roman', Times, Georgia, serif",
-              }}
-            >
-              Other Activities
-            </h2>
-
             <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Beyond the main Park attractions, enjoy a wide range of engaging activities making it a complete learning and fun destination for all purposes and age groups. One Place, Unlimited Entertainment!
+              {otherMainDescription}
             </p>
           </ScrollReveal>
 

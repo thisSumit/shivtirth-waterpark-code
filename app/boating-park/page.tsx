@@ -16,84 +16,74 @@ interface BoatingSlide {
   video_url?: string;
 }
 
-const BoatingParkPage = () => {
-  const boatingSlides: BoatingSlide[] = [
-    {
-      title: 'Banana Boat',
-      description: 'Gather your group and get ready for a ride full of energy and excitement. As the banana boat speeds across the water, every turn brings laughter, splashes, and moments you will want to relive.',
-      image: '/Boating-Park.jpg',
-    },
-    {
-      title: 'Speed Boat',
-      description: 'Experience pure adrenaline as you race across the water with powerful speed and sharp turns. Designed for thrill seekers, this ride delivers high-energy moments and exciting splashes.',
-      image: '/speed-boat.jpg',
-    },
-    {
-      title: 'Shikara Ride',
-      description: 'Unwind with a calm and scenic ride that lets you slow down and take in the beauty around you. Gliding gently over the water, this peaceful experience offers a refreshing escape.',
-      image: '/shikara-boat.jpg',
-    },
-    {
-      title: 'Dragon Boat',
-      description: 'Step into a visually striking ride that brings together group fun and a unique on-water experience as the boat moves across the water in lively unison.',
-      image: '/dragon-boat.jpg',
-    },
-    {
-      title: 'Sofa Boat',
-      description: 'Settle in for a smooth and comfortable ride as you glide across the water at a relaxed pace. Ideal for those who prefer a gentle, enjoyable experience.',
-      image: '/sofa-boat.jpg',
-    },
-    {
-      title: 'Train Boat',
-      description: 'A favorite for families and groups, this connected ride brings a playful twist to your time on the water, with gentle excitement along the way.',
-      image: '/train-boat.jpg',
-    },
-    {
-      title: 'Octopus Ride',
-      description: 'Step into a high-energy ride where motion, water, and excitement come together with spinning movements and unexpected twists.',
-      image: '/octopus-boat.jpg',
-    },
-    {
-      title: 'Disco Boat',
-      description: 'Step into a ride filled with rhythm, movement, and energy. As the boat sways and spins, enjoy a lively celebration atmosphere on the water.',
-      image: '/disco-boat.jpg',
-    },
-    {
-      title: 'Zorbing Ball',
-      description: 'Step inside a giant transparent ball and experience the fun of walking and rolling on water like never before in a safe and playful ball.',
-      image: '/zorbing-ball.jpg',
-    },
-    {
-      title: 'Kayak Boat',
-      description: 'Enjoy a peaceful and scenic ride that lets you connect with nature as you paddle gently across the water.',
-      image: '/Boating-Park.jpg',
-    },
-    {
-      title: 'Pedal Boat',
-      description: 'Get a fun workout while enjoying the water at your own pace, perfect for families and friends.',
-      image: '/Boating-Park.jpg',
-    },
-  ];
+const defaultBoatingSlides: BoatingSlide[] = [
+  {
+    title: 'Speed Boat & Banana Boat',
+    description: 'High-speed thrill rides across open waters for group and adventure seekers.',
+    image: '/Boating-Park.jpg',
+  },
+  {
+    title: 'Family Shikara Boat',
+    description: 'Traditional shikara-style peaceful boat rides with shaded seating for relaxing group outings.',
+    image: '/Boating-Park.jpg',
+  },
+  {
+    title: 'Pedal & Kayak Boats',
+    description: 'Self-driven pedal boats and agile kayaks offering an active water experience.',
+    image: '/Boating-Park.jpg',
+  },
+  {
+    title: 'Dragon Boat & Disco Boat',
+    description: 'Vibrant theme boats designed for continuous group fun and high-energy music rides.',
+    image: '/Boating-Park.jpg',
+  }
+];
 
-  const [slides, setSlides] = useState<BoatingSlide[]>(boatingSlides);
+const BoatingParkPage = () => {
+  const [slides, setSlides] = useState<BoatingSlide[]>(defaultBoatingSlides);
+  const [headerTitle, setHeaderTitle] = useState("Boating Park");
+  const [headerSub, setHeaderSub] = useState(
+    "Banana Boat | Sofa Boat | Speed Boat | Shikara Boat | Train Boat | Dragon Boat | Disco Boat | Octopus Boat | Kayak Boat | Pedal Boat"
+  );
+  const [headerDesc, setHeaderDesc] = useState(
+    "Relax and enjoy peaceful water sports and scenic boating across Vidarbha's serene lake views with family and friends."
+  );
+  const [heroImage, setHeroImage] = useState("/Boating-Park.jpg");
+  const [heroVideo, setHeroVideo] = useState("");
 
   useEffect(() => {
-    async function fetchAttractions() {
+    async function fetchData() {
       try {
-        const { data } = await supabase
-          .from('attractions')
-          .select('title, description, image, video, video_url')
-          .eq('park_type', 'boating-park')
-          .eq('is_hidden', false)
-          .order('display_order', { ascending: true });
-        if (data && data.length > 0) {
-          setSlides(data);
+        const { data: headerData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "park_header_boating-park")
+          .single();
+
+        if (headerData && headerData.content) {
+          const c = headerData.content;
+          if (c.title) setHeaderTitle(c.title);
+          if (c.subDescription) setHeaderSub(c.subDescription);
+          if (c.mainDescription) setHeaderDesc(c.mainDescription);
+          if (c.imageUrl) setHeroImage(c.imageUrl);
+          if (c.videoUrl) setHeroVideo(c.videoUrl);
+        }
+
+        const { data: attractionData } = await supabase
+          .from("attractions")
+          .select("title, description, image, video, video_url")
+          .eq("park_type", "boating-park")
+          .eq("is_hidden", false)
+          .order("display_order", { ascending: true });
+
+        if (attractionData && attractionData.length > 0) {
+          setSlides(attractionData);
         }
       } catch (err) {
-        console.error("Error loading attractions:", err);
+        console.error("Error loading boating park content:", err);
       }
     }
-    fetchAttractions();
+    fetchData();
   }, []);
 
   const boatingFacilities = [
@@ -140,22 +130,33 @@ const BoatingParkPage = () => {
     <main id="about-park" className="bg-gradient-to-b from-teal-950 via-slate-900 to-teal-950 text-slate-100">
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/Boating-Park.jpg"
-            alt="Boating Park"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={headerTitle}
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-teal-950 via-teal-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
               <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-                Boating Park
+                {headerTitle}
               </h1>
               <p className="mt-2 text-sm text-teal-100/90 drop-shadow-sm font-medium">
-                Banana Boat | Sofa Boat | Speed Boat | Shikara Boat | Train Boat | Dragon Boat | Disco Boat | Octopus Boat | Kayak Boat | Pedal Boat
+                {headerSub}
               </p>
             </div>
           </div>
@@ -169,15 +170,12 @@ const BoatingParkPage = () => {
         BOOK NOW
       </InteractiveHoverButton>
 
-      {/* Attractions Section - Customized Lake Teal Gradient */}
+      {/* Attractions Section */}
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e57] via-[#006d77] to-[#002e34] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-              Boating Park Activities
-            </h2> */}
             <p className="text-teal-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Introducing Vidarbha's Biggest, Safest & Most Thrilling Government-Authorized Boating Center - Bringing the Mumbai & Goa Experience to You !
+              {headerDesc}
             </p>
           </ScrollReveal>
 
@@ -218,7 +216,7 @@ const BoatingParkPage = () => {
                       <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                         {slide.title}
                       </h3>
-                      <p className="text-sm text-teal-50 leading-relaxed font-normal">{slide.description}</p>
+                      <p className="text-sm text-teal-50">{slide.description}</p>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -233,7 +231,7 @@ const BoatingParkPage = () => {
         <ScrollReveal direction="up" delay={0.2}>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-teal-100">
-              <h3 className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-teal-800 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Facilities
               </h3>
               <ul className="space-y-2.5">
@@ -249,13 +247,13 @@ const BoatingParkPage = () => {
             </div>
 
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-teal-100">
-              <h3 className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-teal-800 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">
                 {boatingRules.map((rule) => (
                   <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-cyan-100 text-cyan-700 shrink-0">
                       <ShieldCheck className="h-3 w-3" />
                     </span>
                     <span>{rule}</span>

@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { supabase } from '@/lib/supabase';
 import { BadgeCheck, ShieldCheck } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface BirdSlide {
@@ -16,71 +16,74 @@ interface BirdSlide {
   video_url?: string;
 }
 
-const BirdParkPage = () => {
-  const birdSlides: BirdSlide[] = [
-    {
-      title: 'Guineafowls',
-      description: 'Guineafowls are distinctive birds known for their spotted feathers and unique appearance. Their lively nature makes them an interesting attraction for children and families.',
-      image: '/Bird-Park.jpg',
-    },
-    {
-      title: 'Turkey',
-      description: 'Turkeys are large, fascinating birds known for their impressive size and distinctive appearance. Visitors can enjoy observing these beautiful birds up close.',
-      image: '/Bird-Park.jpg',
-    },
-    {
-      title: 'Lovebirds',
-      description: 'Lovebirds are small, colorful and social birds known for their beautiful appearance and affectionate nature. They are especially popular with children and bird lovers.',
-      image: '/Bird-Park.jpg',
-    },
-    {
-      title: 'Pigeons',
-      description: 'Pigeons are familiar and fascinating birds found in many parts of the world. At Shivtirth Bird Park, visitors can observe these gentle birds in a natural setting.',
-      image: '/Bird-Park.jpg',
-    },
-    {
-      title: 'English Duck (Mallard)',
-      description: 'Mallard ducks are attractive waterfowl recognized for their colorful plumage and classic duck appearance.',
-      image: '/Bird-Park.jpg',
-    },
-    {
-      title: 'Country Duck (Gavrani Duck)',
-      description: 'Gavrani Ducks, commonly known as country ducks, are traditional native ducks that offer visitors a glimpse of local farm life.',
-      image: '/Bird-Park.jpg',
-    },
-    {
-      title: 'Rabbit',
-      description: 'Rabbits are gentle, cute and playful animals that are especially loved by children as part of the park’s nature experience.',
-      image: '/Bird-Park.jpg',
-    },
-    {
-      title: 'Hen and Rooster',
-      description: 'The hen and rooster are a classic part of the farm environment, offering children an enjoyable introduction to farm animals.',
-      image: '/Bird-Park.jpg',
-    },
-  ];
+const defaultBirdSlides: BirdSlide[] = [
+  {
+    title: 'Guineafowls & Turkey',
+    description: 'Observe active, colourful guineafowls and majestic turkeys in an open natural habitat.',
+    image: '/birdspark-1.jpg',
+  },
+  {
+    title: 'Lovebirds & Exotic Pigeons',
+    description: 'Interactive aviary setup showcasing vibrant lovebirds, fantail pigeons, and exotic species.',
+    image: '/Bird-Park.jpg',
+  },
+  {
+    title: 'Mallard & Country Ducks',
+    description: 'Watch friendly duck ponds featuring Mallard ducks and country ducks splashing in natural water streams.',
+    image: '/Bird-Park.jpg',
+  },
+  {
+    title: 'Rabbits & Farm Animals',
+    description: 'Gentle, hands-on learning zone with adorable rabbits and farm animals for kids.',
+    image: '/Bird-Park.jpg',
+  }
+];
 
-  const [slides, setSlides] = useState<BirdSlide[]>(birdSlides);
+const BirdParkPage = () => {
+  const [slides, setSlides] = useState<BirdSlide[]>(defaultBirdSlides);
+  const [headerTitle, setHeaderTitle] = useState("Bird Park");
+  const [headerSub, setHeaderSub] = useState(
+    "Guineafowls | Turkey | Lovebirds | Pigeons | Mallard Ducks | Gavrani Ducks | Rabbits | Family-Friendly Learn & Explore Experience"
+  );
+  const [headerDesc, setHeaderDesc] = useState(
+    "Walk among beautiful exotic birds in an open, vibrant natural environment surrounded by Satpuda green valley."
+  );
+  const [heroImage, setHeroImage] = useState("/Bird-Park.jpg");
+  const [heroVideo, setHeroVideo] = useState("");
 
   useEffect(() => {
-    async function fetchAttractions() {
+    async function fetchData() {
       try {
-        const { data } = await supabase
-          .from('attractions')
-          .select('title, description, image, video, video_url')
-          .eq('park_type', 'bird-park')
-          .eq('is_hidden', false)
-          .order('display_order', { ascending: true });
+        const { data: headerData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "park_header_bird-park")
+          .single();
 
-        if (data && data.length > 0) {
-          setSlides(data);
+        if (headerData && headerData.content) {
+          const c = headerData.content;
+          if (c.title) setHeaderTitle(c.title);
+          if (c.subDescription) setHeaderSub(c.subDescription);
+          if (c.mainDescription) setHeaderDesc(c.mainDescription);
+          if (c.imageUrl) setHeroImage(c.imageUrl);
+          if (c.videoUrl) setHeroVideo(c.videoUrl);
+        }
+
+        const { data: attractionData } = await supabase
+          .from("attractions")
+          .select("title, description, image, video, video_url")
+          .eq("park_type", "bird-park")
+          .eq("is_hidden", false)
+          .order("display_order", { ascending: true });
+
+        if (attractionData && attractionData.length > 0) {
+          setSlides(attractionData);
         }
       } catch (err) {
-        console.error('Error loading bird park attractions:', err);
+        console.error("Error loading bird park content:", err);
       }
     }
-
-    fetchAttractions();
+    fetchData();
   }, []);
 
   const birdFacilities = [
@@ -101,12 +104,7 @@ const BirdParkPage = () => {
     'Do not throw objects into bird or animal enclosures',
     'Maintain cleanliness and use designated dustbins',
     'Avoid loud noises near birds and animals',
-    'Do not enter restricted or staff-only areas',
-    'Photography should not disturb the birds or animals',
-    'Do not use flash photography if prohibited',
-    'Respect the natural environment and other visitors',
-    'Follow all safety barriers and designated walking paths',
-    'Report any issue or emergency to park staff immediately'
+    'Do not enter restricted or staff-only areas'
   ];
 
   const birdFaqs = [
@@ -125,10 +123,6 @@ const BirdParkPage = () => {
     {
       question: 'Is Bird Park suitable for children?',
       answer: 'Yes. It is a family-friendly and educational experience where children can observe birds and animals in a calm environment.'
-    },
-    {
-      question: 'Can I visit Bird Park along with other Shivtirth attractions?',
-      answer: 'Yes. Depending on the package and attraction availability, Bird Park can be combined with other Shivtirth experiences.'
     }
   ];
 
@@ -136,22 +130,33 @@ const BirdParkPage = () => {
     <main id="about-park" className="bg-gradient-to-b from-emerald-950 via-slate-900 to-emerald-950 text-slate-100">
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/Bird-Park.jpg"
-            alt="Bird Park"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={headerTitle}
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
             <div className="max-w-3xl text-center">
               <h1 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-                Bird Park
+                {headerTitle}
               </h1>
               <p className="mt-2 text-sm text-emerald-100/90 drop-shadow-sm font-medium">
-                Guineafowls | Turkey | Lovebirds | Pigeons | Mallard Ducks | Gavrani Ducks | Rabbits | Family-Friendly Learn & Explore Experience
+                {headerSub}
               </p>
             </div>
           </div>
@@ -165,15 +170,12 @@ const BirdParkPage = () => {
         BOOK NOW
       </InteractiveHoverButton>
 
-      {/* Attractions Section - Customized Nature Leaf Green Gradient */}
+      {/* Attractions Section */}
       <section className="py-10 md:py-14 bg-gradient-to-br from-[#386641] via-[#6a994e] to-[#1a3a2a] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            {/* <h2 className="text-2xl font-bold text-white mb-2 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
-              Birds & Animals at Sai Bird Park
-            </h2> */}
             <p className="text-emerald-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
-              Introducing Vidarbha's Most Beautiful Bird Park, bringing you closer to nature having exotic and domestic bird species in a spacious, natural habitat designed for education, conservation, and family enjoyment with feeding zone.
+              {headerDesc}
             </p>
           </ScrollReveal>
 
@@ -204,7 +206,7 @@ const BirdParkPage = () => {
                             src={slide.image || '/Bird-Park.jpg'}
                             alt={slide.title}
                             fill
-                            className="object-cover object-center hover:scale-105 transition duration-500"
+                            className="object-cover object-[50%_18%] hover:scale-105 transition duration-500"
                             sizes="(min-width: 768px) 50vw, 100vw"
                           />
                         )}
@@ -214,7 +216,7 @@ const BirdParkPage = () => {
                       <h3 className="text-2xl font-bold text-white font-times mb-2" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                         {slide.title}
                       </h3>
-                      <p className="text-sm text-emerald-50 leading-relaxed font-normal">{slide.description}</p>
+                      <p className="text-sm text-emerald-50">{slide.description}</p>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -229,7 +231,7 @@ const BirdParkPage = () => {
         <ScrollReveal direction="up" delay={0.2}>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-emerald-100">
-              <h3 className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-emerald-800 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Facilities
               </h3>
               <ul className="space-y-2.5">
@@ -245,13 +247,13 @@ const BirdParkPage = () => {
             </div>
 
             <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-emerald-100">
-              <h3 className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+              <h3 className="text-lg md:text-xl font-bold text-emerald-800 font-times mb-3" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">
                 {birdRules.map((rule) => (
                   <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-teal-100 text-teal-700 shrink-0">
                       <ShieldCheck className="h-3 w-3" />
                     </span>
                     <span>{rule}</span>
@@ -273,7 +275,7 @@ const BirdParkPage = () => {
             <Accordion type="single" collapsible className="w-full">
               {birdFaqs.map((faq, idx) => (
                 <AccordionItem key={idx} value={`bird-faq-${idx}`} className="border-slate-200">
-                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-emerald-700 text-left">
+                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-emerald-600 text-left">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-xs md:text-sm text-slate-600 leading-relaxed">
