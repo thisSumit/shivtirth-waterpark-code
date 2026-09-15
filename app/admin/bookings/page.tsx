@@ -52,7 +52,7 @@ export default function AdminBookingsPage() {
 
   // Search & Filters
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "failed" | "pending">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "failed">("all");
   const [dateFilterType, setDateFilterType] = useState<"all" | "visit_date" | "booking_date">("all");
   const [selectedDate, setSelectedDate] = useState("");
 
@@ -118,16 +118,14 @@ export default function AdminBookingsPage() {
   const statusCounts = useMemo(() => {
     let paid = 0;
     let failed = 0;
-    let pending = 0;
 
     bookings.forEach((b) => {
       const st = (b.payment_status || "").toLowerCase();
       if (st === "paid" || st === "success") paid++;
-      else if (st === "failed") failed++;
-      else pending++;
+      else failed++;
     });
 
-    return { all: bookings.length, paid, failed, pending };
+    return { all: bookings.length, paid, failed };
   }, [bookings]);
 
   // Filter & Search Logic
@@ -154,9 +152,7 @@ export default function AdminBookingsPage() {
       if (statusFilter === "paid") {
         matchesStatus = st === "paid" || st === "success";
       } else if (statusFilter === "failed") {
-        matchesStatus = st === "failed";
-      } else if (statusFilter === "pending") {
-        matchesStatus = st !== "paid" && st !== "success" && st !== "failed";
+        matchesStatus = st !== "paid" && st !== "success";
       }
 
       // Date filter
@@ -285,7 +281,7 @@ export default function AdminBookingsPage() {
       </div>
 
       {/* Quick Status Filter Tabs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <button
           onClick={() => setStatusFilter("all")}
           className={`flex items-center justify-between p-4 rounded-2xl border transition text-left ${statusFilter === "all"
@@ -322,24 +318,10 @@ export default function AdminBookingsPage() {
             }`}
         >
           <div>
-            <p className="text-xs uppercase tracking-wider font-semibold text-red-400">Failed Bookings</p>
+            <p className="text-xs uppercase tracking-wider font-semibold text-red-400">Failed / Unpaid Bookings</p>
             <p className="text-2xl font-black text-red-400 mt-1">{statusCounts.failed}</p>
           </div>
           <XCircle size={20} className="text-red-400" />
-        </button>
-
-        <button
-          onClick={() => setStatusFilter("pending")}
-          className={`flex items-center justify-between p-4 rounded-2xl border transition text-left ${statusFilter === "pending"
-              ? "bg-amber-500/20 border-amber-500 text-white font-bold"
-              : "bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700"
-            }`}
-        >
-          <div>
-            <p className="text-xs uppercase tracking-wider font-semibold text-amber-400">Pending</p>
-            <p className="text-2xl font-black text-amber-400 mt-1">{statusCounts.pending}</p>
-          </div>
-          <Clock size={20} className="text-amber-400" />
         </button>
       </div>
 
@@ -457,8 +439,8 @@ export default function AdminBookingsPage() {
                         <div className="font-bold text-white text-xs uppercase tracking-wide">
                           {b.city || "N/A"}
                         </div>
-                        <div className="mt-1 text-[10px] text-slate-400 leading-relaxed">
-                          <div>Adult: {b.adult_qty ?? 0}</div>
+                        <div className="mt-1 text-[10px] text-slate-300 font-medium leading-relaxed">
+                          <div>Adult: {b.adult_qty || b.ticket_qty || 0}</div>
                           <div>Kid 1: {b.kid1_qty ?? 0}</div>
                           <div>Kid 2: {b.kid2_qty ?? 0}</div>
                         </div>
@@ -621,12 +603,14 @@ export default function AdminBookingsPage() {
 
               <div className="space-y-1">
                 <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                  City
+                  City & Guest Quantities
                 </span>
                 <p className="font-bold text-white text-base">{selectedBooking.city || "N/A"}</p>
-                <p className="text-xs text-slate-500">
-                  Adult: {selectedBooking.adult_qty ?? 0} | Kid 1: {selectedBooking.kid1_qty ?? 0} | Kid 2: {selectedBooking.kid2_qty ?? 0}
-                </p>
+                <div className="text-xs text-slate-300 font-semibold space-y-0.5 mt-1">
+                  <div>Adult: {selectedBooking.adult_qty || selectedBooking.ticket_qty || 0}</div>
+                  <div>Kid 1: {selectedBooking.kid1_qty ?? 0}</div>
+                  <div>Kid 2: {selectedBooking.kid2_qty ?? 0}</div>
+                </div>
               </div>
 
               <div className="space-y-1">
