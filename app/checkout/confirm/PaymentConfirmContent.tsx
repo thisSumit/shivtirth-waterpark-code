@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle2, Printer, Loader2 } from 'lucide-react'
 import {
+  clearConfirmedBooking,
   clearPendingBooking,
   readConfirmedBooking,
   readPendingBooking,
@@ -41,32 +42,25 @@ export default function PaymentConfirmContent() {
         } catch (err) {
           console.error('Failed to fetch booking by txnid:', err)
         }
-      }
 
-      if (!b || !b.name) {
-        b = readPendingBooking() || readConfirmedBooking()
-      }
-
-      if (!b || !b.name) {
-        try {
-          const res = await fetch('/api/booking')
-          if (res.ok) {
-            const data = await res.json()
-            if (data?.booking && data.booking.name) {
-              b = data.booking
-            }
+        if (!b || !b.name) {
+          const fallback = readPendingBooking() || readConfirmedBooking()
+          if (fallback && fallback.name) {
+            b = fallback
           }
-        } catch (err) {
-          console.error('Failed to fetch fallback booking:', err)
         }
+      } else {
+        b = readPendingBooking() || readConfirmedBooking()
       }
 
       if (!isMounted) return
 
-      if (b) {
+      if (b && b.name) {
         setBooking(b)
         storeConfirmedBooking(b)
         clearPendingBooking()
+      } else {
+        setBooking(null)
       }
 
       setLoading(false)
@@ -94,9 +88,11 @@ export default function PaymentConfirmContent() {
               <div className="inline-flex rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/90 print:text-slate-700">
                 Shivtirth Waterpark
               </div>
-              <h1 className="mt-3 text-2xl md:text-3xl font-black leading-tight text-accent print:text-slate-900">Payment Confirmed</h1>
+              <h1 className="mt-3 text-2xl md:text-3xl font-black leading-tight text-accent print:text-slate-900">
+                {booking ? 'Payment Confirmed' : 'Booking Confirmation'}
+              </h1>
               <p className="mt-1.5 text-xs md:text-sm text-white/90 print:text-slate-700">
-                Your ticket has been confirmed successfully.
+                {booking ? 'Your ticket has been confirmed successfully.' : 'No active booking session found.'}
               </p>
             </div>
             <CheckCircle2 className="h-12 w-12 shrink-0 text-emerald-400 print:text-emerald-600" strokeWidth={2.2} />
@@ -107,6 +103,19 @@ export default function PaymentConfirmContent() {
               <div className="py-8 flex flex-col items-center justify-center gap-2 text-white/80">
                 <Loader2 className="h-7 w-7 animate-spin text-accent" />
                 <p className="text-xs font-semibold">Loading ticket details...</p>
+              </div>
+            ) : !booking ? (
+              <div className="py-6 text-center text-white/80">
+                <p className="text-sm font-medium">No booking details were found for this session.</p>
+                <p className="mt-1 text-xs text-white/60">If you just made a payment, please make sure your transaction URL is complete or check back in your browser.</p>
+                <div className="mt-5 flex justify-center gap-3">
+                  <Link href="/checkout" className="inline-flex justify-center rounded-full bg-accent px-5 py-2 text-xs font-bold text-slate-950">
+                    Go to Checkout
+                  </Link>
+                  <Link href="/" className="inline-flex justify-center rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-semibold text-white">
+                    Go to Home
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-3 text-xs md:grid-cols-2 md:gap-x-5 md:gap-y-3.5 print:text-slate-800">

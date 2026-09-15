@@ -102,14 +102,14 @@ export const buildBookingFromPayuCallback = (
   payload: PayuCallbackPayload,
   fallbackTxnId: string = ''
 ): CheckoutBooking => {
-  const productinfo = payload.productinfo || ''
-  const productParts = productinfo.split('-')
+  const rawProductinfo = payload.productinfo || ''
+  const [productMain, productMeta] = rawProductinfo.split('|')
+  const productParts = (productMain || '').split('-')
   const ticketQtyFromProduct = readNumber(productParts.at(-1), 1)
   const ticketTypeFromProduct = productParts.length > 1 ? productParts.at(-2) || '' : ''
-  const planNameFromProduct = productParts.length > 2 ? productParts.slice(0, -2).join('-') : productinfo
+  const planNameFromProduct = productParts.length > 2 ? productParts.slice(0, -2).join('-') : productMain
 
-  const infoTokenParts = productinfo.split('|')
-  const detailMeta = infoTokenParts.length > 1 ? infoTokenParts[1]?.split(',') || [] : []
+  const detailMeta = productMeta ? productMeta.split(',') : []
   const adultQtyFromProduct = detailMeta[0] ? Number(detailMeta[0]) : 0
   const kids1QtyFromProduct = detailMeta[1] ? Number(detailMeta[1]) : 0
   const kids2QtyFromProduct = detailMeta[2] ? Number(detailMeta[2]) : 0
@@ -218,6 +218,13 @@ export const clearPendingBooking = () => {
   } catch {}
 }
 
+export const clearConfirmedBooking = () => {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.removeItem(CONFIRMED_STORAGE_KEY)
+  } catch {}
+}
+
 export const buildSheetSubmissionPayload = (
   booking: CheckoutBooking,
   paymentStatus: BookingStatus,
@@ -320,7 +327,7 @@ export const submitBookingToSupabase = async (
     const finalAddonSubtotal = booking.addOnSubtotal || Number(existing?.addon_subtotal || 0)
     const finalTotalAmount = booking.totalAmount || Number(existing?.total_amount || 0)
 
-    const payload = {
+    const payload: Record<string, any> = {
       txnid: booking.txnid,
       gateway_txnid: gatewayMeta.gatewayTxnId || existing?.gateway_txnid || null,
       gateway_status: gatewayMeta.gatewayStatus || existing?.gateway_status || null,
@@ -331,10 +338,6 @@ export const submitBookingToSupabase = async (
       name: finalName,
       mobile: finalMobile,
       email: finalEmail,
-      city: finalCity,
-      adult_qty: finalAdultQty,
-      kid1_qty: finalKid1Qty,
-      kid2_qty: finalKid2Qty,
       visit_date: finalVisitDate,
       plan_name: finalPlanName,
       ticket_type: finalTicketType,
@@ -349,7 +352,32 @@ export const submitBookingToSupabase = async (
       consent_accepted: booking.consentAccepted ?? existing?.consent_accepted ?? true,
     }
 
-    const { error } = await client.from('bookings').upsert(payload, { onConflict: 'txnid' })
+    if (finalCity) payload.city = finalCity
+    if (finalAdultQty) payload.adult_qty = finalAdultQty
+    if (finalKid1Qty) payload.kid1_qty = finalKid1Qty
+    if (finalKid2Qty) payload.kid2_qty = finalKid2Qty
+
+    const currentPayload = { ...payload }
+    let attempts = 0
+    let error: any = null
+
+    while (attempts < 10) {
+      attempts++
+      const res = await client.from('bookings').upsert(currentPayload, { onConflict: 'txnid' })
+      error = res.error
+      if (!error) break
+
+      if (error.code === 'PGRST204' || error.message?.includes('column')) {
+        const match = error.message?.match(/Could not find the '([^']+)' column/i)
+        if (match && match[1] && currentPayload[match[1]] !== undefined) {
+          console.warn(`Stripping missing column '${match[1]}' from bookings payload and retrying...`)
+          delete currentPayload[match[1]]
+          continue
+        }
+      }
+      break
+    }
+
     if (error) {
       console.error('Supabase booking sync error:', error)
       return false

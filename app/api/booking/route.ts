@@ -29,20 +29,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 3. Fallback: If no match found or no txnid supplied, fetch most recent paid or created booking from last 15 minutes
-    if (!data) {
-      const { data: recentList } = await supabaseAdmin
-        .from('bookings')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(5)
-
-      if (recentList && recentList.length > 0) {
-        // Prefer paid booking
-        const paidRecent = recentList.find((b: any) => b.payment_status === 'Paid')
-        data = paidRecent || recentList[0]
-      }
-    }
 
     if (!data) {
       return NextResponse.json({ error: 'Booking not found.' }, { status: 404 })
