@@ -6,12 +6,14 @@ import { supabase } from "@/lib/supabase";
 export type SiteSettings = {
   whatsappNumber: string;
   contactPhone: string;
+  contactPhone2: string;
   contactEmail: string;
 };
 
 export const defaultSettings: SiteSettings = {
   whatsappNumber: "+91 82757 37579",
-  contactPhone: "+91 8605362212",
+  contactPhone: "+91 86053 62212",
+  contactPhone2: "+91 82757 37579",
   contactEmail: "shivtirthtourism@gmail.com",
 };
 
@@ -35,6 +37,7 @@ export function useSiteSettings() {
           setSettings({
             whatsappNumber: map["whatsapp_number"] || defaultSettings.whatsappNumber,
             contactPhone: map["contact_phone"] || defaultSettings.contactPhone,
+            contactPhone2: map["contact_phone_2"] || defaultSettings.contactPhone2,
             contactEmail: map["contact_email"] || defaultSettings.contactEmail,
           });
         }

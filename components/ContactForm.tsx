@@ -114,19 +114,26 @@ const ContactForm = () => {
                 <div className="rounded-3xl bg-white p-6 shadow-lg border border-slate-100">
                   <h3 className="text-xl font-black mb-6">Contact Information</h3>
                   <div className="space-y-6">
-                    <Link href={`tel:${settings.contactPhone}`} className="flex items-start gap-4 group">
+                    <div className="flex items-start gap-4">
                       <span className="p-3 rounded-full bg-accent/10 text-slate-500">
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.1.37 2.28.57 3.5.57a1 1 0 011 1V21a1 1 0 01-1 1C10.85 22 2 13.15 2 2a1 1 0 011-1h4.5a1 1 0 011 1c0 1.22.2 2.4.57 3.5a1 1 0 01-.24 1.01l-2.2 2.28z" />
                         </svg>
                       </span>
                       <span>
-                        <p className="text-sm text-slate-500 mb-1">Phone</p>
-                        <p className="font-medium group-hover:text-slate-900 transition-colors">
-                          {settings.contactPhone}
-                        </p>
+                        <p className="text-sm text-slate-500 mb-1">Support Call Lines</p>
+                        <div className="flex flex-col gap-0.5">
+                          <Link href={`tel:${settings.contactPhone}`} className="font-medium hover:text-slate-900 transition-colors">
+                            Line 1: {settings.contactPhone}
+                          </Link>
+                          {settings.contactPhone2 && (
+                            <Link href={`tel:${settings.contactPhone2}`} className="font-medium hover:text-slate-900 transition-colors">
+                              Line 2: {settings.contactPhone2}
+                            </Link>
+                          )}
+                        </div>
                       </span>
-                    </Link>
+                    </div>
 
                     <Link href={`mailto:${settings.contactEmail}`} className="flex items-start gap-4 group">
                       <span className="p-3 rounded-full bg-accent/10 text-slate-500">

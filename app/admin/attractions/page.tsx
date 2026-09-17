@@ -24,6 +24,7 @@ const PARK_TYPES = [
   { id: "boating-park", label: "Boating Park" },
   { id: "bird-park", label: "Bird Park" },
   { id: "accommodation", label: "Accommodation & Stay" },
+  { id: "school-picnic", label: "School Picnic" },
 ];
 
 export default function AdminAttractionsPage() {
@@ -87,42 +88,57 @@ export default function AdminAttractionsPage() {
     setLoading(true);
 
     try {
+      const payload: Record<string, any> = {
+        park_type: currentAttraction.park_type,
+        title: currentAttraction.title,
+        description: currentAttraction.description,
+        image: currentAttraction.image || "/Water-Park.jpg",
+        display_order: currentAttraction.display_order,
+      };
+
+      const videoVal = currentAttraction.video || currentAttraction.video_url || null;
+      if (videoVal) {
+        payload.video = videoVal;
+        payload.video_url = videoVal;
+      } else {
+        payload.video = null;
+        payload.video_url = null;
+      }
+
       if (currentAttraction.id) {
-        const { error } = await supabase
+        let { error } = await supabase
           .from("attractions")
-          .update({
-            park_type: currentAttraction.park_type,
-            title: currentAttraction.title,
-            description: currentAttraction.description,
-            image: currentAttraction.image,
-            video: currentAttraction.video,
-            video_url: currentAttraction.video,
-            display_order: currentAttraction.display_order,
-          })
+          .update(payload)
           .eq("id", currentAttraction.id);
+
+        if (error && error.message.includes("video_url")) {
+          delete payload.video_url;
+          const retry = await supabase
+            .from("attractions")
+            .update(payload)
+            .eq("id", currentAttraction.id);
+          error = retry.error;
+        }
 
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("attractions").insert([
-          {
-            park_type: currentAttraction.park_type,
-            title: currentAttraction.title,
-            description: currentAttraction.description,
-            image: currentAttraction.image,
-            video: currentAttraction.video,
-            video_url: currentAttraction.video,
-            display_order: currentAttraction.display_order,
-          },
-        ]);
+        let { error } = await supabase.from("attractions").insert([payload]);
+
+        if (error && error.message.includes("video_url")) {
+          delete payload.video_url;
+          const retry = await supabase.from("attractions").insert([payload]);
+          error = retry.error;
+        }
 
         if (error) throw error;
       }
 
       setIsEditing(false);
       fetchAttractions();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error saving attraction:", err);
-      alert("Failed to save attraction details.");
+      const msg = err?.message || err?.details || String(err);
+      alert(`Failed to save attraction details: ${msg}\n\nPlease run the SQL snippet in Supabase SQL Editor to add video columns:\nALTER TABLE public.attractions ADD COLUMN IF NOT EXISTS video TEXT;\nALTER TABLE public.attractions ADD COLUMN IF NOT EXISTS video_url TEXT;`);
     } finally {
       setLoading(false);
     }

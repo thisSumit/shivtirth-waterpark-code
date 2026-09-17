@@ -116,10 +116,12 @@ CREATE TABLE IF NOT EXISTS public.gallery (
 -- ATTRACTIONS
 CREATE TABLE IF NOT EXISTS public.attractions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    park_type TEXT NOT NULL CHECK (park_type IN ('water-park', 'amusement-park', 'adventure-park', 'boating-park')),
+    park_type TEXT NOT NULL CHECK (park_type IN ('water-park', 'amusement-park', 'adventure-park', 'boating-park', 'bird-park', 'accommodation', 'school-picnic')),
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     image TEXT NOT NULL,
+    video TEXT,
+    video_url TEXT,
     display_order INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -179,45 +181,80 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- RLS POLICIES FOR PROFILES
+DROP POLICY IF EXISTS select_own_profile ON public.profiles;
 CREATE POLICY select_own_profile ON public.profiles FOR SELECT USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS all_admin_profiles ON public.profiles;
 CREATE POLICY all_admin_profiles ON public.profiles FOR ALL USING (public.is_admin());
 
 -- RLS POLICIES FOR PUBLIC READ-ONLY TABLES
 -- offers, packages, gallery, attractions, activities, settings, website_content
+DROP POLICY IF EXISTS select_public_offers ON public.offers;
 CREATE POLICY select_public_offers ON public.offers FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_offers ON public.offers;
 CREATE POLICY all_admin_offers ON public.offers FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS select_public_packages ON public.packages;
 CREATE POLICY select_public_packages ON public.packages FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_packages ON public.packages;
 CREATE POLICY all_admin_packages ON public.packages FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS select_public_gallery ON public.gallery;
 CREATE POLICY select_public_gallery ON public.gallery FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_gallery ON public.gallery;
 CREATE POLICY all_admin_gallery ON public.gallery FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS select_public_attractions ON public.attractions;
 CREATE POLICY select_public_attractions ON public.attractions FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_attractions ON public.attractions;
 CREATE POLICY all_admin_attractions ON public.attractions FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS select_public_activities ON public.activities;
 CREATE POLICY select_public_activities ON public.activities FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_activities ON public.activities;
 CREATE POLICY all_admin_activities ON public.activities FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS select_public_settings ON public.settings;
 CREATE POLICY select_public_settings ON public.settings FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_settings ON public.settings;
 CREATE POLICY all_admin_settings ON public.settings FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS select_public_website_content ON public.website_content;
 CREATE POLICY select_public_website_content ON public.website_content FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_website_content ON public.website_content;
 CREATE POLICY all_admin_website_content ON public.website_content FOR ALL USING (public.is_admin());
 
 -- RLS POLICIES FOR SUBMISSIONS / FORM TABLES
 -- contacts, influencers, bookings
+DROP POLICY IF EXISTS insert_public_contacts ON public.contacts;
 CREATE POLICY insert_public_contacts ON public.contacts FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS all_admin_contacts ON public.contacts;
 CREATE POLICY all_admin_contacts ON public.contacts FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS insert_public_influencers ON public.influencers;
 CREATE POLICY insert_public_influencers ON public.influencers FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS all_admin_influencers ON public.influencers;
 CREATE POLICY all_admin_influencers ON public.influencers FOR ALL USING (public.is_admin());
 
 -- Bookings can be inserted by public (during checkout initiate) and updated by public (during PayU callbacks, or we check bypass)
 -- Actually, the PayU callback routes are API routes running on the server, they can bypass RLS via service role client (supabaseAdmin)
 -- But for frontend client, allow select of own booking by email/mobile or just allow insert. Let's make it insert/select for public, full access for admin.
+DROP POLICY IF EXISTS insert_public_bookings ON public.bookings;
 CREATE POLICY insert_public_bookings ON public.bookings FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS select_public_bookings ON public.bookings;
 CREATE POLICY select_public_bookings ON public.bookings FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS all_admin_bookings ON public.bookings;
 CREATE POLICY all_admin_bookings ON public.bookings FOR ALL USING (public.is_admin());
 
 -- TRIGGER FOR AUTH SIGNUP TO CREATE PROFILE
@@ -231,6 +268,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE OR REPLACE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();

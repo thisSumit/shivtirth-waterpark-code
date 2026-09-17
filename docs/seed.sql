@@ -96,6 +96,7 @@ ON CONFLICT (src) DO UPDATE SET
 
 -- Ensure footer and is_hidden columns exist across CMS tables
 ALTER TABLE public.packages DROP CONSTRAINT IF EXISTS packages_category_check;
+ALTER TABLE public.attractions DROP CONSTRAINT IF EXISTS attractions_park_type_check;
 ALTER TABLE public.offers ADD COLUMN IF NOT EXISTS is_hidden BOOLEAN DEFAULT false;
 ALTER TABLE public.packages ADD COLUMN IF NOT EXISTS is_hidden BOOLEAN DEFAULT false;
 ALTER TABLE public.packages ADD COLUMN IF NOT EXISTS footer TEXT DEFAULT '';
@@ -177,7 +178,22 @@ INSERT INTO public.attractions (park_type, title, description, image, display_or
 ('boating-park', 'Speed Boat', 'Experience pure adrenaline as you race across the water with powerful speed and sharp turns. Designed for thrill seekers, this ride delivers high-energy moments, exciting splashes, and a rush you will feel long after it ends.', '/speed-boat.jpg', 2),
 ('boating-park', 'Shikara Ride', 'Unwind with a calm and scenic ride that lets you slow down and take in the beauty around you. Gliding gently over the water, this peaceful experience offers a refreshing escape-perfect for relaxing moments with your loved ones.', '/shikara-boat.jpg', 3),
 ('boating-park', 'Kayak Boat', 'Enjoy a peaceful and scenic ride that lets you connect with nature. As you paddle gently across the water, take in the beauty around you and find a moment of calm in the midst of your adventure.', '/Boating-Park.jpg', 4),
-('boating-park', 'Pedal Boat', 'Get a fun workout while enjoying the water with a pedal boat ride. Perfect for families and friends, it offers a leisurely pace that lets you take in the surroundings while still being part of the fun.', '/Boating-Park.jpg', 5)
+('boating-park', 'Pedal Boat', 'Get a fun workout while enjoying the water with a pedal boat ride. Perfect for families and friends, it offers a leisurely pace that lets you take in the surroundings while still being part of the fun.', '/Boating-Park.jpg', 5),
+
+('bird-park', 'Guineafowls & Turkey', 'Observe active, colourful guineafowls and majestic turkeys in an open natural habitat.', '/birdspark-1.jpg', 1),
+('bird-park', 'Lovebirds & Exotic Pigeons', 'Interactive aviary setup showcasing vibrant lovebirds, fantail pigeons, and exotic species.', '/Bird-Park.jpg', 2),
+('bird-park', 'Mallard & Country Ducks', 'Watch friendly duck ponds featuring Mallard ducks and country ducks splashing in natural water streams.', '/Bird-Park.jpg', 3),
+('bird-park', 'Rabbits & Farm Animals', 'Gentle, hands-on learning zone with adorable rabbits and farm animals for kids.', '/Bird-Park.jpg', 4),
+
+('accommodation', 'Farmhouse Bungalows', 'Spacious private farmhouse with lush green garden lawns, AC bedrooms, living room, and exclusive sit-out area. Ideal for family reunions, group parties, and private gatherings looking for an exclusive getaway.', '/farmhouse.png', 1),
+('accommodation', 'Camping Tents Experience', 'Immerse yourself in authentic outdoors! Premium waterproof camping tents under starry skies with evening bonfire, ambient music, and next morning breakfast surrounded by nature.', '/Stay-Facilities.jpg', 2),
+('accommodation', 'Dormitory Cottages', 'Comfortable dormitory style air-cooled cottages designed for student picnics, large family groups, and corporate team outings looking for value and togetherness.', '/ag4.jpg', 3),
+('accommodation', 'Deluxe AC Rooms', 'Modern deluxe air-conditioned rooms equipped with plush king beds, flat-screen TV, room service, and tranquil views of surrounding plantations for ultimate comfort.', '/g10.png', 4),
+
+('school-picnic', 'Water Park & Adishakti Water Fall', 'A fun-filled water experience designed for students with exciting slides, splash zones, rain dance, foam dance and the iconic Adishakti Water Fall.', '/Water-Park.jpg', 1),
+('school-picnic', 'Mowgli Adventure Park', 'An exciting outdoor adventure zone featuring zip lines, rope bridges, obstacle courses, trekking, tree houses and team-building activities.', '/mowgli-adventure.jpg', 2),
+('school-picnic', 'Baliraja Agro & Bird Park', 'An interactive learning experience where students explore agriculture, nature, plants, birds, farming activities and the surrounding ecosystem.', '/ag4.jpg', 3),
+('school-picnic', 'Amusement Park & Boating', 'Enjoy exciting amusement rides along with optional boating experiences including speed boats, shikara, dragon boats, kayaks and pedal boats.', '/amusement.jpg', 4)
 ON CONFLICT (park_type, title) DO UPDATE SET
   description = EXCLUDED.description,
   image = EXCLUDED.image,

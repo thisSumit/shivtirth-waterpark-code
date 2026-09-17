@@ -264,20 +264,21 @@ export default function AccommodationPage() {
 
         const { data: attractionData } = await supabase
           .from("attractions")
-          .select("title, description, image, video, video_url")
+          .select("*")
           .eq("park_type", "accommodation")
-          .eq("is_hidden", false)
           .order("display_order", { ascending: true });
 
-        if (attractionData && attractionData.length > 0) {
+        const visibleAttractions = (attractionData || []).filter((item: any) => item.is_hidden !== true);
+
+        if (visibleAttractions && visibleAttractions.length > 0) {
           setAccommodations(
-            attractionData.map((item) => ({
+            visibleAttractions.map((item: any) => ({
               name: item.title,
               image: item.image,
               video: item.video,
               video_url: item.video_url,
               description: item.description,
-              features: [],
+              features: Array.isArray(item.features) ? item.features : [],
             }))
           );
         }
@@ -352,7 +353,7 @@ export default function AccommodationPage() {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 shadow-sm border border-slate-200">
               <h3
-                className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3"
+                className="text-lg md:text-xl font-bold text-[#288382] font-times mb-3"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
                 Facilities
@@ -371,7 +372,7 @@ export default function AccommodationPage() {
 
             <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 shadow-sm border border-slate-200">
               <h3
-                className="text-lg md:text-xl font-bold text-amber-700 font-times mb-3"
+                className="text-lg md:text-xl font-bold text-[#288382] font-times mb-3"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
                 Rules & Regulations
@@ -396,7 +397,7 @@ export default function AccommodationPage() {
         <ScrollReveal direction="up" delay={0.25}>
           <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 md:p-6 shadow-sm border border-slate-200">
             <h3
-              className="text-lg md:text-xl font-bold text-slate-900 font-times mb-3"
+              className="text-lg md:text-xl font-bold text-[#288382] font-times mb-3"
               style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
             >
               Frequently Asked Questions

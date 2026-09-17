@@ -20,7 +20,8 @@ import {
   FileText,
   Menu,
   X,
-  Home
+  Home,
+  FolderOpen
 } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -94,12 +95,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Enquiries", href: "/admin/contacts", icon: MessageSquare },
     { name: "Influencers", href: "/admin/influencers", icon: Users },
     { name: "Website Content", href: "/admin/content", icon: FileText },
-    { name: "Offers", href: "/admin/offers", icon: Tag },
-    { name: "Packages", href: "/admin/packages", icon: Layers },
-    { name: "Accommodation", href: "/admin/accommodation", icon: Home },
+    { name: "Packages & Tickets", href: "/admin/packages", icon: Layers },
     { name: "Gallery", href: "/admin/gallery", icon: ImageIcon },
     { name: "Attractions", href: "/admin/attractions", icon: Map },
     { name: "Activities", href: "/admin/activities", icon: Sparkles },
+    { name: "Media Assets", href: "/admin/assets", icon: FolderOpen },
     { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
 

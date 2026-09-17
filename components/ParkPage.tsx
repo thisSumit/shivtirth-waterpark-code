@@ -165,8 +165,7 @@ export const ParkPage = () => {
 
         const { data, error } = await supabase
           .from("activities")
-          .select("title, image, video, video_url, description, features, is_hidden")
-          .eq("is_hidden", false)
+          .select("*")
           .order("display_order", { ascending: true });
 
         if (error) {
@@ -174,8 +173,10 @@ export const ParkPage = () => {
           return;
         }
 
-        if (data && data.length > 0) {
-          const dbParks: ParkItem[] = data.map((item) => ({
+        const visibleData = (data || []).filter((item: any) => item.is_hidden !== true);
+
+        if (visibleData && visibleData.length > 0) {
+          const dbParks: ParkItem[] = visibleData.map((item) => ({
             name: item.title || "",
             image: item.image || "",
             video: item.video,

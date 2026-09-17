@@ -19,12 +19,12 @@ const DEFAULT_OFFER_ASPECT_RATIO = 16 / 9;
 
 const offers: OfferImage[] = [
   {
-    src: "offers/banner4.png",
+    src: "/offers/banner4.png",
     alt: "Offer 1",
     aspectRatio: DEFAULT_OFFER_ASPECT_RATIO,
   },
   {
-    src: "offers/banner3.jpeg",
+    src: "/offers/banner3.jpeg",
     alt: "Offer 2",
     aspectRatio: DEFAULT_OFFER_ASPECT_RATIO,
   },
@@ -57,13 +57,14 @@ const OfferSection = () => {
       try {
         const { data } = await supabase
           .from("offers")
-          .select("src, alt, aspect_ratio, is_hidden")
-          .eq("is_hidden", false)
+          .select("*")
           .order("display_order", { ascending: true });
 
-        if (data && data.length > 0) {
+        const visibleOffers = (data || []).filter((item: any) => item.is_hidden !== true);
+
+        if (visibleOffers && visibleOffers.length > 0) {
           setActiveOffers(
-            data.map((item) => ({
+            visibleOffers.map((item: any) => ({
               src: item.src,
               alt: item.alt || "",
               aspectRatio:
@@ -133,11 +134,12 @@ const OfferSection = () => {
               "
             >
               {activeOffers.map((offer, index) => {
+                const safeSrc = (offer.src && typeof offer.src === "string" && offer.src.trim()) ? offer.src.trim() : "/offers/banner4.png";
                 const imgUrl =
-                  offer.src.startsWith("http") ||
-                  offer.src.startsWith("/")
-                    ? offer.src
-                    : `/${offer.src}`;
+                  safeSrc.startsWith("http") ||
+                  safeSrc.startsWith("/")
+                    ? safeSrc
+                    : `/${safeSrc}`;
 
                 return (
                   <div

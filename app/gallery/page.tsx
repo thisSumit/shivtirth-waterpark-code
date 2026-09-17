@@ -50,11 +50,12 @@ export default function GalleryPage() {
         const { data, error } = await supabase
           .from("gallery")
           .select("*")
-          .eq("is_hidden", false)
           .order("display_order", { ascending: true });
 
-        if (!error && data && data.length > 0) {
-          const mapped: GalleryItem[] = data.map((g: any) => ({
+        const visibleGallery = (data || []).filter((g: any) => g.is_hidden !== true);
+
+        if (!error && visibleGallery && visibleGallery.length > 0) {
+          const mapped: GalleryItem[] = visibleGallery.map((g: any) => ({
             id: g.id,
             type: g.type === "video" ? "video" : "image",
             src: g.src,

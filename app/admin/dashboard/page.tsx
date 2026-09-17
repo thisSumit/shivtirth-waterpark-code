@@ -154,32 +154,156 @@ export default function AdminDashboardPage() {
   }, [filteredBookings]);
 
   // SVG Chart Data Generation
-  // Groups revenue by date for the last 7 days or last 6 months depending on filter
+  // Groups revenue by date/time based on selected dateFilter with full type safety & proper bucketing
   const chartData = useMemo(() => {
-    const grouped: { [key: string]: number } = {};
+    const paidBookings = filteredBookings.filter((b) => b.payment_status === "Paid");
 
-    filteredBookings.forEach((b) => {
-      if (b.payment_status !== "Paid") return;
-      const dateStr = new Date(b.created_at).toLocaleDateString("en-IN", {
-        month: "short",
-        day: "numeric",
+    let labels: string[] = [];
+    let values: number[] = [];
+    let counts: number[] = [];
+
+    const now = new Date();
+
+    if (dateFilter === "today") {
+      // 6 time blocks for today
+      const slots = [
+        { label: "12am-4am", start: 0, end: 4 },
+        { label: "4am-8am", start: 4, end: 8 },
+        { label: "8am-12pm", start: 8, end: 12 },
+        { label: "12pm-4pm", start: 12, end: 16 },
+        { label: "4pm-8pm", start: 16, end: 20 },
+        { label: "8pm-12am", start: 20, end: 24 },
+      ];
+      labels = slots.map((s) => s.label);
+      values = new Array(6).fill(0);
+      counts = new Array(6).fill(0);
+
+      paidBookings.forEach((b) => {
+        const d = new Date(b.created_at);
+        const hour = d.getHours();
+        const idx = slots.findIndex((s) => hour >= s.start && hour < s.end);
+        if (idx !== -1) {
+          values[idx] += Number(b.total_amount) || 0;
+          counts[idx] += 1;
+        }
       });
-      grouped[dateStr] = (grouped[dateStr] || 0) + b.total_amount;
-    });
+    } else if (dateFilter === "week") {
+      // 7 Days of current week (Monday to Sunday)
+      const currentDay = now.getDay();
+      const diffToMon = now.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+      const monday = new Date(now.getFullYear(), now.getMonth(), diffToMon);
 
-    // Sort dates chronologically (or take the last 8 entries for presentation)
-    const sortedKeys = Object.keys(grouped).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-    const displayKeys = sortedKeys.slice(-8);
+      labels = [];
+      values = [];
+      counts = [];
 
-    const values = displayKeys.map((k) => grouped[k]);
-    const maxVal = Math.max(...values, 1000);
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
+        const dateStr = d.toISOString().split("T")[0];
+        labels.push(d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric" }));
+
+        let sum = 0;
+        let count = 0;
+        paidBookings.forEach((b) => {
+          const bDateStr = new Date(b.created_at).toISOString().split("T")[0];
+          if (bDateStr === dateStr) {
+            sum += Number(b.total_amount) || 0;
+            count += 1;
+          }
+        });
+        values.push(sum);
+        counts.push(count);
+      }
+    } else if (dateFilter === "month") {
+      // Days of current month
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const dayMap: { [day: number]: { sum: number; count: number; dateStr: string } } = {};
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateObj = new Date(year, month, d);
+        dayMap[d] = {
+          sum: 0,
+          count: 0,
+          dateStr: dateObj.toLocaleDateString("en-IN", { day: "numeric", month: "short" }),
+        };
+      }
+
+      paidBookings.forEach((b) => {
+        const d = new Date(b.created_at);
+        if (d.getFullYear() === year && d.getMonth() === month) {
+          const dayNum = d.getDate();
+          if (dayMap[dayNum]) {
+            dayMap[dayNum].sum += Number(b.total_amount) || 0;
+            dayMap[dayNum].count += 1;
+          }
+        }
+      });
+
+      const days = Object.keys(dayMap).map(Number);
+      labels = days.map((d) => dayMap[d].dateStr);
+      values = days.map((d) => dayMap[d].sum);
+      counts = days.map((d) => dayMap[d].count);
+    } else if (dateFilter === "year") {
+      // 12 Months of current year
+      const year = now.getFullYear();
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      labels = monthNames;
+      values = new Array(12).fill(0);
+      counts = new Array(12).fill(0);
+
+      paidBookings.forEach((b) => {
+        const d = new Date(b.created_at);
+        if (d.getFullYear() === year) {
+          const m = d.getMonth();
+          values[m] += Number(b.total_amount) || 0;
+          counts[m] += 1;
+        }
+      });
+    } else {
+      // Custom or ALL: Chronological date grouping
+      const dateMap: { [key: string]: { sum: number; count: number; dateDisplay: string; timestamp: number } } = {};
+
+      paidBookings.forEach((b) => {
+        const d = new Date(b.created_at);
+        const key = d.toISOString().split("T")[0];
+        const dateDisplay = d.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
+
+        if (!dateMap[key]) {
+          dateMap[key] = { sum: 0, count: 0, dateDisplay, timestamp: d.getTime() };
+        }
+        dateMap[key].sum += Number(b.total_amount) || 0;
+        dateMap[key].count += 1;
+      });
+
+      const sortedKeys = Object.keys(dateMap).sort((a, b) => dateMap[a].timestamp - dateMap[b].timestamp);
+      const displayKeys = sortedKeys.length > 25 ? sortedKeys.slice(-25) : sortedKeys;
+
+      labels = displayKeys.map((k) => dateMap[k].dateDisplay);
+      values = displayKeys.map((k) => dateMap[k].sum);
+      counts = displayKeys.map((k) => dateMap[k].count);
+    }
+
+    const rawMax = Math.max(...values, 0);
+    let maxVal = 1000;
+    if (rawMax > 0) {
+      const pow = Math.pow(10, Math.floor(Math.log10(rawMax)));
+      maxVal = Math.ceil(rawMax / (pow * 0.5)) * (pow * 0.5);
+      if (maxVal <= rawMax) maxVal = rawMax * 1.15;
+    }
+
+    const totalRevenue = values.reduce((a, b) => a + b, 0);
 
     return {
-      labels: displayKeys,
+      labels,
       values,
+      counts,
       maxVal,
+      totalRevenue,
+      peakRevenue: rawMax,
     };
-  }, [filteredBookings]);
+  }, [filteredBookings, dateFilter]);
 
   return (
     <div className="space-y-8">
@@ -319,13 +443,18 @@ export default function AdminDashboardPage() {
       {/* Forms & Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Custom SVG Chart */}
-        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-lg">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-white uppercase tracking-wide">
-              Revenue Trend
-            </h3>
-            <span className="text-xs text-slate-500">
-              Paid sales over filtered range
+        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-lg flex flex-col justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-white uppercase tracking-wide">
+                Revenue Trend
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Total Period Sales: <span className="text-accent font-bold">₹{chartData.totalRevenue.toLocaleString("en-IN")}</span>
+              </p>
+            </div>
+            <span className="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 font-semibold self-start sm:self-auto">
+              Max Peak: ₹{chartData.peakRevenue.toLocaleString("en-IN")}
             </span>
           </div>
 
@@ -335,47 +464,108 @@ export default function AdminDashboardPage() {
             </div>
           ) : (
             <div className="relative h-64 w-full">
-              {/* Simple Custom SVG Bar Chart */}
-              <svg className="w-full h-full" viewBox="0 0 500 220" preserveAspectRatio="none">
-                {/* Horizontal Guide Lines */}
-                <line x1="30" y1="20" x2="480" y2="20" stroke="#1e293b" strokeDasharray="4" />
-                <line x1="30" y1="80" x2="480" y2="80" stroke="#1e293b" strokeDasharray="4" />
-                <line x1="30" y1="140" x2="480" y2="140" stroke="#1e293b" strokeDasharray="4" />
-                <line x1="30" y1="200" x2="480" y2="200" stroke="#334155" />
+              {/* High-Precision SVG Bar Chart with Y-Axis & X-Axis Alignment */}
+              <svg className="w-full h-full" viewBox="0 0 650 220">
+                {/* Y-Axis Grid Lines & Ticks */}
+                {[0, 0.33, 0.66, 1].map((ratio, i) => {
+                  const y = 180 - ratio * 150;
+                  const tickVal = Math.round(chartData.maxVal * ratio);
+                  const formattedVal =
+                    tickVal >= 100000
+                      ? `₹${(tickVal / 100000).toFixed(1)}L`
+                      : tickVal >= 1000
+                      ? `₹${(tickVal / 1000).toFixed(1)}k`
+                      : `₹${tickVal}`;
 
-                {/* Bars */}
+                  return (
+                    <g key={i}>
+                      <line
+                        x1="65"
+                        y1={y}
+                        x2="630"
+                        y2={y}
+                        stroke={i === 0 ? "#334155" : "#1e293b"}
+                        strokeDasharray={i === 0 ? "none" : "4"}
+                      />
+                      <text
+                        x="55"
+                        y={y + 4}
+                        textAnchor="end"
+                        fill="#64748b"
+                        fontSize="10"
+                        fontWeight="600"
+                      >
+                        {formattedVal}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* Bars & Labels */}
                 {chartData.values.map((val, idx) => {
-                  const barWidth = 32;
-                  const totalBars = chartData.values.length;
-                  const spacing = (450 - barWidth * totalBars) / (totalBars + 1);
-                  const x = 30 + spacing + idx * (barWidth + spacing);
-                  const pct = val / chartData.maxVal;
-                  const barHeight = pct * 180;
-                  const y = 200 - barHeight;
+                  const totalCount = chartData.values.length;
+                  const availWidth = 565; // from x=65 to x=630
+                  const colWidth = availWidth / totalCount;
+                  const barWidth = Math.min(32, Math.max(8, colWidth * 0.55));
+                  const centerX = 65 + idx * colWidth + colWidth / 2;
+                  const x = centerX - barWidth / 2;
+                  const barHeight = (val / chartData.maxVal) * 150;
+                  const y = 180 - barHeight;
+
+                  // Label display step if too many bars
+                  const step = totalCount > 20 ? 4 : totalCount > 12 ? 2 : 1;
+                  const showLabel = idx % step === 0 || idx === totalCount - 1;
 
                   return (
                     <g key={idx} className="group/bar">
+                      {/* Interactive Bar */}
                       <rect
                         x={x}
                         y={y}
                         width={barWidth}
-                        height={barHeight}
+                        height={Math.max(barHeight, 3)}
                         rx="4"
-                        fill="url(#barGradient)"
-                        className="hover:fill-accent transition-all duration-300 cursor-pointer"
+                        fill={val > 0 ? "url(#barGradient)" : "#1e293b"}
+                        className="hover:brightness-125 transition-all duration-300 cursor-pointer"
                       />
-                      {/* Tooltip text */}
-                      <text
-                        x={x + barWidth / 2}
-                        y={Math.max(y - 8, 15)}
-                        textAnchor="middle"
-                        fill="#fef08a"
-                        fontSize="9"
-                        fontWeight="bold"
-                        className="opacity-0 group-hover/bar:opacity-100 transition duration-300"
-                      >
-                        ₹{val}
-                      </text>
+
+                      {/* Bar Top Value Label on Hover */}
+                      <g className="opacity-0 group-hover/bar:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                        <rect
+                          x={Math.max(10, Math.min(650 - 90, centerX - 45))}
+                          y={Math.max(y - 28, 5)}
+                          width="90"
+                          height="22"
+                          rx="6"
+                          fill="#0f172a"
+                          stroke="#eab308"
+                          strokeWidth="1"
+                        />
+                        <text
+                          x={Math.max(10, Math.min(650 - 90, centerX - 45)) + 45}
+                          y={Math.max(y - 13, 20)}
+                          textAnchor="middle"
+                          fill="#fef08a"
+                          fontSize="9"
+                          fontWeight="bold"
+                        >
+                          ₹{val.toLocaleString("en-IN")} ({chartData.counts[idx]})
+                        </text>
+                      </g>
+
+                      {/* X-Axis Date/Time Label */}
+                      {showLabel && (
+                        <text
+                          x={centerX}
+                          y="205"
+                          textAnchor="middle"
+                          fill="#94a3b8"
+                          fontSize="9"
+                          fontWeight="600"
+                        >
+                          {chartData.labels[idx]}
+                        </text>
+                      )}
                     </g>
                   );
                 })}
@@ -384,19 +574,10 @@ export default function AdminDashboardPage() {
                 <defs>
                   <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#facc15" />
-                    <stop offset="100%" stopColor="#ca8a04" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#ca8a04" stopOpacity="0.6" />
                   </linearGradient>
                 </defs>
               </svg>
-
-              {/* Labels Row */}
-              <div className="flex justify-between pl-6 pr-4 mt-2">
-                {chartData.labels.map((lbl, idx) => (
-                  <span key={idx} className="text-[10px] font-bold text-slate-500 rotate-12 origin-top-left">
-                    {lbl}
-                  </span>
-                ))}
-              </div>
             </div>
           )}
         </div>

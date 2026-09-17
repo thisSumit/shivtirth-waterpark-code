@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import {
@@ -15,8 +15,17 @@ import {
   Sparkles,
 } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { supabase } from "@/lib/supabase";
 
-const attractionZones = [
+interface SchoolAttractionZone {
+  title: string;
+  image: string;
+  video?: string;
+  video_url?: string;
+  description: string;
+}
+
+const defaultAttractionZones: SchoolAttractionZone[] = [
   {
     title: "Water Park & Adishakti Water Fall",
     image: "/Water-Park.jpg",
@@ -97,6 +106,53 @@ const schoolPicnicFaqs = [
 ];
 
 const SchoolPicnicPage = () => {
+  const [attractionZones, setAttractionZones] = useState<SchoolAttractionZone[]>(defaultAttractionZones);
+  const [headerTitle, setHeaderTitle] = useState("School Picnic");
+  const [headerSub, setHeaderSub] = useState(
+    "Water Park | Adventure Park | Amusement Park | Agro Park | Bird Park | Boating | Team Activities | Educational Experiences"
+  );
+  const [headerDesc, setHeaderDesc] = useState(
+    "A complete school outing combining fun, adventure, education, teamwork and memorable experiences in one destination."
+  );
+  const [heroImage, setHeroImage] = useState("/picnic.png");
+  const [heroVideo, setHeroVideo] = useState("");
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data: headerData } = await supabase
+          .from("website_content")
+          .select("content")
+          .eq("section", "park_header_school-picnic")
+          .single();
+
+        if (headerData && headerData.content) {
+          const c = headerData.content;
+          if (c.title) setHeaderTitle(c.title);
+          if (c.subDescription) setHeaderSub(c.subDescription);
+          if (c.mainDescription) setHeaderDesc(c.mainDescription);
+          if (c.imageUrl) setHeroImage(c.imageUrl);
+          if (c.videoUrl) setHeroVideo(c.videoUrl);
+        }
+
+        const { data: attractionData } = await supabase
+          .from("attractions")
+          .select("*")
+          .eq("park_type", "school-picnic")
+          .order("display_order", { ascending: true });
+
+        const visibleAttractions = (attractionData || []).filter((item: any) => item.is_hidden !== true);
+
+        if (visibleAttractions && visibleAttractions.length > 0) {
+          setAttractionZones(visibleAttractions);
+        }
+      } catch (err) {
+        console.error("Error fetching school picnic content:", err);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <main
       id="school-picnic"
@@ -105,19 +161,29 @@ const SchoolPicnicPage = () => {
       {/* ================= HERO ================= */}
       <section className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/picnic.png"
-            alt="Shivtirth School Picnic"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={headerTitle}
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-indigo-950 via-indigo-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center">
             <div className="max-w-4xl text-center">
-
               <h1
                 className="text-4xl font-bold text-accent drop-shadow-lg uppercase tracking-wide"
                 style={{
@@ -125,12 +191,11 @@ const SchoolPicnicPage = () => {
                     "'Times New Roman', Times, Georgia, serif",
                 }}
               >
-                School Picnic
+                {headerTitle}
               </h1>
 
               <p className="mt-2 text-sm text-violet-100/90 drop-shadow-sm font-medium">
-                Water Park | Adventure Park | Amusement Park | Agro Park |
-                Bird Park | Boating | Team Activities | Educational Experiences
+                {headerSub}
               </p>
             </div>
           </div>
@@ -150,7 +215,7 @@ const SchoolPicnicPage = () => {
         <div className="max-w-6xl mx-auto px-4">
 
           <ScrollReveal direction="up" delay={0.1}>
-            <h2
+            {/* <h2
               className="text-2xl font-bold text-white mb-2"
               style={{
                 fontFamily:
@@ -158,7 +223,7 @@ const SchoolPicnicPage = () => {
               }}
             >
               School Picnic Experiences
-            </h2>
+            </h2> */}
 
             <p className="text-violet-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
               A complete school outing combining fun, adventure, education,
@@ -245,10 +310,10 @@ const SchoolPicnicPage = () => {
           <div className="grid gap-6 md:grid-cols-2">
 
             {/* FACILITIES */}
-            <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-violet-100">
+            <div className="rounded-2xl bg-white/95 text-[#288382] p-5 shadow-lg border border-violet-100">
 
               <h3
-                className="text-lg md:text-xl font-bold text-slate-900 mb-3"
+                className="text-lg md:text-xl font-bold text-[#288382] mb-3"
                 style={{
                   fontFamily:
                     "'Times New Roman', Times, Georgia, serif",
@@ -275,10 +340,10 @@ const SchoolPicnicPage = () => {
             </div>
 
             {/* RULES */}
-            <div className="rounded-2xl bg-white/95 text-slate-900 p-5 shadow-lg border border-violet-100">
+            <div className="rounded-2xl bg-white/95 text-[#288382] p-5 shadow-lg border border-violet-100">
 
               <h3
-                className="text-lg md:text-xl font-bold text-slate-900 mb-3"
+                className="text-lg md:text-xl font-bold text-[#288382] mb-3"
                 style={{
                   fontFamily:
                     "'Times New Roman', Times, Georgia, serif",
@@ -314,10 +379,10 @@ const SchoolPicnicPage = () => {
 
         <ScrollReveal direction="up" delay={0.25}>
 
-          <div className="rounded-2xl bg-white/95 text-slate-900 p-5 md:p-6 shadow-lg border border-violet-100">
+          <div className="rounded-2xl bg-white/95 text-[#288382] p-5 md:p-6 shadow-lg border border-violet-100">
 
             <h3
-              className="text-lg md:text-xl font-bold text-slate-900 mb-3"
+              className="text-lg md:text-xl font-bold text-[#288382] mb-3"
               style={{
                 fontFamily:
                   "'Times New Roman', Times, Georgia, serif",

@@ -229,7 +229,6 @@ const Page = async () => {
     const { data: dbAll, error } = await supabase
       .from('packages')
       .select('*')
-      .eq('is_hidden', false)
       .order('display_order', { ascending: true });
 
     if (error) {
@@ -239,9 +238,9 @@ const Page = async () => {
     const now = Date.now();
 
     const visiblePackages = (dbAll || []).filter(
-      (item) =>
-        !item.hide_after ||
-        new Date(item.hide_after).getTime() > now
+      (item: any) =>
+        item.is_hidden !== true &&
+        (!item.hide_after || new Date(item.hide_after).getTime() > now)
     );
 
     if (visiblePackages.length > 0) {

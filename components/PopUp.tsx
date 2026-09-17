@@ -229,7 +229,7 @@ const PopUp: React.FC<PopUpProps> = ({ onClose }) => {
                 className="block relative w-full aspect-[4/3] overflow-hidden rounded-xl shadow-lg border border-slate-200 group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#258181]"
               >
                 <Image
-                  src={popupData.imageUrl}
+                  src={popupData.imageUrl || "/offers/banner3.jpeg"}
                   alt="Shivtirth Water Park Special Offer"
                   fill
                   className="object-cover"

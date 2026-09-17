@@ -108,12 +108,21 @@ function BillingForm() {
     return findMatchingPlan(packagePlans, planIdFromUrl) || packagePlans[0]
   }, [packagePlans, planIdFromUrl])
 
+  const tomorrowStr = useMemo(() => {
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    const yyyy = tomorrow.getFullYear()
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0')
+    const dd = String(tomorrow.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
+  }, [])
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     city: '',
-    visitDate: '',
+    visitDate: tomorrowStr,
     packageId: initialPlan.id,
     adultQty: 1,
     kids1Qty: 0,
@@ -198,6 +207,11 @@ function BillingForm() {
 
     if (!formData.visitDate) {
       alert('Please select your visit or arriving date.')
+      return
+    }
+
+    if (formData.visitDate < tomorrowStr) {
+      alert('Same day or past date booking is not permitted. Please select tomorrow or a future date for your visit.')
       return
     }
 
@@ -314,7 +328,7 @@ function BillingForm() {
                 <input
                   type="date"
                   value={formData.visitDate}
-                  min={new Date().toISOString().split('T')[0]}
+                  min={tomorrowStr}
                   onChange={(e) => updateField('visitDate', e.target.value)}
                   className={numericInputClass}
                 />

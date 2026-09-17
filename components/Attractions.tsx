@@ -153,7 +153,7 @@ const Attractions: React.FC = () => {
                     playsInline
                     preload="auto"
                     src={item.videoUrl}
-                    poster={item.posterUrl}
+                    poster={item.posterUrl || undefined}
                     onLoadedData={(e) => {
                       e.currentTarget.play().catch(() => { });
                     }}
@@ -168,7 +168,7 @@ const Attractions: React.FC = () => {
                   />
                 ) : (
                   <img
-                    src={item.posterUrl}
+                    src={item.posterUrl || "/Water-Park.jpg"}
                     alt={item.title}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
                   />

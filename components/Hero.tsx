@@ -43,11 +43,12 @@ const Hero = () => {
           .eq('section', 'hero')
           .single();
         if (data?.content) {
+          const rawVideo = data.content.videoUrl
           setHeroData({
             title1: data.content.title1 || data.content.title || heroData.title1,
             title2: data.content.title2 || heroData.title2,
             description: data.content.description || heroData.description,
-            videoUrl: data.content.videoUrl || heroData.videoUrl,
+            videoUrl: (rawVideo && rawVideo.trim()) ? rawVideo.trim() : '/hero.mp4',
             posterUrl: data.content.posterUrl || heroData.posterUrl,
             subTitle: data.content.subTitle || heroData.subTitle,
           });

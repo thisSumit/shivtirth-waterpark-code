@@ -121,9 +121,19 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href={`tel:${settings.contactPhone}`} className="hover:text-accent transition">
-                  {settings.contactPhone} | +91 8275737579
-                </Link>
+                <div className="flex flex-wrap items-center gap-x-2">
+                  <Link href={`tel:${settings.contactPhone}`} className="hover:text-accent transition">
+                    {settings.contactPhone}
+                  </Link>
+                  {settings.contactPhone2 && (
+                    <>
+                      <span>|</span>
+                      <Link href={`tel:${settings.contactPhone2}`} className="hover:text-accent transition">
+                        {settings.contactPhone2}
+                      </Link>
+                    </>
+                  )}
+                </div>
               </li>
               <li>
                 <Link href={`mailto:${settings.contactEmail}`} className="hover:text-accent transition">

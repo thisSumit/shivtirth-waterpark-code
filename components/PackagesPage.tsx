@@ -91,11 +91,10 @@ const PackagesPage = () => {
           .from('packages')
           .select('*')
           .in('category', ['package', 'accommodation'])
-          .eq('is_hidden', false)
           .order('display_order', { ascending: true });
 
         const now = Date.now();
-        const visibleData = (data || []).filter((item) => !item.hide_after || new Date(item.hide_after).getTime() > now);
+        const visibleData = (data || []).filter((item: any) => item.is_hidden !== true && (!item.hide_after || new Date(item.hide_after).getTime() > now));
 
         if (visibleData.length > 0) {
           setActivePackages(

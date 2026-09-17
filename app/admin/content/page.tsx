@@ -21,6 +21,7 @@ const PARK_PAGE_TYPES = [
   { id: "boating-park", name: "Boating Park Page", defaultTitle: "Boating Park", defaultSub: "Pedal Boats | Family Shikara | Serene Waterways | Scenic Dam Views", defaultDesc: "Relax and enjoy peaceful water sports and scenic boating across Vidarbha's serene lake views.", defaultImage: "/Boating-Park.jpg" },
   { id: "bird-park", name: "Bird Park Page", defaultTitle: "Bird Park", defaultSub: "Exotic Aviary | Interactive Feeding | Rare Species | Satpuda Green Nature", defaultDesc: "Walk among beautiful exotic birds in an open, vibrant natural environment surrounded by nature.", defaultImage: "/Bird-Park.jpg" },
   { id: "accommodation", name: "Accommodation Page", defaultTitle: "Accommodation & Stay", defaultSub: "Farmhouse Bungalows | Dormitory Cottages | Camping Tents | AC Luxury Rooms", defaultDesc: "Relax in luxurious, tranquil resort rooms, family villas, and nature stays amidst stunning views.", defaultImage: "/Stay-Facilities.jpg" },
+  { id: "school-picnic", name: "School Picnic Page", defaultTitle: "School Picnic", defaultSub: "Water Park | Adventure Park | Amusement Park | Agro Park | Bird Park | Boating | Team Activities | Educational Experiences", defaultDesc: "A complete school outing combining fun, adventure, education, teamwork and memorable experiences in one destination.", defaultImage: "/picnic.png" },
 ];
 
 export default function AdminContentPage() {
@@ -81,7 +82,8 @@ export default function AdminContentPage() {
           setHeroTitle(c.title || "");
           setHeroDescription(c.description || "");
           setHeroButtonText(c.buttonText || "Book Tickets");
-          setHeroVideoUrl(c.videoUrl || "");
+          const v = c.videoUrl;
+          setHeroVideoUrl(v || "/hero.mp4");
           setHeroBgImage(c.bgImageUrl || "");
         }
 
