@@ -8,6 +8,8 @@ export type SiteSettings = {
   contactPhone: string;
   contactPhone2: string;
   contactEmail: string;
+  googleAnalyticsId: string;
+  googleSearchConsoleCode: string;
 };
 
 export const defaultSettings: SiteSettings = {
@@ -15,6 +17,8 @@ export const defaultSettings: SiteSettings = {
   contactPhone: "+91 86053 62212",
   contactPhone2: "+91 82757 37579",
   contactEmail: "shivtirthtourism@gmail.com",
+  googleAnalyticsId: "",
+  googleSearchConsoleCode: "",
 };
 
 export function useSiteSettings() {
@@ -39,6 +43,8 @@ export function useSiteSettings() {
             contactPhone: map["contact_phone"] || defaultSettings.contactPhone,
             contactPhone2: map["contact_phone_2"] || defaultSettings.contactPhone2,
             contactEmail: map["contact_email"] || defaultSettings.contactEmail,
+            googleAnalyticsId: map["google_analytics_id"] || defaultSettings.googleAnalyticsId,
+            googleSearchConsoleCode: map["google_search_console_code"] || defaultSettings.googleSearchConsoleCode,
           });
         }
       } catch (err) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Save, ShieldAlert, Phone, Mail, Clock, Utensils } from "lucide-react";
+import { Save, ShieldAlert, Phone, Mail, Clock, Utensils, Globe, Search, BarChart } from "lucide-react";
 
 type SettingRow = {
   key: string;
@@ -23,6 +23,8 @@ export default function AdminSettingsPage() {
   const [fullMealPrice, setFullMealPrice] = useState("300");
   const [lunchMealPrice, setLunchMealPrice] = useState("200");
   const [cutoffHours, setCutoffHours] = useState("0");
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState("");
+  const [googleSearchConsoleCode, setGoogleSearchConsoleCode] = useState("");
 
   const fetchSettings = async () => {
     setLoading(true);
@@ -58,6 +60,13 @@ export default function AdminSettingsPage() {
         // Map Cutoff
         const cut = data.find(s => s.key === "booking_cutoff_hours");
         if (cut) setCutoffHours(cut.value);
+
+        // Map Google Analytics & Search Console
+        const ga = data.find(s => s.key === "google_analytics_id");
+        if (ga) setGoogleAnalyticsId(ga.value);
+
+        const gsc = data.find(s => s.key === "google_search_console_code");
+        if (gsc) setGoogleSearchConsoleCode(gsc.value);
       }
     } catch (err) {
       console.error("Error loading settings:", err);
@@ -327,6 +336,71 @@ export default function AdminSettingsPage() {
             <button
               onClick={() => handleSaveSetting("booking_cutoff_hours", cutoffHours)}
               disabled={savingKey === "booking_cutoff_hours"}
+              className="bg-accent hover:bg-accent/90 text-black font-black uppercase text-xs py-3 px-4 rounded-xl transition tracking-wider disabled:opacity-60 shrink-0"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* SEO & Analytics Settings */}
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-lg space-y-6">
+        <h2 className="text-lg font-bold text-white uppercase tracking-wide flex items-center gap-2 border-b border-slate-800 pb-3">
+          <Globe size={18} className="text-emerald-400" /> SEO, Google Tag & Search Console
+        </h2>
+
+        {/* Google Analytics / Tag ID */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-4 border-b border-slate-850">
+          <div className="space-y-1 md:max-w-md">
+            <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2">
+              <BarChart size={14} className="text-emerald-400" />
+              Google Tag / Analytics Measurement ID
+            </span>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Enter your Google Analytics 4 ID (e.g. <code>G-XXXXXXXXXX</code>) or Google Tag Manager ID (e.g. <code>GTM-XXXXXXX</code>) to enable tracking.
+            </p>
+          </div>
+          <div className="flex gap-2 items-center w-full md:w-auto">
+            <input
+              type="text"
+              value={googleAnalyticsId}
+              onChange={(e) => setGoogleAnalyticsId(e.target.value)}
+              className="px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-accent text-white w-full md:w-56 font-mono"
+              placeholder="G-XXXXXXXXXX or GTM-XXXXXXX"
+            />
+            <button
+              onClick={() => handleSaveSetting("google_analytics_id", googleAnalyticsId)}
+              disabled={savingKey === "google_analytics_id"}
+              className="bg-accent hover:bg-accent/90 text-black font-black uppercase text-xs py-3 px-4 rounded-xl transition tracking-wider disabled:opacity-60 shrink-0"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+
+        {/* Google Search Console Verification Token */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pt-2">
+          <div className="space-y-1 md:max-w-md">
+            <span className="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2">
+              <Search size={14} className="text-blue-400" />
+              Google Search Console Verification Code
+            </span>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Enter your Google Search Console verification meta token (the <code>content=&quot;...&quot;</code> attribute).
+            </p>
+          </div>
+          <div className="flex gap-2 items-center w-full md:w-auto">
+            <input
+              type="text"
+              value={googleSearchConsoleCode}
+              onChange={(e) => setGoogleSearchConsoleCode(e.target.value)}
+              className="px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-accent text-white w-full md:w-56 font-mono"
+              placeholder="e.g. 1a2b3c4d5e6f7g8h"
+            />
+            <button
+              onClick={() => handleSaveSetting("google_search_console_code", googleSearchConsoleCode)}
+              disabled={savingKey === "google_search_console_code"}
               className="bg-accent hover:bg-accent/90 text-black font-black uppercase text-xs py-3 px-4 rounded-xl transition tracking-wider disabled:opacity-60 shrink-0"
             >
               Save

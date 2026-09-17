@@ -1,0 +1,40 @@
+{
+  "$schema": "https://geojson.org/schema/FeatureCollection.json",
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "shivtirth-water-park-main",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [78.9100, 21.3850]
+      },
+      "properties": {
+        "name": "Shivtirth Water Park & Resort",
+        "category": "Water Park & Amusement Resort",
+        "description": "Premier water park, boating resort, bird sanctuary, and adventure park near Umari Dam, Saoner, Nagpur, Maharashtra.",
+        "address": {
+          "street": "Near Umari Dam, Saoner",
+          "city": "Nagpur",
+          "state": "Maharashtra",
+          "postal_code": "441107",
+          "country": "India"
+        },
+        "telephone": "+91-8605362212",
+        "email": "shivtirthtourism@gmail.com",
+        "url": "https://www.shivtirthwaterpark.com",
+        "opening_hours": "Mo-Su 09:30-18:30",
+        "surrounding_cities": [
+          "Nagpur",
+          "Saoner",
+          "Umred",
+          "Wardha",
+          "Chandrapur",
+          "Bhandara",
+          "Yavatmal",
+          "Amravati"
+        ]
+      }
+    }
+  ]
+}
