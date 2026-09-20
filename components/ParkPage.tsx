@@ -277,11 +277,23 @@ export const ParkPage = () => {
           {/* PARK LIST */}
           <div className="space-y-8 md:space-y-10">
             {activeParks.map((park, idx) => {
-              const videoSrc = park.video || park.video_url || (
-                park.image && (park.image.endsWith('.mp4') || park.image.endsWith('.webm') || park.image.endsWith('.ogg') || park.image.includes('/video/'))
-                  ? park.image
-                  : null
-              );
+              const checkIsVideo = (url?: string) => {
+                if (!url) return false;
+                const lower = url.toLowerCase();
+                return (
+                  lower.endsWith('.mp4') ||
+                  lower.endsWith('.webm') ||
+                  lower.endsWith('.ogg') ||
+                  lower.endsWith('.mov') ||
+                  lower.endsWith('.m4v') ||
+                  lower.includes('.mp4?') ||
+                  lower.includes('/video/') ||
+                  lower.includes('/uploads/')
+                );
+              };
+
+              const rawVideo = park.video || park.video_url;
+              const videoSrc = rawVideo || (checkIsVideo(park.image) ? park.image : null);
 
               return (
                 <ScrollReveal

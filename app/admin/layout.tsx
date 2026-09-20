@@ -5,18 +5,18 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
-import { 
-  LayoutDashboard, 
-  Ticket, 
-  MessageSquare, 
-  Users, 
-  Tag, 
-  Layers, 
-  Image as ImageIcon, 
-  Map, 
-  Sparkles, 
-  Settings, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  Ticket,
+  MessageSquare,
+  Users,
+  Tag,
+  Layers,
+  Image as ImageIcon,
+  Map,
+  Sparkles,
+  Settings,
+  LogOut,
   FileText,
   Menu,
   X,
@@ -97,8 +97,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Website Content", href: "/admin/content", icon: FileText },
     { name: "Packages & Tickets", href: "/admin/packages", icon: Layers },
     { name: "Gallery", href: "/admin/gallery", icon: ImageIcon },
-    { name: "Attractions", href: "/admin/attractions", icon: Map },
-    { name: "Activities", href: "/admin/activities", icon: Sparkles },
+    { name: "Attractions & Activities", href: "/admin/attractions", icon: Map },
     { name: "Media Assets", href: "/admin/assets", icon: FolderOpen },
     { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
@@ -129,9 +128,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed md:sticky top-0 left-0 bottom-0 w-64 bg-slate-900 border-r border-slate-800 z-50 md:z-30 transition-transform duration-300 md:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed md:sticky top-0 left-0 bottom-0 w-64 bg-slate-900 border-r border-slate-800 z-50 md:z-30 transition-transform duration-300 md:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo Section */}
@@ -158,11 +156,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.name}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all ${
-                    isActive
+                  className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all ${isActive
                       ? "bg-accent text-black shadow-md shadow-accent/10"
                       : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
-                  }`}
+                    }`}
                 >
                   <Icon size={18} />
                   {item.name}
