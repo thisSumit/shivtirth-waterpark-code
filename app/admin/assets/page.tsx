@@ -21,6 +21,7 @@ export default function AdminAssetsPage() {
   const [assets, setAssets] = useState<StorageAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string>("");
   const [filterType, setFilterType] = useState<"all" | "image" | "video">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
@@ -42,21 +43,62 @@ export default function AdminAssetsPage() {
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
     setUploading(true);
     try {
-      for (let i = 0; i < files.length; i++) {
-        await uploadAsset(files[i]);
-      }
+      const fileProgresses = new Array(files.length).fill(0);
+      let completedCount = 0;
+
+      const updateProgressDisplay = () => {
+        const avgPercent = Math.round(
+          fileProgresses.reduce((acc, curr) => acc + curr, 0) / files.length
+        );
+        if (files.length > 1) {
+          setUploadProgress(`(${completedCount}/${files.length}) ${avgPercent}%`);
+        } else {
+          setUploadProgress(`${avgPercent}%`);
+        }
+      };
+
+      updateProgressDisplay();
+
+      // Upload all files concurrently in parallel!
+      const uploadPromises = files.map(async (file, index) => {
+        try {
+          const url = await uploadAsset(file, (percent) => {
+            fileProgresses[index] = percent;
+            updateProgressDisplay();
+          });
+          completedCount++;
+          updateProgressDisplay();
+          return { status: 'fulfilled', url, file: file.name };
+        } catch (error: any) {
+          return { status: 'rejected', error: error.message || 'Upload failed', file: file.name };
+        }
+      });
+
+      const results = await Promise.all(uploadPromises);
       await fetchAssetsList();
-      alert("Media uploaded successfully!");
-    } catch (err) {
+
+      const errors = results.filter((r) => r.status === 'rejected');
+      if (errors.length === 0) {
+        alert(`${files.length} media file(s) uploaded successfully!`);
+      } else if (errors.length < files.length) {
+        alert(
+          `${files.length - errors.length} of ${files.length} files uploaded successfully.\n\nFailed files:\n` +
+          errors.map((e) => `- ${(e as any).file}: ${(e as any).error}`).join('\n')
+        );
+      } else {
+        alert(`Failed to upload media files:\n` + errors.map((e) => `- ${(e as any).file}: ${(e as any).error}`).join('\n'));
+      }
+    } catch (err: any) {
       console.error("Upload error:", err);
-      alert("Failed to upload media. Please try again.");
+      alert(`Upload error: ${err.message || 'Please try again.'}`);
     } finally {
       setUploading(false);
+      setUploadProgress("");
       e.target.value = "";
     }
   };
@@ -139,7 +181,7 @@ export default function AdminAssetsPage() {
 
           <label className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-black font-black uppercase text-xs py-3 px-5 rounded-xl cursor-pointer shadow-lg transition tracking-wider shrink-0">
             <Upload size={16} />
-            {uploading ? "Uploading..." : "Upload New Media"}
+            {uploading ? `Uploading ${uploadProgress}...` : "Upload New Media"}
             <input
               type="file"
               multiple

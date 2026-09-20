@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { supabase, deleteAsset } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { Plus, Edit2, Trash2, Save, X, Image as ImageIcon, Map, Eye, EyeOff, Video } from "lucide-react";
 import MediaUploader from "@/components/MediaUploader";
 
@@ -163,13 +163,8 @@ export default function AdminAttractionsPage() {
     setLoading(true);
 
     try {
-      const attractionToDelete = attractions.find(a => a.id === id);
       const { error } = await supabase.from("attractions").delete().eq("id", id);
       if (error) throw error;
-
-      if (attractionToDelete?.image) {
-        await deleteAsset(attractionToDelete.image);
-      }
 
       fetchAttractions();
     } catch (err) {

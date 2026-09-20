@@ -158,13 +158,8 @@ export default function AdminGalleryPage() {
     setLoading(true);
 
     try {
-      const itemToDelete = gallery.find(g => g.id === id);
       const { error } = await supabase.from("gallery").delete().eq("id", id);
       if (error) throw error;
-
-      if (itemToDelete?.src) {
-        await deleteAsset(itemToDelete.src);
-      }
 
       fetchGallery();
     } catch (err) {

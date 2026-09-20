@@ -122,13 +122,8 @@ export default function AdminOffersPage() {
     setLoading(true);
 
     try {
-      const offerToDelete = offers.find(o => o.id === id);
       const { error } = await supabase.from("offers").delete().eq("id", id);
       if (error) throw error;
-
-      if (offerToDelete?.src) {
-        await deleteAsset(offerToDelete.src);
-      }
 
       fetchOffers();
     } catch (err) {

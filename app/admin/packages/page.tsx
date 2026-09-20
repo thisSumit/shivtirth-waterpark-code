@@ -230,13 +230,8 @@ export default function AdminPackagesPage() {
     setLoading(true);
 
     try {
-      const packageToDelete = packages.find(p => p.id === id);
       const { error } = await supabase.from("packages").delete().eq("id", id);
       if (error) throw error;
-
-      if (packageToDelete?.image) {
-        await deleteAsset(packageToDelete.image);
-      }
 
       fetchPackages();
     } catch (err) {

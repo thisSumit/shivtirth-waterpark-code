@@ -138,13 +138,8 @@ export default function AdminAccommodationPage() {
     setLoading(true);
 
     try {
-      const itemToDelete = stayItems.find((a) => a.id === id);
       const { error } = await supabase.from("activities").delete().eq("id", id);
       if (error) throw error;
-
-      if (itemToDelete?.image) {
-        await deleteAsset(itemToDelete.image);
-      }
 
       fetchStayItems();
     } catch (err) {

@@ -27,6 +27,7 @@ type MediaUploaderProps = {
 
 export default function MediaUploader({ value, onChange, accept = "image/*", type = "image" }: MediaUploaderProps) {
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
@@ -38,28 +39,27 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const targetInput = e.target;
     setUploading(true);
+    setUploadProgress(0);
     setImageError(false);
     try {
-      const url = await uploadAsset(file);
+      const url = await uploadAsset(file, (percent) => setUploadProgress(percent));
       onChange(url);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Upload error:", err);
-      alert("Failed to upload file. Check if public storage bucket 'assets' exists in Supabase.");
+      alert(`Upload Failed: ${err.message || "Could not upload file to Supabase storage."}\n\nTip: You can use direct local video paths (e.g. /main.mp4) or quick preset buttons below.`);
     } finally {
       setUploading(false);
+      setUploadProgress(0);
+      if (targetInput) targetInput.value = "";
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this file from storage?")) return;
-    const oldUrl = value;
+  const handleUnattach = () => {
     onChange("");
     setMenuOpen(false);
     setImageError(false);
-    if (oldUrl && oldUrl.startsWith("http")) {
-      await deleteAsset(oldUrl);
-    }
   };
 
   const openLibrary = async () => {
@@ -73,29 +73,6 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
       console.error("Error loading library assets:", err);
     } finally {
       setLoadingLibrary(false);
-    }
-  };
-
-  const handleDeleteLibraryAsset = async (e: React.MouseEvent, asset: StorageAsset) => {
-    e.stopPropagation();
-    if (!confirm(`Are you sure you want to permanently delete "${asset.name}" from Supabase storage?`)) return;
-
-    setDeletingUrl(asset.url);
-    try {
-      const success = await deleteAsset(asset.url);
-      if (success) {
-        setLibraryAssets((prev) => prev.filter((item) => item.url !== asset.url));
-        if (value === asset.url) {
-          onChange("");
-        }
-      } else {
-        alert("Failed to delete asset from Supabase storage.");
-      }
-    } catch (err) {
-      console.error("Error deleting asset:", err);
-      alert("Failed to delete asset.");
-    } finally {
-      setDeletingUrl(null);
     }
   };
 
@@ -126,6 +103,7 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                 {isVideo ? (
                   <div className="w-14 h-14 rounded-xl border border-slate-800 bg-black overflow-hidden relative flex items-center justify-center">
                     <video
+                      key={mediaUrl}
                       src={mediaUrl}
                       className="w-full h-full object-cover"
                       muted
@@ -143,6 +121,7 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                   <div className="w-14 h-14 rounded-xl border border-slate-800 bg-slate-900 overflow-hidden relative group shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
+                      key={mediaUrl}
                       src={mediaUrl}
                       alt="Uploaded media preview"
                       className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
@@ -189,7 +168,7 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                 {menuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                    <div className="absolute right-0 mt-1 w-36 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1 z-50 text-xs">
+                    <div className="absolute right-0 mt-1 w-40 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1 z-50 text-xs">
                       <a
                         href={value}
                         target="_blank"
@@ -211,11 +190,26 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                       </a>
                       <button
                         type="button"
-                        onClick={handleDelete}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 transition text-left"
+                        onClick={() => {
+                          const newUrl = prompt("Edit Media URL:", value);
+                          if (newUrl !== null) {
+                            onChange(newUrl);
+                          }
+                          setMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 transition text-left"
                       >
-                        <Trash2 size={12} />
-                        Delete
+                        <ExternalLink size={12} />
+                        Edit URL
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleUnattach}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition text-left"
+                        title="Unattach media from this field without deleting the file from storage"
+                      >
+                        <X size={12} />
+                        Unattach Media
                       </button>
                     </div>
                   </>
@@ -225,33 +219,87 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
           </div>
         </div>
       ) : (
-        <div className="flex flex-col sm:flex-row gap-3">
-          {/* File Upload Trigger */}
-          <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-2xl p-4 cursor-pointer hover:border-accent/40 bg-slate-950/40 hover:bg-slate-950/60 transition group">
-            <Upload size={20} className="text-slate-500 group-hover:text-accent transition mb-2" />
-            <span className="text-xs font-bold text-slate-400 group-hover:text-white transition uppercase tracking-wider">
-              {uploading ? "Uploading..." : "Upload New File"}
-            </span>
-            <input
-              type="file"
-              accept={accept}
-              className="hidden"
-              onChange={handleUpload}
-              disabled={uploading}
-            />
-          </label>
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* File Upload Trigger */}
+            <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-2xl p-4 cursor-pointer hover:border-accent/40 bg-slate-950/40 hover:bg-slate-950/60 transition group">
+              {uploading ? (
+                <div className="flex flex-col items-center gap-1">
+                  <RefreshCw size={20} className="text-amber-400 animate-spin mb-1" />
+                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                    Uploading... {uploadProgress > 0 ? `${uploadProgress}%` : ''}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setUploading(false);
+                      setUploadProgress(0);
+                    }}
+                    className="text-[10px] text-red-400 underline hover:text-red-300 mt-1"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <Upload size={20} className="text-slate-500 group-hover:text-accent transition mb-2" />
+                  <span className="text-xs font-bold text-slate-400 group-hover:text-white transition uppercase tracking-wider">
+                    Upload New File
+                  </span>
+                </>
+              )}
+              <input
+                type="file"
+                accept={accept}
+                className="hidden"
+                onChange={handleUpload}
+                disabled={uploading}
+              />
+            </label>
 
-          {/* Library Picker Trigger */}
-          <button
-            type="button"
-            onClick={openLibrary}
-            className="flex-1 flex flex-col items-center justify-center border border-slate-800 rounded-2xl p-4 hover:border-accent/40 bg-slate-900/60 hover:bg-slate-900 transition group"
-          >
-            <FolderOpen size={20} className="text-accent/80 group-hover:text-accent transition mb-2" />
-            <span className="text-xs font-bold text-slate-300 group-hover:text-white transition uppercase tracking-wider">
-              Choose from Library
-            </span>
-          </button>
+            {/* Library Picker Trigger */}
+            <button
+              type="button"
+              onClick={openLibrary}
+              className="flex-1 flex flex-col items-center justify-center border border-slate-800 rounded-2xl p-4 hover:border-accent/40 bg-slate-900/60 hover:bg-slate-900 transition group"
+            >
+              <FolderOpen size={20} className="text-accent/80 group-hover:text-accent transition mb-2" />
+              <span className="text-xs font-bold text-slate-300 group-hover:text-white transition uppercase tracking-wider">
+                Choose from Library
+              </span>
+            </button>
+          </div>
+
+          <div className="space-y-1.5">
+            <input
+              type="text"
+              placeholder={type === "video" ? "Or paste video URL (e.g. /main.mp4 or https://...)" : "Or paste image URL (e.g. /Water-Park.jpg)"}
+              value={value || ""}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-accent"
+            />
+            {type === "video" && (
+              <div className="flex items-center gap-2 pt-0.5">
+                <span className="text-[10px] text-slate-500 font-semibold uppercase">Presets:</span>
+                <button
+                  type="button"
+                  onClick={() => onChange("/main.mp4")}
+                  className="text-[10px] px-2 py-0.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded text-amber-400 font-medium transition"
+                >
+                  Use /main.mp4
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onChange("/hero.mp4")}
+                  className="text-[10px] px-2 py-0.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded text-slate-300 font-medium transition"
+                >
+                  Use /hero.mp4
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -266,7 +314,7 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                   Media Assets Library ({type.toUpperCase()})
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Click to select an asset, or hover to delete unused media directly from Supabase.
+                  Click to select an asset for this field. (To permanently delete files from storage, manage them on the Media Assets page).
                 </p>
               </div>
 
@@ -306,7 +354,6 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {filteredLibrary.map((item) => {
                     const isSelected = mediaUrl === item.url;
-                    const isDeleting = deletingUrl === item.url;
 
                     return (
                       <div
@@ -322,6 +369,7 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                         {item.is_video ? (
                           <div className="w-full h-full relative bg-slate-950">
                             <video
+                              key={item.url}
                               src={item.url}
                               className="w-full h-full object-cover"
                               muted
@@ -334,6 +382,7 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                         ) : (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
+                            key={item.url}
                             src={item.url}
                             alt={item.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition"
@@ -345,21 +394,6 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                             <Check size={14} />
                           </div>
                         )}
-
-                        {/* Delete asset directly from library modal */}
-                        <button
-                          type="button"
-                          onClick={(e) => handleDeleteLibraryAsset(e, item)}
-                          disabled={isDeleting}
-                          title="Delete from Supabase Storage"
-                          className="absolute top-2 right-2 p-1.5 bg-red-600/80 hover:bg-red-600 text-white rounded-lg shadow opacity-0 group-hover:opacity-100 transition z-10 disabled:opacity-50"
-                        >
-                          {isDeleting ? (
-                            <RefreshCw size={12} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={12} />
-                          )}
-                        </button>
 
                         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2">
                           <p className="text-[10px] font-bold text-white truncate">{item.name}</p>

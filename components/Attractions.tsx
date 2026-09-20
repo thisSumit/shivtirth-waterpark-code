@@ -40,7 +40,7 @@ const initialAttractionsData: AttractionItem[] = [
     description:
       "Enjoy peaceful pedal boats, family shikara boats, and scenic lake views.",
     href: "/boating-park",
-    videoUrl: "",
+    videoUrl: "/main.mp4",
     posterUrl: "/Boating-Park.jpg",
     gridClass: "col-span-1 md:col-start-2 md:col-span-2 md:row-start-3 md:row-span-2 min-h-[340px] md:min-h-[500px]",
   },
@@ -52,7 +52,7 @@ const initialAttractionsData: AttractionItem[] = [
     description:
       "Challenge yourself with high rope bridges, zip line, climbing towers, and obstacles.",
     href: "/adventure-park",
-    videoUrl: "",
+    videoUrl: "/main.mp4",
     posterUrl: "/Adventure-Park.jpg",
     gridClass: "col-span-1 md:col-start-3 md:col-span-1 md:row-start-1 md:row-span-1 min-h-[300px] md:min-h-[240px]",
   },
@@ -64,7 +64,7 @@ const initialAttractionsData: AttractionItem[] = [
     description:
       "Classic Columbus rides, spinning swings, bumper cars, and carnival fun for everyone.",
     href: "/amusement-park",
-    videoUrl: "",
+    videoUrl: "/main.mp4",
     posterUrl: "/amusement.jpg",
     gridClass: "col-span-1 md:col-start-3 md:col-span-1 md:row-start-2 md:row-span-1 min-h-[300px] md:min-h-[240px]",
   },
@@ -110,7 +110,7 @@ const Attractions: React.FC = () => {
           const videosMap = data.content.videos;
           setAttractions((prev) =>
             prev.map((item) => {
-              if (videosMap[item.id] !== undefined) {
+              if (videosMap[item.id] && videosMap[item.id].trim() !== "") {
                 return {
                   ...item,
                   videoUrl: videosMap[item.id],
@@ -145,34 +145,27 @@ const Attractions: React.FC = () => {
                 className="group relative overflow-hidden rounded-3xl block h-full w-full border border-white/20 shadow-lg hover:shadow-2xl hover:border-amber-400/50 transition-all duration-500 transform hover:-translate-y-1.5"
               >
                 {/* Background Video with Poster Fallback */}
-                {item.videoUrl ? (
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="auto"
-                    src={item.videoUrl}
-                    poster={item.posterUrl || undefined}
-                    onLoadedData={(e) => {
-                      e.currentTarget.play().catch(() => { });
-                    }}
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLVideoElement;
-                      if (target.src !== window.location.origin + "/main.mp4") {
-                        target.src = "/main.mp4";
-                        target.play().catch(() => { });
-                      }
-                    }}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
-                  />
-                ) : (
-                  <img
-                    src={item.posterUrl || "/Water-Park.jpg"}
-                    alt={item.title}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
-                  />
-                )}
+                <video
+                  key={item.videoUrl}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  src={item.videoUrl || "/main.mp4"}
+                  poster={item.posterUrl || undefined}
+                  onLoadedData={(e) => {
+                    e.currentTarget.play().catch(() => { });
+                  }}
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLVideoElement;
+                    if (target.src !== window.location.origin + "/main.mp4") {
+                      target.src = "/main.mp4";
+                      target.play().catch(() => { });
+                    }
+                  }}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
+                />
 
                 {/* Gradient Shadow Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/20 transition-opacity duration-300 group-hover:from-slate-950 group-hover:via-slate-900/60" />

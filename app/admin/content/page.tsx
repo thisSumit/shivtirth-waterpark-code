@@ -7,9 +7,9 @@ import { Save, AlertCircle, Sparkles, Megaphone, Video, Layers, Compass, Sun } f
 
 const CURATED_PARKS = [
   { id: "waterpark", name: "Water Park", defaultVideo: "/main.mp4" },
-  { id: "boating-park", name: "Boating Park", defaultVideo: "" },
-  { id: "adventure-park", name: "Adventure Park", defaultVideo: "" },
-  { id: "amusement-park", name: "Amusement Park", defaultVideo: "" },
+  { id: "boating-park", name: "Boating Park", defaultVideo: "/main.mp4" },
+  { id: "adventure-park", name: "Adventure Park", defaultVideo: "/main.mp4" },
+  { id: "amusement-park", name: "Amusement Park", defaultVideo: "/main.mp4" },
   { id: "bird-park", name: "Bird Park", defaultVideo: "/main.mp4" },
   { id: "accommodation", name: "Accommodation", defaultVideo: "/main.mp4" },
 ];
@@ -43,9 +43,9 @@ export default function AdminContentPage() {
   // Curated Destinations Videos State (Key -> Video URL)
   const [curatedVideos, setCuratedVideos] = useState<Record<string, string>>({
     "waterpark": "/main.mp4",
-    "boating-park": "",
-    "adventure-park": "",
-    "amusement-park": "",
+    "boating-park": "/main.mp4",
+    "adventure-park": "/main.mp4",
+    "amusement-park": "/main.mp4",
     "bird-park": "/main.mp4",
     "accommodation": "/main.mp4",
   });

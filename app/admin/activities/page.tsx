@@ -11,6 +11,8 @@ type Activity = {
   title: string;
   description: string;
   image: string;
+  video?: string;
+  video_url?: string;
   features: string[];
   display_order: number;
   is_hidden?: boolean;
@@ -25,6 +27,8 @@ export default function AdminActivitiesPage() {
     title: "",
     description: "",
     image: "",
+    video_url: "",
+    video: "",
     features: [],
     display_order: 1,
   });
@@ -64,6 +68,8 @@ export default function AdminActivitiesPage() {
       title: "",
       description: "",
       image: "",
+      video_url: "",
+      video: "",
       features: [],
       display_order: activities.length + 1,
     });
@@ -77,33 +83,52 @@ export default function AdminActivitiesPage() {
 
     const parsedFeatures = featuresText.split("\n").map(t => t.trim()).filter(Boolean);
     const parkTypeToSave = currentActivity.park_type || (currentActivity.title ? currentActivity.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "general-activity");
+    const videoValue = currentActivity.video_url || currentActivity.video || "";
+    // If image is empty but a video is provided, fallback to setting image as video URL
+    const imageValue = currentActivity.image || videoValue;
+
+    const basePayload = {
+      park_type: parkTypeToSave,
+      title: currentActivity.title || "",
+      description: currentActivity.description || "",
+      image: imageValue,
+      features: parsedFeatures,
+      display_order: currentActivity.display_order || 1,
+    };
 
     try {
       if (currentActivity.id) {
-        const { error } = await supabase
+        let { error } = await supabase
           .from("activities")
           .update({
-            park_type: parkTypeToSave,
-            title: currentActivity.title || "",
-            description: currentActivity.description || "",
-            image: currentActivity.image || "",
-            features: parsedFeatures,
-            display_order: currentActivity.display_order || 1,
+            ...basePayload,
+            ...(videoValue ? { video_url: videoValue } : {}),
           })
           .eq("id", currentActivity.id);
 
+        // Fallback if video_url column is not in DB schema
+        if (error && error.message?.includes("column")) {
+          const res = await supabase
+            .from("activities")
+            .update(basePayload)
+            .eq("id", currentActivity.id);
+          error = res.error;
+        }
+
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("activities").insert([
+        let { error } = await supabase.from("activities").insert([
           {
-            park_type: parkTypeToSave,
-            title: currentActivity.title || "",
-            description: currentActivity.description || "",
-            image: currentActivity.image || "",
-            features: parsedFeatures,
-            display_order: currentActivity.display_order || 1,
+            ...basePayload,
+            ...(videoValue ? { video_url: videoValue } : {}),
           },
         ]);
+
+        // Fallback if video_url column is not in DB schema
+        if (error && error.message?.includes("column")) {
+          const res = await supabase.from("activities").insert([basePayload]);
+          error = res.error;
+        }
 
         if (error) throw error;
       }
@@ -137,13 +162,8 @@ export default function AdminActivitiesPage() {
     setLoading(true);
 
     try {
-      const activityToDelete = activities.find(a => a.id === id);
       const { error } = await supabase.from("activities").delete().eq("id", id);
       if (error) throw error;
-
-      if (activityToDelete?.image) {
-        await deleteAsset(activityToDelete.image);
-      }
 
       fetchActivities();
     } catch (err) {
@@ -162,7 +182,7 @@ export default function AdminActivitiesPage() {
             Secondary Parks & Stays CMS
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Configure Bird Park details, Stays (Camping/Farmhouse), celebrations and custom events
+            Configure Bird Park details, Stays (Camping/Farmhouse), celebrations, videos and custom events
           </p>
         </div>
         {!isEditing && (
@@ -199,17 +219,6 @@ export default function AdminActivitiesPage() {
 
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Featured Cover Image
-              </label>
-              <MediaUploader
-                value={currentActivity.image || ""}
-                onChange={(url) => setCurrentActivity({ ...currentActivity, image: url })}
-                accept="image/*"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Display Order index
               </label>
               <input
@@ -218,6 +227,29 @@ export default function AdminActivitiesPage() {
                 value={currentActivity.display_order}
                 onChange={(e) => setCurrentActivity({ ...currentActivity, display_order: Number(e.target.value) })}
                 className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-accent text-sm"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                Featured Cover Media (Image or Video)
+              </label>
+              <MediaUploader
+                value={currentActivity.image || ""}
+                onChange={(url) => setCurrentActivity({ ...currentActivity, image: url })}
+                accept="image/*,video/*"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                Experience Video (Optional MP4 / Video)
+              </label>
+              <MediaUploader
+                value={currentActivity.video_url || currentActivity.video || ""}
+                onChange={(url) => setCurrentActivity({ ...currentActivity, video_url: url, video: url })}
+                accept="video/*"
+                type="video"
               />
             </div>
 
@@ -279,7 +311,16 @@ export default function AdminActivitiesPage() {
             activities.map((act) => (
               <div key={act.id} className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-lg flex flex-col justify-between group">
                 <div className="relative aspect-[1.3] w-full bg-slate-950 flex items-center justify-center text-slate-700 overflow-hidden">
-                  {act.image ? (
+                  {act.video_url || act.video || (act.image && (act.image.endsWith('.mp4') || act.image.endsWith('.webm') || act.image.includes('/video/'))) ? (
+                    <video
+                      src={act.video_url || act.video || act.image}
+                      className="w-full h-full object-cover"
+                      muted
+                      loop
+                      autoPlay
+                      playsInline
+                    />
+                  ) : act.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={act.image.startsWith("http") || act.image.startsWith("/") ? act.image : `/${act.image}`}
