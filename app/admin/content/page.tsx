@@ -83,7 +83,7 @@ export default function AdminContentPage() {
           setHeroDescription(c.description || "");
           setHeroButtonText(c.buttonText || "Book Tickets");
           const v = c.videoUrl;
-          setHeroVideoUrl(v || "/hero.mp4");
+          setHeroVideoUrl(v !== undefined ? v : "/hero.mp4");
           setHeroBgImage(c.bgImageUrl || "");
         }
 
@@ -137,11 +137,11 @@ export default function AdminContentPage() {
     const existing = allParkHeaders[selectedParkPage];
 
     if (existing) {
-      setParkHeaderTitle(existing.title || defaultData?.defaultTitle || "");
-      setParkHeaderSub(existing.subDescription || defaultData?.defaultSub || "");
-      setParkHeaderDesc(existing.mainDescription || defaultData?.defaultDesc || "");
-      setParkHeaderImage(existing.imageUrl || defaultData?.defaultImage || "");
-      setParkHeaderVideo(existing.videoUrl || "");
+      setParkHeaderTitle(existing.title ?? defaultData?.defaultTitle ?? "");
+      setParkHeaderSub(existing.subDescription ?? defaultData?.defaultSub ?? "");
+      setParkHeaderDesc(existing.mainDescription ?? defaultData?.defaultDesc ?? "");
+      setParkHeaderImage(existing.imageUrl !== undefined ? existing.imageUrl : defaultData?.defaultImage || "");
+      setParkHeaderVideo(existing.videoUrl ?? "");
     } else if (defaultData) {
       setParkHeaderTitle(defaultData.defaultTitle);
       setParkHeaderSub(defaultData.defaultSub);

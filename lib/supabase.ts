@@ -10,7 +10,11 @@ export async function uploadAsset(
   onProgress?: (percent: number) => void
 ): Promise<string> {
   const rawFileName = file.name || "uploaded-file";
-  const fileName = rawFileName.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const nameParts = rawFileName.split('.');
+  const ext = nameParts.length > 1 ? nameParts.pop() : '';
+  const baseName = nameParts.join('.').replace(/[^a-zA-Z0-9._-]/g, '_');
+  const timestamp = Date.now();
+  const fileName = ext ? `${baseName}_${timestamp}.${ext}` : `${baseName}_${timestamp}`;
   const filePath = `uploads/${fileName}`;
 
   // 1. Direct Client Upload to Supabase Storage (Fastest: Browser -> Supabase direct)
@@ -20,7 +24,7 @@ export async function uploadAsset(
       .upload(filePath, file, {
         contentType: file.type || 'video/mp4',
         cacheControl: '3600',
-        upsert: false,
+        upsert: true,
       })
 
     if (!error && data) {
@@ -32,15 +36,9 @@ export async function uploadAsset(
     }
 
     if (error) {
-      if (error.message?.includes("already exists") || error.message?.includes("Duplicate")) {
-        throw new Error(`A file named "${fileName}" already exists in storage. Please rename your file before uploading.`)
-      }
       console.warn("Direct upload error, trying signed URL upload:", error.message)
     }
   } catch (e: any) {
-    if (e.message && (e.message.includes("already exists") || e.message.includes("Please rename"))) {
-      throw e;
-    }
     console.warn("Direct upload failed, trying signed URL fallback...", e)
   }
 

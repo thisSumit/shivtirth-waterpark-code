@@ -231,7 +231,7 @@ const SchoolPicnicPage = () => {
             </p>
           </ScrollReveal>
 
-          <div className="space-y-8 md:space-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {attractionZones.map((zone: { title: string; image: string; video?: string; video_url?: string; description: string }, index) => {
               const videoSrc = zone.video || zone.video_url || (
                 zone.image && (zone.image.endsWith('.mp4') || zone.image.endsWith('.webm') || zone.image.endsWith('.ogg') || zone.image.includes('/video/'))
@@ -243,45 +243,37 @@ const SchoolPicnicPage = () => {
                 <ScrollReveal
                   key={zone.title}
                   direction="up"
-                  delay={0.1}
+                  delay={0.1 * index}
                   duration={0.5}
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/25 backdrop-blur-md p-4 rounded-2xl border border-violet-300/20">
+                  <div className="relative group overflow-hidden rounded-2xl aspect-[9/16] shadow-2xl border border-violet-300/20 bg-slate-900">
+                    {/* REEL MEDIA BACKGROUND */}
+                    {videoSrc ? (
+                      <video
+                        src={videoSrc}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <Image
+                        src={zone.image}
+                        alt={zone.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(min-width: 768px) 33vw, 100vw"
+                      />
+                    )}
 
-                    {/* MEDIA */}
-                    <div
-                      className={`order-1 ${index % 2 === 1 ? "md:order-2" : ""
-                        }`}
-                    >
-                      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
-                        {videoSrc ? (
-                          <video
-                            src={videoSrc}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="w-full h-full object-cover hover:scale-105 transition duration-500"
-                          />
-                        ) : (
-                          <Image
-                            src={zone.image}
-                            alt={zone.title}
-                            fill
-                            className="object-cover hover:scale-105 transition duration-500"
-                            sizes="(min-width: 768px) 50vw, 100vw"
-                          />
-                        )}
-                      </div>
-                    </div>
+                    {/* REEL BACKGROUND GRADIENT & SHADOW AT LEFT CORNER / BOTTOM ONLY */}
+                    <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
 
-                    {/* CONTENT */}
-                    <div
-                      className={`order-2 ${index % 2 === 1 ? "md:order-1" : ""
-                        }`}
-                    >
+                    {/* REEL CONTENT (TITLE & DESCRIPTION OVERLAY) */}
+                    <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-end text-left z-10 pointer-events-none">
                       <h3
-                        className="text-2xl font-bold text-white font-times mb-2"
+                        className="text-xl md:text-2xl font-bold text-white mb-2 drop-shadow-md"
                         style={{
                           fontFamily:
                             "'Times New Roman', Times, Georgia, serif",
@@ -290,11 +282,10 @@ const SchoolPicnicPage = () => {
                         {zone.title}
                       </h3>
 
-                      <p className="text-sm text-cyan-50 leading-relaxed font-normal">
+                      <p className="text-xs md:text-sm text-slate-100/90 leading-relaxed font-normal drop-shadow">
                         {zone.description}
                       </p>
                     </div>
-
                   </div>
                 </ScrollReveal>
               );

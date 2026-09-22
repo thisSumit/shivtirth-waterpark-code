@@ -158,7 +158,7 @@ function AdminAttractionsContent() {
       activeTab === "other-activities" ||
       currentAttraction.park_type === "other-activities";
     const parsedFeatures = featuresText.split("\n").map((t) => t.trim()).filter(Boolean);
-    const videoVal = currentAttraction.video || currentAttraction.video_url || null;
+    const videoVal = (currentAttraction.video !== undefined ? currentAttraction.video : currentAttraction.video_url) || "";
 
     try {
       const isVideoColumnError = (err: any) => {
@@ -173,8 +173,8 @@ function AdminAttractionsContent() {
       };
 
       if (isActivityTable) {
-        // If a video is uploaded, make sure the video URL is preserved in the image field as fallback
-        const effectiveImage = videoVal || currentAttraction.image || "/Water-Park.jpg";
+        // If a video is uploaded, make sure the video URL is preserved in the image field if image is empty
+        const effectiveImage = currentAttraction.image !== undefined ? currentAttraction.image : (videoVal || "");
         const payload: Record<string, any> = {
           park_type: currentAttraction.park_type || "other-activities",
           title: currentAttraction.title || "",
@@ -182,11 +182,9 @@ function AdminAttractionsContent() {
           image: effectiveImage,
           features: parsedFeatures,
           display_order: currentAttraction.display_order || 1,
+          video: videoVal,
+          video_url: videoVal,
         };
-        if (videoVal) {
-          payload.video = videoVal;
-          payload.video_url = videoVal;
-        }
 
         if (currentAttraction.id) {
           let { error } = await supabase.from("activities").update(payload).eq("id", currentAttraction.id);
@@ -212,17 +210,11 @@ function AdminAttractionsContent() {
           park_type: currentAttraction.park_type,
           title: currentAttraction.title,
           description: currentAttraction.description,
-          image: currentAttraction.image || "/Water-Park.jpg",
+          image: currentAttraction.image !== undefined ? currentAttraction.image : "",
           display_order: currentAttraction.display_order,
+          video: videoVal,
+          video_url: videoVal,
         };
-
-        if (videoVal) {
-          payload.video = videoVal;
-          payload.video_url = videoVal;
-        } else {
-          payload.video = null;
-          payload.video_url = null;
-        }
 
         if (currentAttraction.id) {
           let { error } = await supabase.from("attractions").update(payload).eq("id", currentAttraction.id);

@@ -13,24 +13,18 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'No fileName provided' }, { status: 400 })
       }
 
-      const cleanFileName = fileName.replace(/[^a-zA-Z0-9._-]/g, '_')
+      const rawFileName = fileName || 'uploaded-file'
+      const nameParts = rawFileName.split('.')
+      const ext = nameParts.length > 1 ? nameParts.pop() : ''
+      const baseName = nameParts.join('.').replace(/[^a-zA-Z0-9._-]/g, '_')
+      const cleanFileName = fileName.includes('_') && !isNaN(Number(fileName.split('_').pop()?.split('.')[0]))
+        ? fileName.replace(/[^a-zA-Z0-9._-]/g, '_')
+        : (ext ? `${baseName}_${Date.now()}.${ext}` : `${baseName}_${Date.now()}`)
       const filePath = `uploads/${cleanFileName}`
-
-      // Check if file already exists in storage
-      const { data: existingFiles } = await supabaseAdmin.storage
-        .from('assets')
-        .list('uploads', { search: cleanFileName })
-
-      if (existingFiles && existingFiles.some((f) => f.name.toLowerCase() === cleanFileName.toLowerCase())) {
-        return NextResponse.json(
-          { error: `A file named "${cleanFileName}" already exists in storage. Please rename your file before uploading.` },
-          { status: 409 }
-        )
-      }
 
       const { data: signedData, error: signedError } = await supabaseAdmin.storage
         .from('assets')
-        .createSignedUploadUrl(filePath)
+        .createSignedUploadUrl(filePath, { upsert: true })
 
       if (signedError || !signedData) {
         return NextResponse.json(
@@ -60,20 +54,11 @@ export async function POST(request: Request) {
     }
 
     const rawFileName = file.name || 'uploaded-file'
-    const fileName = rawFileName.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const nameParts = rawFileName.split('.')
+    const ext = nameParts.length > 1 ? nameParts.pop() : ''
+    const baseName = nameParts.join('.').replace(/[^a-zA-Z0-9._-]/g, '_')
+    const fileName = ext ? `${baseName}_${Date.now()}.${ext}` : `${baseName}_${Date.now()}`
     const filePath = `uploads/${fileName}`
-
-    // Check if file already exists in storage
-    const { data: existingFiles } = await supabaseAdmin.storage
-      .from('assets')
-      .list('uploads', { search: fileName })
-
-    if (existingFiles && existingFiles.some((f) => f.name.toLowerCase() === fileName.toLowerCase())) {
-      return NextResponse.json(
-        { error: `A file named "${fileName}" already exists in storage. Please rename your file before uploading.` },
-        { status: 409 }
-      )
-    }
 
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
@@ -84,34 +69,21 @@ export async function POST(request: Request) {
       .upload(filePath, buffer, {
         contentType: file.type || 'video/mp4',
         cacheControl: '3600',
-        upsert: false,
+        upsert: true,
       })
 
     if (uploadRes.error) {
-      if (uploadRes.error.message?.includes('already exists') || uploadRes.error.message?.includes('Duplicate')) {
-        return NextResponse.json(
-          { error: `A file named "${fileName}" already exists in storage. Please rename your file before uploading.` },
-          { status: 409 }
-        )
-      }
-
       console.warn('supabaseAdmin upload failed, falling back to anon client:', uploadRes.error)
       uploadRes = await supabase.storage
         .from('assets')
         .upload(filePath, buffer, {
           contentType: file.type || 'video/mp4',
           cacheControl: '3600',
-          upsert: false,
+          upsert: true,
         })
     }
 
     if (uploadRes.error) {
-      if (uploadRes.error.message?.includes('already exists') || uploadRes.error.message?.includes('Duplicate')) {
-        return NextResponse.json(
-          { error: `A file named "${fileName}" already exists in storage. Please rename your file before uploading.` },
-          { status: 409 }
-        )
-      }
       return NextResponse.json({ error: uploadRes.error.message }, { status: 500 })
     }
 
