@@ -88,7 +88,7 @@ export default function PaymentConfirmContent() {
               <div className="inline-flex rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/90 print:text-slate-700">
                 Shivtirth Waterpark
               </div>
-              <h1 className="mt-3 text-2xl md:text-3xl font-black leading-tight text-accent print:text-slate-900">
+              <h1 className="mt-3 text-2xl   font-black leading-tight text-accent print:text-slate-900">
                 {booking ? 'Payment Confirmed' : 'Booking Confirmation'}
               </h1>
               <p className="mt-1.5 text-xs md:text-sm text-white/90 print:text-slate-700">

@@ -194,40 +194,40 @@ const Attractions: React.FC = () => {
                     />
                   )}
 
-                {/* Gradient Shadow Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/20 transition-opacity duration-300 group-hover:from-slate-950 group-hover:via-slate-900/60" />
+                  {/* Gradient Shadow Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/20 transition-opacity duration-300 group-hover:from-slate-950 group-hover:via-slate-900/60" />
 
-                {/* Top ParkTag Badge & Action Button */}
-                <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10 gap-2">
-                  <span className="text-[10px] sm:text-[11px] font-medium tracking-wider uppercase bg-black/40 backdrop-blur-md border border-white/20 text-slate-100 px-3 py-1 rounded-full shadow-xs">
-                    {item.parkTag}
-                  </span>
+                  {/* Top ParkTag Badge & Action Button */}
+                  <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10 gap-2">
+                    <span className="text-[10px] sm:text-[11px] font-medium tracking-wider uppercase bg-black/40 backdrop-blur-md border border-white/20 text-slate-100 px-3 py-1 rounded-full shadow-xs">
+                      {item.parkTag}
+                    </span>
 
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md transition-all duration-300 group-hover:bg-accent group-hover:border-amber-400 group-hover:text-slate-950 group-hover:scale-110 shadow-md">
-                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300" />
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md transition-all duration-300 group-hover:bg-accent group-hover:border-amber-400 group-hover:text-slate-950 group-hover:scale-110 shadow-md">
+                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300" />
+                    </div>
                   </div>
-                </div>
 
-                {/* Bottom Content Container */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-10 flex flex-col justify-end text-white">
-                  <span className="text-sm uppercase text-white drop-shadow-md mb-0.5">
-                    {item.subtitle}
-                  </span>
+                  {/* Bottom Content Container */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 z-10 flex flex-col justify-end text-white">
+                    <span className="text-sm uppercase text-white drop-shadow-md mb-0.5">
+                      {item.subtitle}
+                    </span>
 
-                  <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-accent transition-colors duration-300 drop-shadow-sm">
-                    {item.title}
-                  </h3>
+                    <h3 className="text-2xl   font-extrabold tracking-tight text-accent transition-colors duration-300 drop-shadow-sm">
+                      {item.title}
+                    </h3>
 
-                  <div className="max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-in-out overflow-hidden">
-                    <p className="text-sm text-slate-200 pt-2 line-clamp-3 drop-shadow-xs">
-                      {item.description}
-                    </p>
+                    <div className="max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-in-out overflow-hidden">
+                      <p className="text-sm text-slate-200 pt-2 line-clamp-3 drop-shadow-xs">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </ScrollStaggerItem>
-          );
-        })}
+                </Link>
+              </ScrollStaggerItem>
+            );
+          })}
         </div>
       </ScrollReveal>
     </section>

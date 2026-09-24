@@ -652,7 +652,7 @@ export default SchoolPicnicPage;
 //       <section className="mx-auto max-w-6xl px-4 py-12">
 //         <div className="mb-8 text-center">
 //           <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-400">Core Attraction Zones</p>
-//           <h2 className="mt-1 uppercase text-2xl md:text-3xl font-bold text-white font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+//           <h2 className="mt-1 uppercase text-2xl   font-bold text-white font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
 //             Learning & Adventure Experience
 //           </h2>
 //         </div>
@@ -697,7 +697,7 @@ export default SchoolPicnicPage;
 //       <section className="bg-slate-950 py-12 text-white border-y border-slate-800">
 //         <div className="mx-auto max-w-6xl px-4">
 //           <div className="mb-8 text-center">
-//             <h2 className="uppercase text-2xl md:text-3xl font-bold text-amber-400 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
+//             <h2 className="uppercase text-2xl   font-bold text-amber-400 font-times" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}>
 //               Package Schedules
 //             </h2>
 //           </div>

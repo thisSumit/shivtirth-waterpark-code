@@ -167,7 +167,7 @@ export default function AdminPackagesPage() {
     const parsedCovers = coversText.split("\n").map(t => t.trim()).filter(Boolean);
     const parsedRules = rulesText.split("\n").map(t => t.trim()).filter(Boolean);
 
-    const payload = {
+    const payload: Record<string, any> = {
       plan_id: currentPackage.plan_id || String(currentPackage.name).toLowerCase().replace(/[^a-z0-9]/g, ""),
       category: currentPackage.category,
       name: currentPackage.name,
@@ -189,15 +189,42 @@ export default function AdminPackagesPage() {
     };
 
     try {
+      const isHideAfterError = (err: any) => {
+        if (!err || !err.message) return false;
+        const msg = String(err.message).toLowerCase();
+        return (
+          msg.includes("hide_after") ||
+          msg.includes("column") ||
+          msg.includes("schema cache") ||
+          msg.includes("could not find")
+        );
+      };
+
       if (currentPackage.id) {
-        const { error } = await supabase
+        let { error } = await supabase
           .from("packages")
           .update(payload)
           .eq("id", currentPackage.id);
 
+        if (error && isHideAfterError(error)) {
+          delete payload.hide_after;
+          const retry = await supabase
+            .from("packages")
+            .update(payload)
+            .eq("id", currentPackage.id);
+          error = retry.error;
+        }
+
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("packages").insert([payload]);
+        let { error } = await supabase.from("packages").insert([payload]);
+
+        if (error && isHideAfterError(error)) {
+          delete payload.hide_after;
+          const retry = await supabase.from("packages").insert([payload]);
+          error = retry.error;
+        }
+
         if (error) throw error;
       }
 

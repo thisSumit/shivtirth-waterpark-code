@@ -28,16 +28,13 @@ const FacilitiesRulesPage = () => {
         <div className="relative mx-auto max-w-6xl px-4 pb-6 text-center md:px-8 pt-36">
 
           <h1
-            className="text-2xl font-bold uppercase leading-tight tracking-wide text-white md:text-3xl"
-            style={{
-              fontFamily: "'Times New Roman', Times, Georgia, serif",
-            }}
+            className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
           >
             Facilities & Rules
           </h1>
 
-          <p className="mx-auto max-w-4xl text-sm leading-relaxed text-cyan-50/90">
-             At Shivtirth, we are committed to providing every visitor with a
+          <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
+            At Shivtirth, we are committed to providing every visitor with a
             safe, comfortable and enjoyable experience.
           </p>
         </div>
@@ -45,7 +42,7 @@ const FacilitiesRulesPage = () => {
 
       <Speciallity />
       <CommonFacilitiesRules />
-      <CommonRules/>
+      <CommonRules />
 
     </main>
   );

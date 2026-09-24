@@ -15,6 +15,7 @@ type Package = {
   tag?: string;
   description: string;
   inclusions: string[];
+  note?: string | null;
   cta: string;
   link: string;
   singlePrice?: number | null;
@@ -111,6 +112,7 @@ const PackagesPage = () => {
                 tag: item.tag || undefined,
                 description: item.description || '',
                 inclusions: Array.isArray(item.inclusions) ? item.inclusions : [],
+                note: item.consent_text || undefined,
                 cta: item.cta || 'Book Now',
                 link: item.link || '/checkout',
                 singlePrice: singleOpt ? singleOpt.price : null,
@@ -225,7 +227,7 @@ const PackagesPage = () => {
                         <p className="text-xs text-slate-500 mb-4">Per person pricing</p>
 
                         {/* Inclusions */}
-                        <ul className="space-y-2 mb-6 border-t border-slate-100 pt-4">
+                        <ul className="space-y-2 mb-4 border-t border-slate-100 pt-4">
                           {pkg.inclusions.map((item) => (
                             <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
                               <span className="text-amber-500 font-bold">✓</span>
@@ -233,6 +235,14 @@ const PackagesPage = () => {
                             </li>
                           ))}
                         </ul>
+
+                        {/* Note (Only rendered if added/present) */}
+                        {pkg.note && pkg.note.trim() !== "" && (
+                          <div className="mt-3 mb-4 rounded-xl border border-amber-400/30 bg-amber-50 p-3 text-xs text-amber-900">
+                            <span className="font-bold block uppercase tracking-wider text-[10px] text-amber-700 mb-0.5">Note:</span>
+                            <span className="whitespace-pre-line leading-relaxed">{pkg.note}</span>
+                          </div>
+                        )}
                       </div>
 
                       {/* CTA */}

@@ -93,14 +93,13 @@ const ContactForm = () => {
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-16 text-center">
-          <h1 className="inline-block px-4 py-2 rounded-full bg-accent/20 border border-accent/40 text-accent font-semibold mb-4">
-            Contact Shivtirth Water Park
-          </h1>
-          <h1 className="text-4xl uppercase md:text-6xl font-black mb-6 leading-tight">
+        <div className="relative max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-12 text-center">
+          <h1
+            className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
+          >
             Get In Touch
           </h1>
-          <p className="text-slate-300 max-w-3xl mx-auto mb-8 text-lg">
+          <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
             Get in touch with Shivtirth Water Park for bookings, timings, and queries. Visit or contact the best water park in Nagpur for family fun.
           </p>
         </div>

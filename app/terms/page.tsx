@@ -102,30 +102,46 @@ export default function TermsPage() {
           </section>
 
           <section className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xl">
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">5. Cancellation, Refund & Rescheduling</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">5. Cancellation, Refund & Rescheduling Policy</h2>
             <div className="space-y-4 text-slate-700">
               <div>
-                <h3 className="text-slate-900 font-semibold mb-2">Cancellation Policy</h3>
+                <h3 className="text-slate-900 font-semibold mb-2">Cancellation & Refund Eligibility</h3>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>Cancellation requests made at least 48 hours before the visit may be eligible for a refund as per schedule.</li>
-                  <li>Cancellation requests made within 24-48 hours may receive partial refund or rescheduling, depending on management approval.</li>
-                  <li>Cancellations made less than 24 hours before entry will generally be non-refundable.</li>
-                  <li>No-show tickets are non-refundable.</li>
-                  <li>Refunds are processed within 5-7 business days from the approval date.</li>
+                  <li>Cancellation requests submitted at least one day (24 hours) before the booked visit or arrival date are eligible for refund or rescheduling upon management approval.</li>
+                  <li>Cancellations requested on the same day of the visit, on the arrival date, or after entry time are strictly non-refundable.</li>
+                  <li>No-shows, unapproved late arrivals, or partially used tickets are non-refundable.</li>
                 </ul>
               </div>
+
               <div>
-                <h3 className="text-slate-900 font-semibold mb-2">Rescheduling</h3>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Date or time changes may be allowed only before the scheduled entry, subject to availability.</li>
-                  <li>Requests for rescheduling may be declined if the original date is already fully booked or suspended.</li>
+                <h3 className="text-slate-900 font-semibold mb-2">Refund Calculation & Processing</h3>
+                <p className="mb-2 leading-relaxed">
+                  For all approved eligible refund cases, the refundable amount is calculated as:
+                </p>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 font-semibold text-slate-900 text-sm">
+                  Refund Amount = Total Paid Amount - 18% Cancellation Charge - Payment Gateway / Platform Fees
+                </div>
+                <ul className="list-disc list-inside space-y-1 mt-2">
+                  <li>An 18% cancellation deduction applies to all approved refund requests.</li>
+                  <li>Third-party payment gateway fees (e.g., PayU platform charges) are non-refundable.</li>
+                  <li>Approved refunds will be processed within 15 working days to the original payment source.</li>
                 </ul>
               </div>
+
               <div>
-                <h3 className="text-slate-900 font-semibold mb-2">No Refund Policy</h3>
-                <p>
-                  Once a booking is confirmed, it is considered final. In general, no refunds will be issued for
-                  change of mind, weather conditions unrelated to major operational shutdowns, or if the guest leaves early.
+                <h3 className="text-slate-900 font-semibold mb-2">Rescheduling Policy</h3>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Rescheduling requests must be submitted before the booked arrival date. Same-day reschedule requests are not permitted.</li>
+                  <li>Valid rescheduled tickets can be used within 6 months from the original visit date, subject to park capacity and management availability.</li>
+                </ul>
+              </div>
+
+              <div className="pt-2">
+                <p className="text-xs text-slate-500">
+                  For full details on payment processing, bank transaction queries, and refund procedures, please view our detailed{' '}
+                  <Link href="/payment-refund" className="text-slate-900 font-bold underline hover:text-accent">
+                    Payment & Refund Policy
+                  </Link>.
                 </p>
               </div>
             </div>
@@ -298,6 +314,12 @@ export default function TermsPage() {
               className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2 font-semibold text-black shadow-lg shadow-accent/20 transition hover:scale-[1.03]"
             >
               Back to Home
+            </Link>
+            <Link
+              href="/payment-refund"
+              className="inline-flex items-center gap-2 rounded-full border border-accent/60 px-6 py-2 font-semibold text-slate-800 transition hover:bg-accent/10 hover:text-slate-900"
+            >
+              Payment & Refund Policy
             </Link>
             <Link
               href="/privacy"

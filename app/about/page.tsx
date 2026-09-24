@@ -222,10 +222,10 @@ const AboutPage = () => {
         </div>
 
         <div className="relative mx-auto max-w-6xl px-4 pb-6 text-center md:px-8 pt-36">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-100 backdrop-blur-sm">
+          {/* <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-100 backdrop-blur-sm">
             <Sparkles className="h-3 w-3 text-amber-300" />
             About Shivtirth
-          </span>
+          </span> */}
 
           <h1
             className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide" style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
@@ -233,7 +233,7 @@ const AboutPage = () => {
             Your Ultimate Destination for Fun, Learning, Food, and Natural Beauty!
           </h1>
 
-          <p className="mx-auto max-w-4xl text-sm leading-relaxed text-cyan-50/90">
+          <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
             Discover Shivtirth — a unique destination where adventure,
             entertainment, learning and natural beauty come together. From
             water parks and boating to adventure, amusement, agriculture and

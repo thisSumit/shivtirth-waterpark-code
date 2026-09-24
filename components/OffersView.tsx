@@ -136,7 +136,7 @@ export default function OffersView({
               Featured Deals
             </p>
             <h2
-              className="text-2xl md:text-3xl font-bold text-white font-times uppercase"
+              className="text-2xl   font-bold text-white font-times uppercase"
               style={{
                 fontFamily: "'Times New Roman', Times, Georgia, serif",
               }}
@@ -259,7 +259,7 @@ export default function OffersView({
                 All-Inclusive Packages
               </p>
               <h2
-                className="text-2xl md:text-3xl font-bold text-white font-times uppercase"
+                className="text-2xl   font-bold text-white font-times uppercase"
                 style={{
                   fontFamily: "'Times New Roman', Times, Georgia, serif",
                 }}
@@ -405,7 +405,7 @@ export default function OffersView({
                   Overnight Experience
                 </p>
                 <h2
-                  className="text-2xl md:text-3xl font-bold text-white font-times uppercase"
+                  className="text-2xl   font-bold text-white font-times uppercase"
                   style={{
                     fontFamily: "'Times New Roman', Times, Georgia, serif",
                   }}
