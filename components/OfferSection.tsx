@@ -30,9 +30,11 @@ const offers: OfferImage[] = [
   },
 ];
 
+let cachedOffersList: OfferImage[] | null = null;
+
 const OfferSection = () => {
   const router = useRouter();
-  const [activeOffers, setActiveOffers] = useState<OfferImage[]>(offers);
+  const [activeOffers, setActiveOffers] = useState<OfferImage[]>(() => cachedOffersList || offers);
   const offerTrackRef = useRef<HTMLDivElement | null>(null);
 
   const scrollOffers = (direction: number) => {
@@ -53,7 +55,9 @@ const OfferSection = () => {
   };
 
   useEffect(() => {
+    let mounted = true;
     async function fetchOffers() {
+      if (cachedOffersList) return;
       try {
         const { data } = await supabase
           .from("offers")
@@ -63,15 +67,13 @@ const OfferSection = () => {
         const visibleOffers = (data || []).filter((item: any) => item.is_hidden !== true);
 
         if (visibleOffers && visibleOffers.length > 0) {
-          setActiveOffers(
-            visibleOffers.map((item: any) => ({
-              src: item.src,
-              alt: item.alt || "",
-              aspectRatio:
-                Number(item.aspect_ratio) ||
-                DEFAULT_OFFER_ASPECT_RATIO,
-            }))
-          );
+          const mapped = visibleOffers.map((item: any) => ({
+            src: item.src,
+            alt: item.alt || "",
+            aspectRatio: Number(item.aspect_ratio) || DEFAULT_OFFER_ASPECT_RATIO,
+          }));
+          cachedOffersList = mapped;
+          if (mounted) setActiveOffers(mapped);
         }
       } catch (err) {
         console.error("Error loading offers from Supabase:", err);
@@ -79,6 +81,9 @@ const OfferSection = () => {
     }
 
     fetchOffers();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (activeOffers.length === 0) return null;

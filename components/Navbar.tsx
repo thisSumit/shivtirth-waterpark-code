@@ -35,6 +35,8 @@ type NavLink = {
   dropdownItems?: DropdownItem[];
 };
 
+let cachedNavbarActivities: ActivityItem[] | null = null;
+
 const defaultParksDropdownItems: ActivityItem[] = [
   // { name: "Bird Park", id: getParkSectionId("Bird Park") },
   { name: "Agro Park", id: getParkSectionId("Agro Park") },
@@ -113,10 +115,15 @@ const Navbar = () => {
   }, [isOpen]);
 
   /* --------------------------------
-     Load Activities from Supabase
+     Load Activities from Supabase (Cached)
   -------------------------------- */
   useEffect(() => {
+    let mounted = true;
     async function loadActivities() {
+      if (cachedNavbarActivities) {
+        setActivitiesList(cachedNavbarActivities);
+        return;
+      }
       try {
         const { data, error } = await supabase
           .from("activities")
@@ -124,14 +131,7 @@ const Navbar = () => {
           .eq("is_hidden", false)
           .order("display_order", { ascending: true });
 
-        if (error) {
-          console.error("Error loading activities:", error);
-          return;
-        }
-
-        if (!data || data.length === 0) {
-          return;
-        }
+        if (error || !data || data.length === 0) return;
 
         const mapped: ActivityItem[] = data
           .filter((act) => {
@@ -143,13 +143,17 @@ const Navbar = () => {
             id: getParkSectionId(act.title),
           }));
 
-        setActivitiesList(mapped);
+        cachedNavbarActivities = mapped;
+        if (mounted) setActivitiesList(mapped);
       } catch (err) {
         console.error("Error loading navbar activities:", err);
       }
     }
 
     loadActivities();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   /* --------------------------------

@@ -7,8 +7,10 @@ import { InteractiveHoverButton } from './ui/interactive-hover-button';
 import { supabase } from '@/lib/supabase';
 import { ChevronDown, Sparkles } from 'lucide-react';
 
+let cachedHeroData: any = null;
+
 const Hero = () => {
-  const [heroData, setHeroData] = useState({
+  const [heroData, setHeroData] = useState(() => cachedHeroData || {
     title1: "Shivtirth",
     title2: "Best Water Park & Resorts",
     description: "Waterpark | Boating Park | Adventure Park | Amusement Park | Safari | Bird Park | Agro Park | Helicopter Ride | Wedding | Accommodation | Corporate Events | Festival Celebrations | Birthday Events | Special School Picnic",
@@ -35,7 +37,9 @@ const Hero = () => {
   ];
 
   useEffect(() => {
+    let mounted = true;
     async function fetchHero() {
+      if (cachedHeroData) return;
       try {
         const { data } = await supabase
           .from('website_content')
@@ -44,21 +48,25 @@ const Hero = () => {
           .single();
         if (data?.content) {
           const rawVideo = data.content.videoUrl;
-          setHeroData((prev) => ({
-            ...prev,
-            title1: data.content.title1 || data.content.title || prev.title1,
-            title2: data.content.title2 || prev.title2,
-            description: data.content.description || prev.description,
+          const updated = {
+            title1: data.content.title1 || data.content.title || "Shivtirth",
+            title2: data.content.title2 || "Best Water Park & Resorts",
+            description: data.content.description || "Waterpark | Boating Park | Adventure Park | Amusement Park | Safari | Bird Park | Agro Park | Helicopter Ride | Wedding | Accommodation | Corporate Events | Festival Celebrations | Birthday Events | Special School Picnic",
             videoUrl: (rawVideo && rawVideo.trim()) ? rawVideo.trim() : '/hero.mp4',
-            posterUrl: data.content.bgImageUrl || data.content.posterUrl || prev.posterUrl,
-            subTitle: data.content.subTitle || prev.subTitle,
-          }));
+            posterUrl: data.content.bgImageUrl || data.content.posterUrl || "/p6.jpg",
+            subTitle: data.content.subTitle || "मौज मस्ती चाहिये, शिवतीर्थ आइए",
+          };
+          cachedHeroData = updated;
+          if (mounted) setHeroData(updated);
         }
       } catch (err) {
         console.error("Error fetching hero content from Supabase:", err);
       }
     }
     fetchHero();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
@@ -74,7 +82,7 @@ const Hero = () => {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             className='h-full w-full object-cover'
             src={heroData.videoUrl || "/hero.mp4"}
             poster={heroData.posterUrl}

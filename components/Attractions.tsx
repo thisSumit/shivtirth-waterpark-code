@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import AnimatedHeading from "./ui/AnimatedHeading";
 import { ScrollReveal, ScrollStaggerItem } from "./ui/ScrollReveal";
 import { supabase } from "@/lib/supabase";
+import { getOptimizedMediaUrl } from "@/lib/mediaUtils";
 
 interface AttractionItem {
   id: string;
@@ -170,9 +171,9 @@ const Attractions: React.FC = () => {
                       loop
                       muted
                       playsInline
-                      preload="auto"
+                      preload="metadata"
                       src={item.videoUrl || "/main.mp4"}
-                      poster={item.posterUrl || undefined}
+                      poster={getOptimizedMediaUrl(item.posterUrl) || undefined}
                       onLoadedData={(e) => {
                         e.currentTarget.play().catch(() => { });
                       }}
@@ -188,8 +189,10 @@ const Attractions: React.FC = () => {
                   ) : (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={mediaSrc || item.posterUrl}
+                      src={getOptimizedMediaUrl(mediaSrc || item.posterUrl, { width: 800, quality: 75 })}
                       alt={item.title}
+                      loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
                     />
                   )}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { InteractiveHoverButton } from "./ui/interactive-hover-button";
 import { supabase } from "@/lib/supabase";
+import { getOptimizedMediaUrl } from "@/lib/mediaUtils";
 import AnimatedHeading from "./ui/AnimatedHeading";
 import { ScrollReveal } from "./ui/ScrollReveal";
 
@@ -32,37 +33,44 @@ const mediaItems: MediaItem[] = [
   { type: "image", src: "/ag4.jpg" },
 ];
 
+let cachedGalleryMedia: MediaItem[] | null = null;
+
 export default function GalleryAutoScroll() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const startScrollLeftRef = useRef(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [activeMedia, setActiveMedia] = useState<MediaItem[]>(mediaItems);
+  const [activeMedia, setActiveMedia] = useState<MediaItem[]>(() => cachedGalleryMedia || mediaItems);
 
   useEffect(() => {
+    let mounted = true;
     async function fetchGallery() {
+      if (cachedGalleryMedia) return;
       try {
         const { data } = await supabase
           .from('gallery')
           .select('type, src')
           .order('display_order', { ascending: true });
         if (data && data.length > 0) {
-          setActiveMedia(
-            data.map((item) => {
-              if (item.type === 'youtube') {
-                return { type: 'youtube', url: item.src };
-              } else {
-                return { type: item.type as "image" | "video", src: item.src };
-              }
-            })
-          );
+          const mapped = data.map((item) => {
+            if (item.type === 'youtube') {
+              return { type: 'youtube' as const, url: item.src };
+            } else {
+              return { type: item.type as "image" | "video", src: item.src };
+            }
+          });
+          cachedGalleryMedia = mapped;
+          if (mounted) setActiveMedia(mapped);
         }
       } catch (err) {
         console.error("Error loading gallery from Supabase:", err);
       }
     }
     fetchGallery();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -199,31 +207,25 @@ export default function GalleryAutoScroll() {
   );
 }
 
-function MediaCard({ item }: { item: MediaItem }) {
+function isVideoUrl(url?: string) {
+  if (!url) return false;
+  const clean = url.toLowerCase().split('?')[0];
   return (
-    <div className="group relative w-72 md:w-96 h-[420px] md:h-[520px] shrink-0 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl bg-black border border-slate-800">
-      {item.type === "image" && (
-        <Image
-          src={item.src}
-          alt="Gallery"
-          fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          sizes="(max-width: 768px) 288px, 384px"
-        />
-      )}
+    clean.endsWith('.mp4') ||
+    clean.endsWith('.webm') ||
+    clean.endsWith('.mov') ||
+    clean.endsWith('.m4v') ||
+    clean.endsWith('.ogg') ||
+    clean.endsWith('.avi') ||
+    clean.endsWith('.mkv') ||
+    clean.includes('/video/')
+  );
+}
 
-      {item.type === "video" && (
-        <video
-          src={item.src}
-          className="w-full h-full object-cover"
-          muted
-          autoPlay
-          loop
-          playsInline
-        />
-      )}
-
-      {item.type === "youtube" && (
+function MediaCard({ item }: { item: MediaItem }) {
+  if (item.type === "youtube") {
+    return (
+      <div className="group relative w-72 md:w-96 h-[420px] md:h-[520px] shrink-0 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl bg-black border border-slate-800">
         <iframe
           className="w-full h-full"
           src={getYouTubeEmbedUrl(item.url)}
@@ -231,6 +233,39 @@ function MediaCard({ item }: { item: MediaItem }) {
           loading="eager"
           allow="autoplay; fullscreen; encrypted-media; picture-in-picture; clipboard-write; accelerometer; gyroscope"
           allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  const isVid = item.type === "video" || isVideoUrl(item.src);
+
+  return (
+    <div className="group relative w-72 md:w-96 h-[420px] md:h-[520px] shrink-0 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl bg-black border border-slate-800">
+      {isVid ? (
+        <video
+          src={item.src}
+          className="w-full h-full object-cover"
+          muted
+          autoPlay
+          loop
+          playsInline
+          preload="metadata"
+        />
+      ) : (
+        <Image
+          src={getOptimizedMediaUrl(item.src || "/waterpark-1.jpg", { width: 600, quality: 75 })}
+          alt="Gallery item"
+          fill
+          loading="lazy"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          sizes="(max-width: 768px) 288px, 384px"
+          onError={(e) => {
+            const target = e.currentTarget as HTMLImageElement;
+            if (target && !target.src.includes('/waterpark-1.jpg')) {
+              target.src = '/waterpark-1.jpg';
+            }
+          }}
         />
       )}
 

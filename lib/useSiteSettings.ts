@@ -21,41 +21,69 @@ export const defaultSettings: SiteSettings = {
   googleSearchConsoleCode: "",
 };
 
+let cachedSettings: SiteSettings | null = null;
+let settingsFetchPromise: Promise<SiteSettings> | null = null;
+
+async function fetchSiteSettings(): Promise<SiteSettings> {
+  if (cachedSettings) return cachedSettings;
+  if (settingsFetchPromise) return settingsFetchPromise;
+
+  settingsFetchPromise = (async () => {
+    try {
+      const { data, error } = await supabase.from("settings").select("key, value");
+      if (!error && data) {
+        const map: Record<string, string> = {};
+        data.forEach((s) => {
+          if (s.key && s.value) {
+            map[s.key] = s.value.replace(/^"|"$/g, "").trim();
+          }
+        });
+
+        cachedSettings = {
+          whatsappNumber: map["whatsapp_number"] || defaultSettings.whatsappNumber,
+          contactPhone: map["contact_phone"] || defaultSettings.contactPhone,
+          contactPhone2: map["contact_phone_2"] || defaultSettings.contactPhone2,
+          contactEmail: map["contact_email"] || defaultSettings.contactEmail,
+          googleAnalyticsId: map["google_analytics_id"] || defaultSettings.googleAnalyticsId,
+          googleSearchConsoleCode: map["google_search_console_code"] || defaultSettings.googleSearchConsoleCode,
+        };
+        return cachedSettings;
+      }
+    } catch (err) {
+      console.error("Failed loading site settings:", err);
+    } finally {
+      settingsFetchPromise = null;
+    }
+    return defaultSettings;
+  })();
+
+  return settingsFetchPromise;
+}
+
 export function useSiteSettings() {
-  const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
-  const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState<SiteSettings>(cachedSettings || defaultSettings);
+  const [loading, setLoading] = useState(!cachedSettings);
 
   useEffect(() => {
-    async function loadSettings() {
-      try {
-        const { data, error } = await supabase.from("settings").select("key, value");
-        if (!error && data) {
-          const map: Record<string, string> = {};
-          data.forEach((s) => {
-            if (s.key && s.value) {
-              // Clean outer double quotes if stringified
-              map[s.key] = s.value.replace(/^"|"$/g, "").trim();
-            }
-          });
-
-          setSettings({
-            whatsappNumber: map["whatsapp_number"] || defaultSettings.whatsappNumber,
-            contactPhone: map["contact_phone"] || defaultSettings.contactPhone,
-            contactPhone2: map["contact_phone_2"] || defaultSettings.contactPhone2,
-            contactEmail: map["contact_email"] || defaultSettings.contactEmail,
-            googleAnalyticsId: map["google_analytics_id"] || defaultSettings.googleAnalyticsId,
-            googleSearchConsoleCode: map["google_search_console_code"] || defaultSettings.googleSearchConsoleCode,
-          });
-        }
-      } catch (err) {
-        console.error("Failed loading site settings:", err);
-      } finally {
-        setLoading(false);
-      }
+    let mounted = true;
+    if (cachedSettings) {
+      setSettings(cachedSettings);
+      setLoading(false);
+      return;
     }
 
-    loadSettings();
+    fetchSiteSettings().then((res) => {
+      if (mounted) {
+        setSettings(res);
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return { settings, loading };
 }
+
