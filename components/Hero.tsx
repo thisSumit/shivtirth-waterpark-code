@@ -43,15 +43,16 @@ const Hero = () => {
           .eq('section', 'hero')
           .single();
         if (data?.content) {
-          const rawVideo = data.content.videoUrl
-          setHeroData({
-            title1: data.content.title1 || data.content.title || heroData.title1,
-            title2: data.content.title2 || heroData.title2,
-            description: data.content.description || heroData.description,
+          const rawVideo = data.content.videoUrl;
+          setHeroData((prev) => ({
+            ...prev,
+            title1: data.content.title1 || data.content.title || prev.title1,
+            title2: data.content.title2 || prev.title2,
+            description: data.content.description || prev.description,
             videoUrl: (rawVideo && rawVideo.trim()) ? rawVideo.trim() : '/hero.mp4',
-            posterUrl: data.content.posterUrl || heroData.posterUrl,
-            subTitle: data.content.subTitle || heroData.subTitle,
-          });
+            posterUrl: data.content.bgImageUrl || data.content.posterUrl || prev.posterUrl,
+            subTitle: data.content.subTitle || prev.subTitle,
+          }));
         }
       } catch (err) {
         console.error("Error fetching hero content from Supabase:", err);
@@ -73,10 +74,20 @@ const Hero = () => {
             loop
             muted
             playsInline
+            preload="auto"
             className='h-full w-full object-cover'
-            // src={heroData.videoUrl}
-            src="/hero.mp4"
+            src={heroData.videoUrl || "/hero.mp4"}
             poster={heroData.posterUrl}
+            onLoadedData={(e) => {
+              e.currentTarget.play().catch(() => {});
+            }}
+            onError={(e) => {
+              const target = e.currentTarget as HTMLVideoElement;
+              if (target.src && !target.src.includes('/main.mp4')) {
+                target.src = '/main.mp4';
+                target.play().catch(() => {});
+              }
+            }}
           />
           <div className='absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75' />
         </div>
