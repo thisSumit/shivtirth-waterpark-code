@@ -128,6 +128,20 @@ const Attractions: React.FC = () => {
     fetchCuratedVideos();
   }, []);
 
+  const checkIsVideo = (url?: string) => {
+    if (!url) return false;
+    const lower = url.toLowerCase().split('?')[0];
+    return (
+      lower.endsWith('.mp4') ||
+      lower.endsWith('.webm') ||
+      lower.endsWith('.ogg') ||
+      lower.endsWith('.mov') ||
+      lower.endsWith('.m4v') ||
+      lower.endsWith('.m3u8') ||
+      lower.includes('/video/')
+    );
+  };
+
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
       {/* Title with common AnimatedHeading component matching Speciallity.tsx */}
@@ -138,34 +152,47 @@ const Attractions: React.FC = () => {
 
       <ScrollReveal direction="up" delay={0.2} duration={0.5}>
         <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-4 gap-5 pt-6 md:h-[1080px] lg:h-[1150px]">
-          {attractions.map((item) => (
-            <ScrollStaggerItem key={item.id} className={`${item.gridClass} w-full aspect-square md:aspect-auto md:h-full`}>
-              <Link
-                href={item.href}
-                className="group relative overflow-hidden rounded-3xl block h-full w-full border border-white/20 shadow-lg hover:shadow-2xl hover:border-amber-400/50 transition-all duration-500 transform hover:-translate-y-1.5"
-              >
-                {/* Background Video with Poster Fallback */}
-                <video
-                  key={item.videoUrl}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                  src={item.videoUrl || "/main.mp4"}
-                  poster={item.posterUrl || undefined}
-                  onLoadedData={(e) => {
-                    e.currentTarget.play().catch(() => { });
-                  }}
-                  onError={(e) => {
-                    const target = e.currentTarget as HTMLVideoElement;
-                    if (target.src !== window.location.origin + "/main.mp4") {
-                      target.src = "/main.mp4";
-                      target.play().catch(() => { });
-                    }
-                  }}
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
-                />
+          {attractions.map((item) => {
+            const isVideo = checkIsVideo(item.videoUrl);
+            const mediaSrc = item.videoUrl || item.posterUrl;
+
+            return (
+              <ScrollStaggerItem key={item.id} className={`${item.gridClass} w-full aspect-square md:aspect-auto md:h-full`}>
+                <Link
+                  href={item.href}
+                  className="group relative overflow-hidden rounded-3xl block h-full w-full border border-white/20 shadow-lg hover:shadow-2xl hover:border-amber-400/50 transition-all duration-500 transform hover:-translate-y-1.5"
+                >
+                  {/* Background Video or Image/GIF */}
+                  {isVideo ? (
+                    <video
+                      key={item.videoUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="auto"
+                      src={item.videoUrl || "/main.mp4"}
+                      poster={item.posterUrl || undefined}
+                      onLoadedData={(e) => {
+                        e.currentTarget.play().catch(() => { });
+                      }}
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLVideoElement;
+                        if (target.src !== window.location.origin + "/main.mp4") {
+                          target.src = "/main.mp4";
+                          target.play().catch(() => { });
+                        }
+                      }}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
+                    />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={mediaSrc || item.posterUrl}
+                      alt={item.title}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 scale-110 group-hover:scale-120"
+                    />
+                  )}
 
                 {/* Gradient Shadow Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-black/20 transition-opacity duration-300 group-hover:from-slate-950 group-hover:via-slate-900/60" />
@@ -199,7 +226,8 @@ const Attractions: React.FC = () => {
                 </div>
               </Link>
             </ScrollStaggerItem>
-          ))}
+          );
+        })}
         </div>
       </ScrollReveal>
     </section>

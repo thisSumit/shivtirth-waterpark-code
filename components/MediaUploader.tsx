@@ -22,7 +22,7 @@ type MediaUploaderProps = {
   value: string;
   onChange: (newValue: string) => void;
   accept?: string;
-  type?: "image" | "video";
+  type?: "image" | "video" | "all";
 };
 
 export default function MediaUploader({ value, onChange, accept = "image/*", type = "image" }: MediaUploaderProps) {
@@ -78,7 +78,7 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
 
   const mediaUrl = typeof value === "string" ? value.trim() : (value && typeof value === "object" && "src" in (value as any) ? String((value as any).src || "").trim() : "");
   const fileName = mediaUrl ? mediaUrl.split("/").pop() || "asset" : "";
-  const isVideo = type === "video" || !!mediaUrl.match(/\.(mp4|webm|mov|ogg)$/i);
+  const isVideo = type === "video" || (type !== "image" && !!mediaUrl.split('?')[0].match(/\.(mp4|webm|mov|ogg|m4v|m3u8)$/i));
 
   const filteredLibrary = libraryAssets.filter((item) => {
     const matchesType = type === "video" ? item.is_video : type === "image" ? !item.is_video : true;

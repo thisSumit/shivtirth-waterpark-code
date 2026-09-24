@@ -165,7 +165,7 @@ const Footer = () => {
           <span className="text-md">
             Created by{' '}
             <a
-              href="https://avantula.live"
+              href="https://avantula.com"
               target="_blank"
               rel="noreferrer"
               className="font-bold hover:text-accent transition"

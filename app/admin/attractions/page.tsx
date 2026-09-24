@@ -59,16 +59,15 @@ function AdminAttractionsContent() {
 
   const checkIsVideoUrl = (url?: string) => {
     if (!url) return false;
-    const lower = url.toLowerCase();
+    const lower = url.toLowerCase().split('?')[0];
     return (
       lower.endsWith(".mp4") ||
       lower.endsWith(".webm") ||
       lower.endsWith(".ogg") ||
       lower.endsWith(".mov") ||
       lower.endsWith(".m4v") ||
-      lower.includes(".mp4?") ||
-      lower.includes("/video/") ||
-      lower.includes("/uploads/")
+      lower.endsWith(".m3u8") ||
+      lower.includes("/video/")
     );
   };
 
@@ -173,13 +172,11 @@ function AdminAttractionsContent() {
       };
 
       if (isActivityTable) {
-        // If a video is uploaded, make sure the video URL is preserved in the image field if image is empty
-        const effectiveImage = currentAttraction.image !== undefined ? currentAttraction.image : (videoVal || "");
         const payload: Record<string, any> = {
           park_type: currentAttraction.park_type || "other-activities",
           title: currentAttraction.title || "",
           description: currentAttraction.description || "",
-          image: effectiveImage,
+          image: currentAttraction.image || "",
           features: parsedFeatures,
           display_order: currentAttraction.display_order || 1,
           video: videoVal,
@@ -477,25 +474,30 @@ function AdminAttractionsContent() {
             >
               <div>
                 <div className="relative h-48 bg-slate-950 w-full">
-                  {a.video || a.video_url ? (
-                    <video
-                      src={a.video || a.video_url}
-                      className="w-full h-full object-cover"
-                      muted
-                      loop
-                      autoPlay
-                      playsInline
-                    />
-                  ) : (
-                    <img
-                      src={a.image || "/Water-Park.jpg"}
-                      alt={a.title}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                  {(() => {
+                    const videoSrc = (a.video || a.video_url) && checkIsVideoUrl(a.video || a.video_url) ? (a.video || a.video_url) : null;
+                    const imageSrc = a.image || ((a.video || a.video_url) && !checkIsVideoUrl(a.video || a.video_url) ? (a.video || a.video_url) : null) || "/Water-Park.jpg";
+
+                    return videoSrc ? (
+                      <video
+                        src={videoSrc}
+                        className="w-full h-full object-cover"
+                        muted
+                        loop
+                        autoPlay
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={imageSrc}
+                        alt={a.title}
+                        className="w-full h-full object-cover"
+                      />
+                    );
+                  })()}
 
                   <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                    {a.video || a.video_url ? (
+                    {(a.video || a.video_url) && checkIsVideoUrl(a.video || a.video_url) ? (
                       <span className="bg-blue-500/90 text-white font-bold text-[10px] uppercase px-2 py-0.5 rounded-md flex items-center gap-1">
                         <Video size={10} /> Video
                       </span>

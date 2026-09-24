@@ -279,21 +279,21 @@ export const ParkPage = () => {
             {activeParks.map((park, idx) => {
               const checkIsVideo = (url?: string) => {
                 if (!url) return false;
-                const lower = url.toLowerCase();
+                const lower = url.toLowerCase().split('?')[0];
                 return (
                   lower.endsWith('.mp4') ||
                   lower.endsWith('.webm') ||
                   lower.endsWith('.ogg') ||
                   lower.endsWith('.mov') ||
                   lower.endsWith('.m4v') ||
-                  lower.includes('.mp4?') ||
-                  lower.includes('/video/') ||
-                  lower.includes('/uploads/')
+                  lower.endsWith('.m3u8') ||
+                  lower.includes('/video/')
                 );
               };
 
               const rawVideo = park.video || park.video_url;
-              const videoSrc = rawVideo || (checkIsVideo(park.image) ? park.image : null);
+              const videoSrc = (rawVideo && checkIsVideo(rawVideo)) ? rawVideo : (checkIsVideo(park.image) ? park.image : null);
+              const imageSrc = park.image || (!checkIsVideo(rawVideo) ? rawVideo : null) || "/waterpark-slide-1.jpg";
 
               return (
                 <ScrollReveal
@@ -322,13 +322,11 @@ export const ParkPage = () => {
                             className="w-full h-full object-cover hover:scale-105 transition duration-500"
                           />
                         ) : (
-                          <Image
-                            src={park.image}
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={imageSrc}
                             alt={park.name}
-                            fill
-                            className="object-cover object-center hover:scale-105 transition duration-500"
-                            sizes="(min-width: 768px) 50vw, 100vw"
-                            priority={idx === 0}
+                            className="w-full h-full object-cover object-center hover:scale-105 transition duration-500"
                           />
                         )}
                       </div>

@@ -380,7 +380,7 @@ export default function AdminContentPage() {
         </form>
       </div>
 
-      {/* CURATED DESTINATIONS VIDEOS SECTION */}
+      {/* CURATED DESTINATIONS MEDIA SECTION */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-lg space-y-6">
         <div className="flex items-center gap-3 border-b border-slate-850 pb-3">
           <div className="p-2 bg-amber-500/10 rounded-xl text-amber-400">
@@ -388,10 +388,10 @@ export default function AdminContentPage() {
           </div>
           <div>
             <h3 className="text-lg font-bold text-white uppercase tracking-wide">
-              Curated Destinations Park Videos
+              Curated Destinations Park Media (Image / GIF / Video)
             </h3>
             <p className="text-xs text-slate-500">
-              Set videos for each of the 6 destination parks displayed on the homepage
+              Set images, GIFs, or background videos for each of the 6 destination parks displayed on the homepage
             </p>
           </div>
         </div>
@@ -402,7 +402,7 @@ export default function AdminContentPage() {
               <div key={park.id} className="bg-slate-950 border border-slate-800/80 p-4 rounded-2xl space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                    <Video size={16} /> {park.name}
+                    <Compass size={16} /> {park.name}
                   </h4>
                   <span className="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
                     ID: {park.id}
@@ -413,8 +413,8 @@ export default function AdminContentPage() {
                   onChange={(val) =>
                     setCuratedVideos((prev) => ({ ...prev, [park.id]: val }))
                   }
-                  accept="video/*"
-                  type="video"
+                  accept="image/*,video/*"
+                  type="all"
                 />
               </div>
             ))}
@@ -427,7 +427,7 @@ export default function AdminContentPage() {
               className="flex items-center gap-1.5 px-4 py-2.5 bg-accent hover:bg-accent/90 text-black font-black text-xs uppercase rounded-xl transition tracking-wider disabled:opacity-60"
             >
               <Save size={15} />
-              {savingSection === "curated" ? "Saving Videos..." : "Save Curated Destinations Videos"}
+              {savingSection === "curated" ? "Saving Media..." : "Save Curated Destinations Media"}
             </button>
           </div>
         </form>
