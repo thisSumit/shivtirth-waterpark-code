@@ -5,7 +5,6 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { Sparkles, Play, X, Image as ImageIcon, Video, Filter } from "lucide-react";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import OfferSection from "@/components/OfferSection";
 
 type GalleryItem = {
   id: string;

@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import PopUp from '@/components/PopUp';
 import WhatsAppFloatingButton from '@/components/WhatsAppFloatingButton';
+import Preloader from '@/components/Preloader';
 
 const hiddenRoutes = ['/checkout/confirm', '/checkout/failed'];
 
@@ -16,6 +17,7 @@ const SiteChrome = () => {
 
   return (
     <>
+      <Preloader />
       <Navbar />
       <PopUp />
       <WhatsAppFloatingButton />

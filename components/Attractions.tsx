@@ -171,7 +171,7 @@ const Attractions: React.FC = () => {
                       loop
                       muted
                       playsInline
-                      preload="metadata"
+                      preload="none"
                       src={item.videoUrl || "/main.mp4"}
                       poster={getOptimizedMediaUrl(item.posterUrl) || undefined}
                       onLoadedData={(e) => {

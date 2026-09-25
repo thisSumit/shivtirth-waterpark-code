@@ -82,7 +82,7 @@ const Hero = () => {
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="none"
             className='h-full w-full object-cover'
             src={heroData.videoUrl || "/hero.mp4"}
             poster={heroData.posterUrl}
