@@ -48,24 +48,26 @@ export default function GalleryAutoScroll({ initialMedia }: GalleryProps) {
 
   useEffect(() => {
     let mounted = true;
-    if (initialMedia) return;
     async function fetchGallery() {
-      if (cachedGalleryMedia) return;
       try {
         const { data } = await supabase
           .from('gallery')
-          .select('type, src')
+          .select('type, src, is_hidden')
           .order('display_order', { ascending: true });
+
         if (data && data.length > 0) {
-          const mapped = data.map((item) => {
-            if (item.type === 'youtube') {
-              return { type: 'youtube' as const, url: item.src };
-            } else {
-              return { type: item.type as "image" | "video", src: item.src };
-            }
-          });
-          cachedGalleryMedia = mapped;
-          if (mounted) setActiveMedia(mapped);
+          const visibleData = data.filter((item: any) => item.is_hidden !== true);
+          if (visibleData.length > 0) {
+            const mapped: MediaItem[] = visibleData.map((item: any) => {
+              if (item.type === 'youtube') {
+                return { type: 'youtube' as const, url: item.src };
+              } else {
+                return { type: item.type as "image" | "video", src: item.src };
+              }
+            });
+            cachedGalleryMedia = mapped;
+            if (mounted) setActiveMedia(mapped);
+          }
         }
       } catch (err) {
         console.error("Error loading gallery from Supabase:", err);
@@ -75,7 +77,7 @@ export default function GalleryAutoScroll({ initialMedia }: GalleryProps) {
     return () => {
       mounted = false;
     };
-  }, [initialMedia]);
+  }, []);
 
   useEffect(() => {
     const container = scrollRef.current;

@@ -153,13 +153,21 @@ export default function AdminGalleryPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this media item?")) return;
+  const handleDelete = async (item: GalleryItem) => {
+    if (!confirm(`Are you sure you want to delete "${item.title || "this media item"}"?`)) return;
     setLoading(true);
 
     try {
-      const { error } = await supabase.from("gallery").delete().eq("id", id);
+      // 1. Delete from database table
+      const { error } = await supabase.from("gallery").delete().eq("id", item.id);
       if (error) throw error;
+
+      // 2. Delete uploaded storage asset if applicable
+      if (item.src && (item.src.includes("/storage/v1/object/public/") || item.src.includes("supabase.co") || item.src.includes("/assets/"))) {
+        await deleteAsset(item.src).catch((err) => {
+          console.warn("Storage asset cleanup info:", err);
+        });
+      }
 
       fetchGallery();
     } catch (err) {
@@ -406,7 +414,7 @@ export default function AdminGalleryPage() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => handleDelete(item)}
                       className="flex items-center gap-1 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-xs uppercase rounded-lg transition"
                     >
                       <Trash2 size={13} />

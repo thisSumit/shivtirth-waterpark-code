@@ -211,6 +211,25 @@ export default function MediaUploader({ value, onChange, accept = "image/*", typ
                         <X size={12} />
                         Unattach Media
                       </button>
+                      {mediaUrl && (mediaUrl.includes("/storage/v1/object/public/") || mediaUrl.includes("supabase.co") || mediaUrl.includes("/assets/")) && (
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (confirm("Are you sure you want to permanently delete this asset file from storage?")) {
+                              setUploading(true);
+                              await deleteAsset(mediaUrl);
+                              onChange("");
+                              setUploading(false);
+                              setMenuOpen(false);
+                            }
+                          }}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 transition text-left font-semibold"
+                          title="Permanently delete this file from Supabase storage"
+                        >
+                          <Trash2 size={12} />
+                          Delete File from Storage
+                        </button>
+                      )}
                     </div>
                   </>
                 )}

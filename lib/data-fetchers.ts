@@ -111,17 +111,20 @@ export const getGalleryMedia = cache(async () => {
   try {
     const { data } = await supabase
       .from('gallery')
-      .select('type, src')
+      .select('type, src, is_hidden')
       .order('display_order', { ascending: true });
 
     if (data && data.length > 0) {
-      return data.map((item) => {
-        if (item.type === 'youtube') {
-          return { type: 'youtube' as const, url: item.src };
-        } else {
-          return { type: item.type as "image" | "video", src: item.src };
-        }
-      });
+      const visibleData = data.filter((item: any) => item.is_hidden !== true);
+      if (visibleData.length > 0) {
+        return visibleData.map((item) => {
+          if (item.type === 'youtube') {
+            return { type: 'youtube' as const, url: item.src };
+          } else {
+            return { type: item.type as "image" | "video", src: item.src };
+          }
+        });
+      }
     }
   } catch (err) {
     console.error("Error loading gallery media on server:", err);
