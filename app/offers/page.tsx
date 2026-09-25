@@ -19,9 +19,8 @@ type TicketOption = {
   price?: number | string;
 };
 
-/* =========================================================
-   METADATA
-========================================================= */
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Latest Offers & Packages | Shivtirth Water Park",
@@ -225,11 +224,27 @@ const Page = async () => {
   let packageCards: PackageItem[] = [];
   let accommodationCards: PackageItem[] = [];
 
+  let heroTitle = "Offer & Packages";
+  let heroSub = "Customized and Affordable Various packages designed for every age group having special discounts.";
+  let heroImage = "/Water-Park.jpg";
+  let heroVideo = "";
+
   try {
-    const { data: dbAll, error } = await supabase
-      .from('packages')
-      .select('*')
-      .order('display_order', { ascending: true });
+    const [packagesRes, headerRes] = await Promise.all([
+      supabase.from('packages').select('*').order('display_order', { ascending: true }),
+      supabase.from('website_content').select('content').eq('section', 'park_header_offers').single(),
+    ]);
+
+    if (headerRes.data && headerRes.data.content) {
+      const c = headerRes.data.content;
+      if (c.title) heroTitle = c.title;
+      if (c.subDescription || c.mainDescription) heroSub = c.subDescription || c.mainDescription;
+      if (c.imageUrl) heroImage = c.imageUrl;
+      if (c.videoUrl) heroVideo = c.videoUrl;
+    }
+
+    const dbAll = packagesRes.data;
+    const error = packagesRes.error;
 
     if (error) {
       throw error;
@@ -451,13 +466,24 @@ const Page = async () => {
       ===================================================== */}
       <div className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/Water-Park.jpg"
-            alt="Water Park"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover object-center"
+            />
+          ) : (
+            <Image
+              src={heroImage || "/Water-Park.jpg"}
+              alt="Offer and Packages header background"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-cyan-950 via-cyan-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center pointer-events-none">
@@ -466,10 +492,10 @@ const Page = async () => {
                 className="text-4xl font-bold text-accent drop-shadow-lg font-times uppercase tracking-wide"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
-                Offer & Packages
+                {heroTitle}
               </h1>
               <p className="mt-2 text-sm text-cyan-100/90 drop-shadow-sm font-medium">
-                Customized and Affordable Various packages designed for every age group having special discounts.
+                {heroSub}
               </p>
             </div>
           </div>

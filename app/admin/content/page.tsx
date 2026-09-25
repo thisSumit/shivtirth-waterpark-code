@@ -22,6 +22,8 @@ const PARK_PAGE_TYPES = [
   { id: "bird-park", name: "Bird Park Page", defaultTitle: "Bird Park", defaultSub: "Exotic Aviary | Interactive Feeding | Rare Species | Satpuda Green Nature", defaultDesc: "Walk among beautiful exotic birds in an open, vibrant natural environment surrounded by nature.", defaultImage: "/Bird-Park.jpg" },
   { id: "accommodation", name: "Accommodation Page", defaultTitle: "Accommodation & Stay", defaultSub: "Farmhouse Bungalows | Dormitory Cottages | Camping Tents | AC Luxury Rooms", defaultDesc: "Relax in luxurious, tranquil resort rooms, family villas, and nature stays amidst stunning views.", defaultImage: "/Stay-Facilities.jpg" },
   { id: "school-picnic", name: "School Picnic Page", defaultTitle: "School Picnic", defaultSub: "Water Park | Adventure Park | Amusement Park | Agro Park | Bird Park | Boating | Team Activities | Educational Experiences", defaultDesc: "A complete school outing combining fun, adventure, education, teamwork and memorable experiences in one destination.", defaultImage: "/picnic.png" },
+  { id: "other-activities", name: "Other Activities Page", defaultTitle: "Other Activities", defaultSub: "Water Park | Adventure Park | Amusement Park | Agro Park | Bird Park | Boating | Air Tourism | Accommodation | Events", defaultDesc: "Beyond the main Park attractions, enjoy a wide range of engaging activities making it a complete learning and fun destination for all purposes and age groups. One Place, Unlimited Entertainment!", defaultImage: "/park-experience.png" },
+  { id: "offers", name: "Offer & Packages Page", defaultTitle: "Offer & Packages", defaultSub: "Special Discounts | Group Offers | Ladies Offer | Combo Packages", defaultDesc: "Customized and Affordable Various packages designed for every age group having special discounts.", defaultImage: "/Water-Park.jpg" },
 ];
 
 export default function AdminContentPage() {
@@ -265,6 +267,12 @@ export default function AdminContentPage() {
 
       if (error) throw error;
 
+      if (selectedParkPage === "other-activities") {
+        await supabase
+          .from("website_content")
+          .upsert({ section: "other_activities", content: contentPayload }, { onConflict: "section" });
+      }
+
       setAllParkHeaders((prev) => ({
         ...prev,
         [selectedParkPage]: contentPayload,
@@ -456,11 +464,10 @@ export default function AdminContentPage() {
               key={park.id}
               type="button"
               onClick={() => setSelectedParkPage(park.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase transition tracking-wider border ${
-                selectedParkPage === park.id
-                  ? "bg-purple-600 text-white border-purple-500 shadow-lg"
-                  : "bg-slate-950 text-slate-400 border-slate-800 hover:text-white"
-              }`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase transition tracking-wider border ${selectedParkPage === park.id
+                ? "bg-purple-600 text-white border-purple-500 shadow-lg"
+                : "bg-slate-950 text-slate-400 border-slate-800 hover:text-white"
+                }`}
             >
               {park.name}
             </button>
@@ -548,75 +555,6 @@ export default function AdminContentPage() {
         </form>
       </div>
 
-      {/* OTHER ACTIVITIES SECTION CMS */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-lg space-y-6">
-        <div className="flex items-center gap-3 border-b border-slate-850 pb-3">
-          <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400">
-            <Sun size={20} />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-white uppercase tracking-wide">
-              Other Activities Section Copy
-            </h3>
-            <p className="text-xs text-slate-500">
-              Customize title, tag/sub-description, and main description for the Other Activities page/section
-            </p>
-          </div>
-        </div>
-
-        <form onSubmit={handleSaveOtherActivities} className="grid grid-cols-1 gap-6 text-sm">
-          <div className="space-y-2">
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
-              Title (e.g. Other Activities)
-            </label>
-            <input
-              type="text"
-              required
-              value={otherTitle}
-              onChange={(e) => setOtherTitle(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
-              placeholder="Other Activities"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
-              Tag / Sub-description (e.g. Water Park | Adventure Park | Amusement Park | Agro Park | Bird Park | Boating | Air Tourism | Accommodation | Events)
-            </label>
-            <textarea
-              required
-              value={otherSubDescription}
-              onChange={(e) => setOtherSubDescription(e.target.value)}
-              className="w-full h-20 px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 resize-none text-xs"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
-              Main Description
-            </label>
-            <textarea
-              required
-              value={otherMainDescription}
-              onChange={(e) => setOtherMainDescription(e.target.value)}
-              className="w-full h-24 px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 resize-none text-xs"
-            />
-          </div>
-
-          <div className="flex justify-end pt-3">
-            <button
-              type="submit"
-              disabled={savingSection === "other_activities"}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase rounded-xl transition tracking-wider disabled:opacity-60"
-            >
-              <Save size={15} />
-              {savingSection === "other_activities"
-                ? "Saving..."
-                : "Save Other Activities Details"}
-            </button>
-          </div>
-        </form>
-      </div>
 
       {/* Promo Marketing Popup Section */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-lg space-y-6">

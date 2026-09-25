@@ -145,22 +145,41 @@ export const ParkPage = () => {
   const [otherMainDescription, setOtherMainDescription] = useState(
     "Beyond the main Park attractions, enjoy a wide range of engaging activities making it a complete learning and fun destination for all purposes and age groups. One Place, Unlimited Entertainment!"
   );
+  const [otherImage, setOtherImage] = useState("/park-experience.png");
+  const [otherVideo, setOtherVideo] = useState("");
 
   useEffect(() => {
     async function fetchActivities() {
       try {
-        // Fetch Other Activities section copy
-        const { data: copyData } = await supabase
+        // Fetch Other Activities header details from park_header_other-activities or fallback to other_activities
+        const { data: headerData } = await supabase
           .from("website_content")
           .select("content")
-          .eq("section", "other_activities")
+          .eq("section", "park_header_other-activities")
           .single();
 
-        if (copyData && copyData.content) {
-          const c = copyData.content;
+        if (headerData && headerData.content) {
+          const c = headerData.content;
           if (c.title) setOtherTitle(c.title);
           if (c.subDescription) setOtherSubDescription(c.subDescription);
           if (c.mainDescription) setOtherMainDescription(c.mainDescription);
+          if (c.imageUrl) setOtherImage(c.imageUrl);
+          if (c.videoUrl) setOtherVideo(c.videoUrl);
+        } else {
+          const { data: copyData } = await supabase
+            .from("website_content")
+            .select("content")
+            .eq("section", "other_activities")
+            .single();
+
+          if (copyData && copyData.content) {
+            const c = copyData.content;
+            if (c.title) setOtherTitle(c.title);
+            if (c.subDescription) setOtherSubDescription(c.subDescription);
+            if (c.mainDescription) setOtherMainDescription(c.mainDescription);
+            if (c.imageUrl) setOtherImage(c.imageUrl);
+            if (c.videoUrl) setOtherVideo(c.videoUrl);
+          }
         }
 
         const { data, error } = await supabase
@@ -234,13 +253,24 @@ export const ParkPage = () => {
       {/* ================= HERO ================= */}
       <section className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
-          <Image
-            src="/park-experience.png"
-            alt="Parks and experiences background"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {otherVideo ? (
+            <video
+              src={otherVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover object-center"
+            />
+          ) : (
+            <Image
+              src={otherImage || "/park-experience.png"}
+              alt="Parks and experiences background"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-[#023047] via-[#023047]/40 to-black/60 pointer-events-none" />
 

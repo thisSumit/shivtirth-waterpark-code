@@ -249,13 +249,18 @@ function buildEmailHtml(payload, paymentStatus) {
             <tr><td style="padding:8px 0;color:#64748b;">Booking Date</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(bookingDate)}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Transaction ID</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.txnid || payload.gatewayTxnId || '')}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Name</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.name || '')}</td></tr>
+            <tr><td style="padding:8px 0;color:#64748b;">City</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.city || '')}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Mobile</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.mobile || '')}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Email</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.email || '')}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Visit Date</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.visitDate || '')}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Plan / Package</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.planName || '')}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Ticket Type</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.ticketType || '')}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;">Ticket Price</td><td style="padding:8px 0;font-weight:bold;">₹${escapeHtml(String(ticketPrice || '0'))}</td></tr>
-            <tr><td style="padding:8px 0;color:#64748b;">People / Quantity</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(String(ticketQty || ''))}</td></tr>
+            <tr><td style="padding:8px 0;color:#64748b;">Guests Breakdown</td><td style="padding:8px 0;font-weight:bold;">
+              <div>• Adult (100% price ₹${escapeHtml(String(ticketPrice || '0'))}/ticket): ${escapeHtml(String(payload.adultQty || ticketQty || 0))}</div>
+              <div>• Kids 1 (121 cm - 140 cm / 5 to 10 yrs): ${escapeHtml(String(payload.kids1Qty || 0))}</div>
+              <div>• Kids 2 (100 cm - 120 cm / 3 to 5 yrs): ${escapeHtml(String(payload.kids2Qty || 0))}</div>
+            </td></tr>
+            <tr><td style="padding:8px 0;color:#64748b;">Total Guests</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(String(ticketQty || ''))}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Ticket Subtotal</td><td style="padding:8px 0;font-weight:bold;">₹${escapeHtml(String(ticketSubtotal || '0'))}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Add-ons</td><td style="padding:8px 0;font-weight:bold;">${escapeHtml(payload.addOnSummary || 'None')}</td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Add-ons Subtotal</td><td style="padding:8px 0;font-weight:bold;">₹${escapeHtml(String(addOnSubtotal || '0'))}</td></tr>

@@ -17,7 +17,7 @@ const Footer = () => {
         <div className='absolute bottom-0 right-0 w-96 h-96 bg-cyan-500 rounded-full blur-3xl'></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-16">
+      <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {/* Brand */}
           <div>
@@ -154,7 +154,7 @@ const Footer = () => {
 
       {/* Bottom bar */}
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 text-sm flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pb-24 pt-8 text-sm flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-slate-400">© {new Date().getFullYear()} Shivtirth Best Water Park. All rights reserved.</p>
           <div className="flex text-xs items-center gap-6 text-slate-400">
             <Link href="/payment-refund" className="hover:text-accent transition">Payment & Refund Policy</Link>

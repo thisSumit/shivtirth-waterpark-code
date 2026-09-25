@@ -133,9 +133,12 @@ export const buildBookingFromPayuCallback = (
   const mobile = payload.udf9 || payload.phone || payload.mobile || ''
   const email = payload.udf10 || payload.email || ''
   const city = payload.city || cityFromProduct || ''
-  const adultQty = readNumber(payload.adultQty || payload.udf12, adultQtyFromProduct)
   const kids1Qty = readNumber(payload.kids1Qty || payload.udf13, kids1QtyFromProduct)
   const kids2Qty = readNumber(payload.kids2Qty || payload.udf14, kids2QtyFromProduct)
+  const adultQty = readNumber(
+    payload.adultQty || payload.udf12,
+    detailMeta[0] !== undefined ? adultQtyFromProduct : Math.max(0, ticketQty - kids1Qty - kids2Qty)
+  )
 
   return {
     txnid: payload.txnid || fallbackTxnId,
@@ -314,9 +317,9 @@ export const submitBookingToSupabase = async (
     const finalMobile = booking.mobile || existing?.mobile || ''
     const finalEmail = booking.email || existing?.email || ''
     const finalCity = booking.city || existing?.city || ''
-    const finalAdultQty = booking.adultQty || Number(existing?.adult_qty || 0)
-    const finalKid1Qty = booking.kids1Qty || Number(existing?.kid1_qty || 0)
-    const finalKid2Qty = booking.kids2Qty || Number(existing?.kid2_qty || 0)
+    const finalAdultQty = typeof booking.adultQty === 'number' ? booking.adultQty : Number(existing?.adult_qty || 0)
+    const finalKid1Qty = typeof booking.kids1Qty === 'number' ? booking.kids1Qty : Number(existing?.kid1_qty || 0)
+    const finalKid2Qty = typeof booking.kids2Qty === 'number' ? booking.kids2Qty : Number(existing?.kid2_qty || 0)
     const finalVisitDate = booking.visitDate || existing?.visit_date || ''
     const finalPlanName = booking.planName || existing?.plan_name || ''
     const finalTicketType = booking.ticketType || existing?.ticket_type || ''
@@ -350,12 +353,11 @@ export const submitBookingToSupabase = async (
       source: booking.source || existing?.source || 'checkout-page',
       rules_accepted: booking.rulesAccepted ?? existing?.rules_accepted ?? true,
       consent_accepted: booking.consentAccepted ?? existing?.consent_accepted ?? true,
+      city: finalCity,
+      adult_qty: finalAdultQty,
+      kid1_qty: finalKid1Qty,
+      kid2_qty: finalKid2Qty,
     }
-
-    if (finalCity) payload.city = finalCity
-    if (finalAdultQty) payload.adult_qty = finalAdultQty
-    if (finalKid1Qty) payload.kid1_qty = finalKid1Qty
-    if (finalKid2Qty) payload.kid2_qty = finalKid2Qty
 
     const currentPayload = { ...payload }
     let attempts = 0

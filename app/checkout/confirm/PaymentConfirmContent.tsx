@@ -127,6 +127,10 @@ export default function PaymentConfirmContent() {
                   <p className="text-white/60 print:text-slate-500">Mobile</p>
                   <p className="mt-0.5 font-semibold">{booking?.mobile || 'N/A'}</p>
                 </div>
+                <div>
+                  <p className="text-white/60 print:text-slate-500">City</p>
+                  <p className="mt-0.5 font-semibold">{booking?.city || 'N/A'}</p>
+                </div>
                 <div className="md:col-span-2">
                   <p className="text-white/60 print:text-slate-500">Email</p>
                   <p className="mt-0.5 font-semibold break-all">{booking?.email || 'N/A'}</p>
@@ -148,8 +152,25 @@ export default function PaymentConfirmContent() {
                   <p className="mt-0.5 font-semibold">{booking?.ticketType || 'N/A'}</p>
                 </div>
                 <div>
-                  <p className="text-white/60 print:text-slate-500">People / Quantity</p>
+                  <p className="text-white/60 print:text-slate-500">Total Tickets (People)</p>
                   <p className="mt-0.5 font-semibold">{booking?.ticketQty ?? 'N/A'}</p>
+                </div>
+                <div className="md:col-span-2 rounded-xl border border-white/15 bg-white/5 p-3 print:border-slate-300 print:bg-slate-50">
+                  <p className="text-xs font-bold uppercase tracking-wider text-accent print:text-slate-800 mb-1.5">Guests & Pricing Breakdown</p>
+                  <div className="space-y-1 text-[11px] md:text-xs">
+                    <p className="flex justify-between">
+                      <span>• Adult: 100% price (₹{booking?.ticketPrice || 690}/ticket)</span>
+                      <span className="font-bold">Qty: {booking?.adultQty ?? Math.max(0, (booking?.ticketQty || 0) - (booking?.kids1Qty || 0) - (booking?.kids2Qty || 0))}</span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span>• Kids 1: 121 cm - 140 cm / 5 to 10 yrs</span>
+                      <span className="font-bold">Qty: {booking?.kids1Qty ?? 0}</span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span>• Kids 2: 100 cm - 120 cm / 3 to 5 yrs</span>
+                      <span className="font-bold">Qty: {booking?.kids2Qty ?? 0}</span>
+                    </p>
+                  </div>
                 </div>
                 <div>
                   <p className="text-white/60 print:text-slate-500">Ticket Subtotal</p>

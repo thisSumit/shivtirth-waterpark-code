@@ -395,7 +395,7 @@ export default function AdminBookingsPage() {
                 <tr className="border-b border-slate-850 bg-slate-950/40 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
                   <th className="py-4 px-5">Txn ID</th>
                   <th className="py-4 px-5">Customer Details</th>
-                  <th className="py-4 px-5">City / Guests</th>
+                  <th className="py-4 px-5">Guests</th>
                   <th className="py-4 px-5">Visit Date</th>
                   <th className="py-4 px-5">Plan & Add-ons</th>
                   <th className="py-4 px-5 text-center">Qty / Amt</th>
@@ -432,17 +432,17 @@ export default function AdminBookingsPage() {
                           <Mail size={12} className="text-slate-600 shrink-0" />
                           <span>{custEmail}</span>
                         </div>
+                        <div className="text-amber-400 text-[11px] font-bold mt-1.5">
+                          📍 City: {b.city || "N/A"}
+                        </div>
                       </td>
 
-                      {/* City / Guest Mix */}
-                      <td className="py-4 px-5 min-w-28">
-                        <div className="font-bold text-white text-xs uppercase tracking-wide">
-                          {b.city || "N/A"}
-                        </div>
-                        <div className="mt-1 text-[10px] text-slate-300 font-medium leading-relaxed">
-                          <div>Adult: {b.adult_qty || b.ticket_qty || 0}</div>
-                          <div>Kid 1: {b.kid1_qty ?? 0}</div>
-                          <div>Kid 2: {b.kid2_qty ?? 0}</div>
+                      {/* Guests Column */}
+                      <td className="py-4 px-5 min-w-36">
+                        <div className="text-xs text-slate-200 font-medium space-y-0.5">
+                          <div>Adult: <span className="font-bold text-white">{b.adult_qty ?? Math.max(0, (b.ticket_qty || 0) - (b.kid1_qty || 0) - (b.kid2_qty || 0))}</span></div>
+                          <div>Kid 1: <span className="font-bold text-white">{b.kid1_qty ?? 0}</span></div>
+                          <div>Kid 2: <span className="font-bold text-white">{b.kid2_qty ?? 0}</span></div>
                         </div>
                       </td>
 
@@ -582,6 +582,7 @@ export default function AdminBookingsPage() {
                 <p className="font-bold text-white text-base">{selectedBooking.name || selectedBooking.customer_name || "Guest"}</p>
                 <p className="text-slate-300 text-xs font-semibold">{selectedBooking.mobile || selectedBooking.customer_phone || "N/A"}</p>
                 <p className="text-slate-400 text-xs">{selectedBooking.email || selectedBooking.customer_email || "N/A"}</p>
+                <p className="text-amber-400 text-xs font-bold pt-1">📍 City: {selectedBooking.city || "N/A"}</p>
               </div>
 
               <div className="space-y-1">
@@ -603,13 +604,12 @@ export default function AdminBookingsPage() {
 
               <div className="space-y-1">
                 <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                  City & Guest Quantities
+                  Guests Quantity
                 </span>
-                <p className="font-bold text-white text-base">{selectedBooking.city || "N/A"}</p>
-                <div className="text-xs text-slate-300 font-semibold space-y-0.5 mt-1">
-                  <div>Adult: {selectedBooking.adult_qty || selectedBooking.ticket_qty || 0}</div>
-                  <div>Kid 1: {selectedBooking.kid1_qty ?? 0}</div>
-                  <div>Kid 2: {selectedBooking.kid2_qty ?? 0}</div>
+                <div className="text-xs text-slate-300 font-semibold space-y-1 pt-1">
+                  <div>Adult: <span className="font-bold text-white">{selectedBooking.adult_qty ?? Math.max(0, (selectedBooking.ticket_qty || 0) - (selectedBooking.kid1_qty || 0) - (selectedBooking.kid2_qty || 0))}</span></div>
+                  <div>Kid 1: <span className="font-bold text-white">{selectedBooking.kid1_qty ?? 0}</span></div>
+                  <div>Kid 2: <span className="font-bold text-white">{selectedBooking.kid2_qty ?? 0}</span></div>
                 </div>
               </div>
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Tag, Package as PackageIcon } from "lucide-react";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { supabase } from "@/lib/supabase";
 
 export type PackageItem = {
   name: string;
@@ -69,13 +70,125 @@ export default function OffersView({
   accommodationCards,
 }: OffersViewProps) {
   const [activeTab, setActiveTab] = useState<"packages" | "offers">("packages");
+  const [liveOffers, setLiveOffers] = useState<OfferCardItem[]>(offerCards);
+  const [livePackages, setLivePackages] = useState<PackageItem[]>(packageCards);
+  const [liveAccommodation, setLiveAccommodation] = useState<PackageItem[]>(accommodationCards);
 
   useEffect(() => {
     // Sync with URL hash if loaded with #packages-list
     if (typeof window !== "undefined" && window.location.hash === "#packages-list") {
       setActiveTab("packages");
     }
-  }, []);
+
+    async function fetchLivePackages() {
+      try {
+        const { data: dbAll, error } = await supabase
+          .from('packages')
+          .select('*')
+          .order('display_order', { ascending: true });
+
+        if (error || !dbAll || dbAll.length === 0) return;
+
+        const now = Date.now();
+        const visiblePackages = dbAll.filter(
+          (item: any) =>
+            item.is_hidden !== true &&
+            (!item.hide_after || new Date(item.hide_after).getTime() > now)
+        );
+
+        if (visiblePackages.length === 0) return;
+
+        const resolveBillingLink = (planId: string | undefined, groupPrice?: number | null) => {
+          const link = planId ? `/billing?planId=${encodeURIComponent(planId)}` : '/billing';
+          if (groupPrice == null) return link;
+          const separator = link.includes('?') ? '&' : '?';
+          return `${link}${separator}groupPrice=${groupPrice}`;
+        };
+
+        const offers = visiblePackages.filter((item: any) => item.category === 'offer');
+        const packages = visiblePackages.filter((item: any) => item.category === 'package');
+        const accommodation = visiblePackages.filter((item: any) => item.category === 'accommodation');
+
+        if (offers.length > 0) {
+          const mappedOffers: OfferCardItem[] = offers.map((item: any) => {
+            const ticketOpts = Array.isArray(item.ticket_options) ? item.ticket_options : [];
+            const singleOpt = ticketOpts.find((o: any) => String(o.id ?? '').includes('single') || String(o.label ?? '').toLowerCase().includes('single'));
+            const groupOpt = ticketOpts.find((o: any) => String(o.id ?? '').includes('group') || String(o.label ?? '').toLowerCase().includes('group'));
+
+            return {
+              title: item.name,
+              image: item.image,
+              alt: item.name,
+              highlight: item.highlight || '',
+              description: item.description || '',
+              oldPrice: item.original_price ? `₹${item.original_price}` : '',
+              newPrice: `₹${item.discounted_price}`,
+              badge: item.tag || 'Special Offer',
+              cta: item.cta || 'Book Now',
+              link: resolveBillingLink(item.plan_id, groupOpt?.price != null ? Number(groupOpt.price) : null),
+              footer: item.footer || '',
+              note: item.consent_text || '',
+              singlePrice: singleOpt?.price != null ? Number(singleOpt.price) : null,
+              groupPrice: groupOpt?.price != null ? Number(groupOpt.price) : null,
+            };
+          });
+          setLiveOffers(mappedOffers);
+        }
+
+        if (packages.length > 0) {
+          const mappedPackages: PackageItem[] = packages.map((item: any) => {
+            const ticketOpts = Array.isArray(item.ticket_options) ? item.ticket_options : [];
+            const singleOpt = ticketOpts.find((o: any) => String(o.id ?? '').includes('single') || String(o.label ?? '').toLowerCase().includes('single'));
+            const groupOpt = ticketOpts.find((o: any) => String(o.id ?? '').includes('group') || String(o.label ?? '').toLowerCase().includes('group'));
+
+            return {
+              name: item.name,
+              image: item.image,
+              originalPrice: item.original_price ? `₹${item.original_price}` : '',
+              discountedPrice: `₹${item.discounted_price}`,
+              tag: item.tag || undefined,
+              description: item.description || '',
+              inclusions: Array.isArray(item.inclusions) ? item.inclusions : [],
+              note: item.consent_text || '',
+              cta: item.cta || 'Book Now',
+              link: resolveBillingLink(item.plan_id, groupOpt?.price != null ? Number(groupOpt.price) : null),
+              singlePrice: singleOpt?.price != null ? Number(singleOpt.price) : null,
+              groupPrice: groupOpt?.price != null ? Number(groupOpt.price) : null,
+            };
+          });
+          setLivePackages(mappedPackages);
+        }
+
+        if (accommodation.length > 0) {
+          const mappedAccommodation: PackageItem[] = accommodation.map((item: any) => {
+            const ticketOpts = Array.isArray(item.ticket_options) ? item.ticket_options : [];
+            const singleOpt = ticketOpts.find((o: any) => String(o.id ?? '').includes('single') || String(o.label ?? '').toLowerCase().includes('single'));
+            const groupOpt = ticketOpts.find((o: any) => String(o.id ?? '').includes('group') || String(o.label ?? '').toLowerCase().includes('group'));
+
+            return {
+              name: item.name,
+              image: item.image,
+              originalPrice: item.original_price ? `₹${item.original_price}` : '',
+              discountedPrice: `₹${item.discounted_price}`,
+              tag: item.tag || undefined,
+              description: item.description || '',
+              inclusions: Array.isArray(item.inclusions) ? item.inclusions : [],
+              note: item.consent_text || '',
+              cta: item.cta || 'Book Now',
+              link: resolveBillingLink(item.plan_id, groupOpt?.price != null ? Number(groupOpt.price) : null),
+              singlePrice: singleOpt?.price != null ? Number(singleOpt.price) : null,
+              groupPrice: groupOpt?.price != null ? Number(groupOpt.price) : null,
+            };
+          });
+          setLiveAccommodation(mappedAccommodation);
+        }
+      } catch (err) {
+        console.error("Error fetching live packages in client component:", err);
+      }
+    }
+
+    fetchLivePackages();
+  }, [offerCards, packageCards, accommodationCards]);
 
   return (
     <div className="pt-4">
@@ -100,7 +213,7 @@ export default function OffersView({
                 : "bg-slate-800 text-slate-400"
                 }`}
             >
-              {packageCards.length + accommodationCards.length}
+              {livePackages.length + liveAccommodation.length}
             </span>
           </button>
 
@@ -120,7 +233,7 @@ export default function OffersView({
                 : "bg-slate-800 text-slate-400"
                 }`}
             >
-              {offerCards.length}
+              {liveOffers.length}
             </span>
           </button>
         </div>
@@ -146,7 +259,7 @@ export default function OffersView({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {offerCards.map((offer) => (
+            {liveOffers.map((offer) => (
               <Link
                 key={offer.title}
                 href={offer.link}
@@ -273,7 +386,7 @@ export default function OffersView({
 
             <div id="packages-list" className="max-w-7xl mx-auto px-4 md:px-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {packageCards.map((pkg) => {
+                {livePackages.map((pkg) => {
                   const originalVal = pkg.originalPrice
                     ? parseInt(pkg.originalPrice.replace(/[^\d]/g, ""))
                     : 0;
@@ -398,7 +511,7 @@ export default function OffersView({
           </section>
 
           {/* STAY & ACCOMMODATION PACKAGES */}
-          {accommodationCards.length > 0 && (
+          {liveAccommodation.length > 0 && (
             <section className="max-w-7xl mx-auto px-4 md:px-8 py-12">
               <div className="text-center mb-8">
                 <p className="text-xs font-bold uppercase tracking-widest text-amber-400">
@@ -418,7 +531,7 @@ export default function OffersView({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
-                {accommodationCards.map((pkg) => {
+                {liveAccommodation.map((pkg) => {
                   const originalVal = pkg.originalPrice
                     ? parseInt(pkg.originalPrice.replace(/[^\d]/g, ""))
                     : 0;

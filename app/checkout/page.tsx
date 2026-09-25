@@ -198,6 +198,9 @@ const CheckoutPageContent = () => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'offer' | 'package' | 'accommodation'>('all')
   const [selectedTicketType, setSelectedTicketType] = useState('')
+  const [adultQty, setAdultQty] = useState(1)
+  const [kids1Qty, setKids1Qty] = useState(0)
+  const [kids2Qty, setKids2Qty] = useState(0)
   const [ticketQty, setTicketQty] = useState(1)
   const [consentAccepted, setConsentAccepted] = useState(false)
   const [rulesAccepted, setRulesAccepted] = useState(false)
@@ -399,9 +402,11 @@ const CheckoutPageContent = () => {
     return diffDays > 0 ? diffDays : 1;
   }, [isAccommodationSelected, checkInDate, checkOutDate]);
 
-  const ticketSubtotal = activeTicketType
-    ? activeTicketType.price * ticketQty * (isAccommodationSelected ? numberOfNights : 1)
-    : 0;
+  const baseTicketPrice = activeTicketType ? activeTicketType.price : 0;
+  const weightedTicketQty = adultQty + kids1Qty * 0.75 + kids2Qty * 0.5;
+  const ticketSubtotal = Math.round(
+    baseTicketPrice * weightedTicketQty * (isAccommodationSelected ? numberOfNights : 1)
+  );
   const addOnSubtotal = activeAddOns.reduce(
     (sum, addon) => sum + addon.price * (addOnQuantities[addon.id] || 0),
     0
@@ -490,9 +495,9 @@ const CheckoutPageContent = () => {
           mobile: mobile.trim(),
           email: email.trim(),
           city: city.trim(),
-          adultQty: ticketQty,
-          kids1Qty: 0,
-          kids2Qty: 0,
+          adultQty,
+          kids1Qty,
+          kids2Qty,
           visitDate: effectiveVisitDate,
           checkInDate: isAccommodationSelected ? checkInDate : undefined,
           checkOutDate: isAccommodationSelected ? checkOutDate : undefined,
@@ -522,9 +527,9 @@ const CheckoutPageContent = () => {
         mobile: mobile.trim(),
         email: email.trim(),
         city: city.trim(),
-        adultQty: ticketQty,
-        kids1Qty: 0,
-        kids2Qty: 0,
+        adultQty,
+        kids1Qty,
+        kids2Qty,
         bookedDate: new Date().toISOString(),
         visitDate: effectiveVisitDate,
         checkInDate: isAccommodationSelected ? checkInDate : undefined,
@@ -1086,33 +1091,101 @@ const CheckoutPageContent = () => {
           </aside>
 
                 <div className="rounded-xl border border-slate-200 p-4 space-y-4">
+                  {/* Adult Quantity */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold">Ticket: {activeTicketTypeLabel}</p>
-                      <p className="text-sm text-slate-500">₹{activeTicketTypePrice} per ticket</p>
+                      <p className="font-semibold">Adult: 100% price (₹{activeTicketTypePrice}/ticket)</p>
+                      <p className="text-sm text-slate-500">Regular adult entry</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => updateQty(ticketQty, 'dec', setTicketQty, 0)}
+                        onClick={() => {
+                          const nextAdult = Math.max(0, adultQty - 1)
+                          setAdultQty(nextAdult)
+                          setTicketQty(nextAdult + kids1Qty + kids2Qty)
+                        }}
                         className="h-8 w-8 rounded-lg border border-slate-300 text-base"
                       >
                         -
                       </button>
-                      <span className="font-bold min-w-8 text-center">{ticketQty}</span>
+                      <span className="font-bold min-w-8 text-center">{adultQty}</span>
                       <button
                         type="button"
-                        onClick={() => updateQty(ticketQty, 'inc', setTicketQty, 0)}
+                        onClick={() => {
+                          const nextAdult = adultQty + 1
+                          setAdultQty(nextAdult)
+                          setTicketQty(nextAdult + kids1Qty + kids2Qty)
+                        }}
                         className="h-8 w-8 rounded-lg border border-slate-300 text-base"
                       >
                         +
                       </button>
+                    </div>
+                  </div>
+
+                  {/* Kids 1 Quantity */}
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div>
+                      <p className="font-semibold">Kids 1: 121 cm - 140 cm / 5 to 10 yrs</p>
+                      <p className="text-sm text-slate-500">75% of adult price (₹{(activeTicketTypePrice * 0.75).toFixed(0)}/ticket)</p>
+                    </div>
+                    <div className="flex items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => setTicketQty(0)}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-semibold"
+                        onClick={() => {
+                          const nextKids1 = Math.max(0, kids1Qty - 1)
+                          setKids1Qty(nextKids1)
+                          setTicketQty(adultQty + nextKids1 + kids2Qty)
+                        }}
+                        className="h-8 w-8 rounded-lg border border-slate-300 text-base"
                       >
-                        Delete
+                        -
+                      </button>
+                      <span className="font-bold min-w-8 text-center">{kids1Qty}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const nextKids1 = kids1Qty + 1
+                          setKids1Qty(nextKids1)
+                          setTicketQty(adultQty + nextKids1 + kids2Qty)
+                        }}
+                        className="h-8 w-8 rounded-lg border border-slate-300 text-base"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Kids 2 Quantity */}
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div>
+                      <p className="font-semibold">Kids 2: 100 cm - 120 cm / 3 to 5 yrs</p>
+                      <p className="text-sm text-slate-500">50% of adult price (₹{(activeTicketTypePrice * 0.5).toFixed(0)}/ticket)</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const nextKids2 = Math.max(0, kids2Qty - 1)
+                          setKids2Qty(nextKids2)
+                          setTicketQty(adultQty + kids1Qty + nextKids2)
+                        }}
+                        className="h-8 w-8 rounded-lg border border-slate-300 text-base"
+                      >
+                        -
+                      </button>
+                      <span className="font-bold min-w-8 text-center">{kids2Qty}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const nextKids2 = kids2Qty + 1
+                          setKids2Qty(nextKids2)
+                          setTicketQty(adultQty + kids1Qty + nextKids2)
+                        }}
+                        className="h-8 w-8 rounded-lg border border-slate-300 text-base"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
