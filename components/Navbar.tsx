@@ -65,7 +65,11 @@ const defaultParksDropdownItems: ActivityItem[] = [
   },
 ];
 
-const Navbar = () => {
+interface NavbarProps {
+  initialActivities?: ActivityItem[];
+}
+
+const Navbar: React.FC<NavbarProps> = ({ initialActivities }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +78,7 @@ const Navbar = () => {
     useState<string | null>(null);
 
   const [activitiesList, setActivitiesList] = useState<ActivityItem[]>(
-    defaultParksDropdownItems
+    () => initialActivities || defaultParksDropdownItems
   );
 
   const closeMobileMenu = () => {
@@ -92,7 +96,7 @@ const Navbar = () => {
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -119,6 +123,7 @@ const Navbar = () => {
   -------------------------------- */
   useEffect(() => {
     let mounted = true;
+    if (initialActivities) return;
     async function loadActivities() {
       if (cachedNavbarActivities) {
         setActivitiesList(cachedNavbarActivities);
@@ -154,7 +159,7 @@ const Navbar = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [initialActivities]);
 
   /* --------------------------------
      Navigation Links

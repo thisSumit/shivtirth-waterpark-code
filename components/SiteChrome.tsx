@@ -4,11 +4,14 @@ import { usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import PopUp from '@/components/PopUp';
 import WhatsAppFloatingButton from '@/components/WhatsAppFloatingButton';
-import Preloader from '@/components/Preloader';
 
 const hiddenRoutes = ['/checkout/confirm', '/checkout/failed'];
 
-const SiteChrome = () => {
+interface SiteChromeProps {
+  initialActivities?: Array<{ name: string; id?: string; href?: string }>;
+}
+
+const SiteChrome: React.FC<SiteChromeProps> = ({ initialActivities }) => {
   const pathname = usePathname();
 
   if (hiddenRoutes.includes(pathname) || pathname.startsWith('/admin')) {
@@ -17,8 +20,7 @@ const SiteChrome = () => {
 
   return (
     <>
-      <Preloader />
-      <Navbar />
+      <Navbar initialActivities={initialActivities} />
       <PopUp />
       <WhatsAppFloatingButton />
     </>

@@ -9,12 +9,23 @@ import { ChevronDown, Sparkles } from 'lucide-react';
 
 let cachedHeroData: any = null;
 
-const Hero = () => {
-  const [heroData, setHeroData] = useState(() => cachedHeroData || {
+interface HeroProps {
+  initialData?: {
+    title1: string;
+    title2: string;
+    description: string;
+    videoUrl: string;
+    posterUrl: string;
+    subTitle: string;
+  };
+}
+
+const Hero: React.FC<HeroProps> = ({ initialData }) => {
+  const [heroData, setHeroData] = useState(() => initialData || cachedHeroData || {
     title1: "Shivtirth",
     title2: "Best Water Park & Resorts",
     description: "Waterpark | Boating Park | Adventure Park | Amusement Park | Safari | Bird Park | Agro Park | Helicopter Ride | Wedding | Accommodation | Corporate Events | Festival Celebrations | Birthday Events | Special School Picnic",
-    videoUrl: "/hero.mp4",
+    videoUrl: "/",
     posterUrl: "/p6.jpg",
     subTitle: "मौज मस्ती चाहिये, शिवतीर्थ आइए"
   });
@@ -38,6 +49,7 @@ const Hero = () => {
 
   useEffect(() => {
     let mounted = true;
+    if (initialData) return;
     async function fetchHero() {
       if (cachedHeroData) return;
       try {
@@ -52,7 +64,7 @@ const Hero = () => {
             title1: data.content.title1 || data.content.title || "Shivtirth",
             title2: data.content.title2 || "Best Water Park & Resorts",
             description: data.content.description || "Waterpark | Boating Park | Adventure Park | Amusement Park | Safari | Bird Park | Agro Park | Helicopter Ride | Wedding | Accommodation | Corporate Events | Festival Celebrations | Birthday Events | Special School Picnic",
-            videoUrl: (rawVideo && rawVideo.trim()) ? rawVideo.trim() : '/hero.mp4',
+            videoUrl: (rawVideo && rawVideo.trim()) ? rawVideo.trim() : '/',
             posterUrl: data.content.bgImageUrl || data.content.posterUrl || "/p6.jpg",
             subTitle: data.content.subTitle || "मौज मस्ती चाहिये, शिवतीर्थ आइए",
           };
@@ -67,7 +79,7 @@ const Hero = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [initialData]);
 
   return (
     <>
@@ -82,18 +94,18 @@ const Hero = () => {
             loop
             muted
             playsInline
-            preload="none"
+            preload="auto"
             className='h-full w-full object-cover'
             src={heroData.videoUrl || "/hero.mp4"}
             poster={heroData.posterUrl}
             onLoadedData={(e) => {
-              e.currentTarget.play().catch(() => {});
+              e.currentTarget.play().catch(() => { });
             }}
             onError={(e) => {
               const target = e.currentTarget as HTMLVideoElement;
               if (target.src && !target.src.includes('/main.mp4')) {
                 target.src = '/main.mp4';
-                target.play().catch(() => {});
+                target.play().catch(() => { });
               }
             }}
           />

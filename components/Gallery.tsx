@@ -28,23 +28,27 @@ const mediaItems: MediaItem[] = [
     url: "https://www.youtube.com/shorts/ciOg6AOlTzE",
   },
   { type: "image", src: "/birdspark-1.jpg" },
-  { type: "image", src: "/p1.jpeg" },
   { type: "image", src: "/adventure.jpg" },
   { type: "image", src: "/ag4.jpg" },
 ];
 
 let cachedGalleryMedia: MediaItem[] | null = null;
 
-export default function GalleryAutoScroll() {
+interface GalleryProps {
+  initialMedia?: MediaItem[];
+}
+
+export default function GalleryAutoScroll({ initialMedia }: GalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const startScrollLeftRef = useRef(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [activeMedia, setActiveMedia] = useState<MediaItem[]>(() => cachedGalleryMedia || mediaItems);
+  const [activeMedia, setActiveMedia] = useState<MediaItem[]>(() => initialMedia || cachedGalleryMedia || mediaItems);
 
   useEffect(() => {
     let mounted = true;
+    if (initialMedia) return;
     async function fetchGallery() {
       if (cachedGalleryMedia) return;
       try {
@@ -71,7 +75,7 @@ export default function GalleryAutoScroll() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [initialMedia]);
 
   useEffect(() => {
     const container = scrollRef.current;

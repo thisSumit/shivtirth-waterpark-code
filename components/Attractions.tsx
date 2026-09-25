@@ -95,10 +95,25 @@ const initialAttractionsData: AttractionItem[] = [
   },
 ];
 
-const Attractions: React.FC = () => {
-  const [attractions, setAttractions] = useState<AttractionItem[]>(initialAttractionsData);
+interface AttractionsProps {
+  initialVideos?: Record<string, string>;
+}
+
+const Attractions: React.FC<AttractionsProps> = ({ initialVideos }) => {
+  const [attractions, setAttractions] = useState<AttractionItem[]>(() => {
+    if (initialVideos) {
+      return initialAttractionsData.map((item) => {
+        if (initialVideos[item.id] && initialVideos[item.id].trim() !== "") {
+          return { ...item, videoUrl: initialVideos[item.id] };
+        }
+        return item;
+      });
+    }
+    return initialAttractionsData;
+  });
 
   useEffect(() => {
+    if (initialVideos) return;
     async function fetchCuratedVideos() {
       try {
         const { data, error } = await supabase
@@ -127,7 +142,7 @@ const Attractions: React.FC = () => {
     }
 
     fetchCuratedVideos();
-  }, []);
+  }, [initialVideos]);
 
   const checkIsVideo = (url?: string) => {
     if (!url) return false;
@@ -171,7 +186,7 @@ const Attractions: React.FC = () => {
                       loop
                       muted
                       playsInline
-                      preload="none"
+                      preload="metadata"
                       src={item.videoUrl || "/main.mp4"}
                       poster={getOptimizedMediaUrl(item.posterUrl) || undefined}
                       onLoadedData={(e) => {

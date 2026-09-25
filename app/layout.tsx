@@ -92,11 +92,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+import { getNavbarActivities } from "@/lib/data-fetchers";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navbarActivities = await getNavbarActivities();
+
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -171,7 +175,7 @@ export default function RootLayout({
       <body
         className={`${montserrat.className} ${montserrat.variable} ${poppins.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <SiteChrome />
+        <SiteChrome initialActivities={navbarActivities} />
         <main className="flex-1">{children}</main>
         <SiteFooter />
       </body>

@@ -25,17 +25,17 @@ const defaultAdventureSlides: AdventureSlide[] = [
   {
     title: 'Rope Bridges & Obstacles',
     description: 'Challenge your balance and confidence across various elevated rope crossings designed for fun and adventure.',
-    image: '/high-rope.jpeg',
+    image: '/burma-bridges.jpg',
   },
   {
     title: 'Commando Tower',
     description: 'Test your strength and endurance as you climb up and conquer the commando tower obstacle.',
-    image: '/climbing.jpeg',
+    image: '/commando-tower.jpeg',
   },
   {
     title: 'Tyre & Burma Bridges',
     description: 'Navigate through suspended tyre bridges and classic Burma bridges for an authentic jungle adventure experience.',
-    image: '/mowgli-adventure.jpg',
+    image: '/burma-bridge.jpg',
   },
   {
     title: 'Tree House & Nature Trail',
