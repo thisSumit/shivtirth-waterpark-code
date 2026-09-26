@@ -379,7 +379,7 @@ const InfluencerCollab = () => {
 
       <section className="px-4 py-8 md:px-8">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-100 bg-white p-6 shadow-lg md:p-8">
-          <h3 className="mb-6 text-2xl font-black  ">Brand Guidelines To Follow</h3>
+          <h3 className="mb-6 text-2xl font-bold">Brand Guidelines To Follow</h3>
           <ol className="grid grid-cols-1 gap-3 text-sm text-slate-700 md:grid-cols-2">
             {brandGuidelines.map((item, index) => (
               <li key={item} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -392,11 +392,11 @@ const InfluencerCollab = () => {
 
       <section className="px-4 pb-8 pt-6 md:px-8">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-100 bg-white p-6 shadow-lg md:p-8">
-          <h3 className="mb-6 text-2xl font-black  ">Collaboration Opportunities</h3>
+          <h3 className="mb-6 text-2xl font-bold">Collaboration Opportunities</h3>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {opportunities.map((item) => (
               <article key={item.title} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                <h4 className="mb-2 text-lg font-black">{item.title}</h4>
+                <h4 className="mb-2 text-lg font-bold">{item.title}</h4>
                 <p className="text-sm text-slate-700">{item.description}</p>
               </article>
             ))}

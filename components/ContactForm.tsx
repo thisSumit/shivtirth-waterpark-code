@@ -120,14 +120,14 @@ const ContactForm = () => {
                         </svg>
                       </span>
                       <span>
-                        <p className="text-sm text-slate-500 mb-1">Support Call Lines</p>
+                        <p className="text-sm text-slate-500 mb-1">Contact Number</p>
                         <div className="flex flex-col gap-0.5">
                           <Link href={`tel:${settings.contactPhone}`} className="font-medium hover:text-slate-900 transition-colors">
-                            Line 1: {settings.contactPhone}
+                            {settings.contactPhone}
                           </Link>
                           {settings.contactPhone2 && (
                             <Link href={`tel:${settings.contactPhone2}`} className="font-medium hover:text-slate-900 transition-colors">
-                              Line 2: {settings.contactPhone2}
+                              {settings.contactPhone2}
                             </Link>
                           )}
                         </div>
