@@ -159,7 +159,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
     <ScrollReveal direction="up" delay={0.1} duration={0.6}>
       <div
         id={getSectionId(item.name)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-slate-50 border border-slate-200 p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md transition"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center bg-black/30 backdrop-blur-md border border-cyan-400/20 p-4 md:p-6 rounded-2xl shadow-xl hover:border-amber-400/40 transition"
       >
         {/* Media Column */}
         <div className={`order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
@@ -193,13 +193,13 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
         {/* Content Column */}
         <div className={`order-2 ${isEven ? "md:order-2" : "md:order-1"} flex flex-col justify-center space-y-3`}>
           <h3
-            className="text-2xl font-bold text-slate-900 font-times mb-2"
+            className="text-2xl font-bold text-white font-times mb-2"
             style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
           >
             {item.name}
           </h3>
 
-          <p className="text-sm text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm text-cyan-100/90 leading-relaxed font-normal">
             {item.description}
           </p>
 
@@ -209,7 +209,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
               {item.features.map((feature, fIdx) => (
                 <span
                   key={`${item.name}-feature-${fIdx}`}
-                  className="inline-block px-2.5 py-1 bg-amber-50 border border-amber-300/60 rounded-full text-sm font-semibold text-slate-800 hover:bg-amber-100 transition"
+                  className="inline-block px-2.5 py-1 bg-amber-400/10 border border-amber-400/30 rounded-full text-xs font-semibold text-amber-300 hover:bg-amber-400/20 transition"
                 >
                   {feature}
                 </span>
@@ -221,7 +221,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ item, index }) =>
           <div className="flex flex-wrap gap-3 pt-2">
             <Link
               href="tel:+918605362212"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition shadow-md"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-slate-950 font-bold text-sm uppercase tracking-wider hover:bg-amber-300 transition shadow-lg"
             >
               Call to Plan & Book
             </Link>
@@ -290,7 +290,7 @@ export default function AccommodationPage() {
   }, []);
 
   return (
-    <main id="about-park" className="min-h-screen bg-white text-slate-900">
+    <main id="about-park" className="min-h-screen bg-gradient-to-b from-cyan-950 via-slate-950 to-cyan-950 text-slate-100 pb-16">
       {/* Hero Section */}
       <section className="relative">
         <div className="relative h-[52vh] md:h-[65vh] overflow-hidden">
@@ -312,7 +312,7 @@ export default function AccommodationPage() {
               priority
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-black/60 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-cyan-950 via-cyan-950/40 to-black/60 pointer-events-none" />
 
           <div className="absolute left-0 right-0 bottom-6 md:bottom-10 px-6 flex justify-center">
             <div className="max-w-4xl text-center">
@@ -331,10 +331,10 @@ export default function AccommodationPage() {
       </section>
 
       {/* Accommodation Cards Section */}
-      <section className="pt-4 pb-10 md:pb-14 bg-white text-slate-900">
+      <section className="pt-4 pb-10 md:pb-14 bg-gradient-to-br from-[#023047] via-[#005f73] to-[#004e64] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
-            <p className="text-slate-600 mb-8 text-sm leading-relaxed max-w-2xl">
+            <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">
               {headerDesc}
             </p>
           </ScrollReveal>
@@ -351,17 +351,17 @@ export default function AccommodationPage() {
       <section className="mx-auto max-w-6xl px-4 pt-6 pb-6">
         <ScrollReveal direction="up" delay={0.2}>
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 shadow-sm border border-slate-200">
+            <div className="rounded-2xl bg-white/10 backdrop-blur-xl text-slate-100 p-5 shadow-lg border border-white/15">
               <h3
-                className="text-lg md:text-xl font-bold text-[#288382] font-times mb-3"
+                className="text-lg md:text-xl font-bold text-amber-300 font-times mb-3"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
                 Facilities
               </h3>
               <ul className="space-y-2.5">
                 {accommodationFacilities.map((facility) => (
-                  <li key={facility} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-amber-100 text-amber-700 shrink-0">
+                  <li key={facility} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-200">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-amber-400/20 text-amber-300 shrink-0">
                       <BadgeCheck className="h-3 w-3" />
                     </span>
                     <span>{facility}</span>
@@ -370,17 +370,17 @@ export default function AccommodationPage() {
               </ul>
             </div>
 
-            <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 shadow-sm border border-slate-200">
+            <div className="rounded-2xl bg-white/10 backdrop-blur-xl text-slate-100 p-5 shadow-lg border border-white/15">
               <h3
-                className="text-lg md:text-xl font-bold text-[#288382] font-times mb-3"
+                className="text-lg md:text-xl font-bold text-amber-300 font-times mb-3"
                 style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
               >
                 Rules & Regulations
               </h3>
               <ul className="space-y-2.5">
                 {accommodationRules.map((rule) => (
-                  <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-700">
-                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
+                  <li key={rule} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-200">
+                    <span className="mt-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-400/20 text-emerald-300 shrink-0">
                       <ShieldCheck className="h-3 w-3" />
                     </span>
                     <span>{rule}</span>
@@ -395,20 +395,20 @@ export default function AccommodationPage() {
       {/* FAQ */}
       <section className="mx-auto max-w-6xl px-4 py-6 pb-12">
         <ScrollReveal direction="up" delay={0.25}>
-          <div className="rounded-2xl bg-slate-50 text-slate-900 p-5 md:p-6 shadow-sm border border-slate-200">
+          <div className="rounded-2xl bg-white/10 backdrop-blur-xl text-slate-100 p-5 md:p-6 shadow-lg border border-white/15">
             <h3
-              className="text-lg md:text-xl font-bold text-[#288382] font-times mb-3"
+              className="text-lg md:text-xl font-bold text-amber-300 font-times mb-3"
               style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}
             >
               Frequently Asked Questions
             </h3>
             <Accordion type="single" collapsible className="w-full">
               {accommodationFaqs.map((faq, idx) => (
-                <AccordionItem key={idx} value={`acc-faq-${idx}`} className="border-slate-200">
-                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-slate-900 hover:text-amber-600 text-left">
+                <AccordionItem key={idx} value={`acc-faq-${idx}`} className="border-white/15">
+                  <AccordionTrigger className="text-xs md:text-sm font-semibold text-white hover:text-amber-300 text-left">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-xs md:text-sm text-slate-600 leading-relaxed">
+                  <AccordionContent className="text-xs md:text-sm text-slate-300 leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
