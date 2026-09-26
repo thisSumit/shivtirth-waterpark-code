@@ -160,7 +160,7 @@ export default function PaymentConfirmContent() {
                   <div className="space-y-1 text-[11px] md:text-xs">
                     <p className="flex justify-between">
                       <span>• Adult: 100% price (₹{booking?.ticketPrice || 690}/ticket)</span>
-                      <span className="font-bold">Qty: {booking?.adultQty ?? Math.max(0, (booking?.ticketQty || 0) - (booking?.kids1Qty || 0) - (booking?.kids2Qty || 0))}</span>
+                      <span className="font-bold">Qty: {(booking?.adultQty && booking.adultQty > 0) ? booking.adultQty : Math.max(0, (booking?.ticketQty || 0) - (booking?.kids1Qty || 0) - (booking?.kids2Qty || 0))}</span>
                     </p>
                     <p className="flex justify-between">
                       <span>• Kids 1: 121 cm - 140 cm / 5 to 10 yrs</span>

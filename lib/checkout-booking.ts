@@ -48,8 +48,12 @@ export type SheetSubmissionPayload = CheckoutBooking & {
 
 export type PayuCallbackPayload = Record<string, string>
 
-const readNumber = (value: string | undefined, fallback = 0) => {
-  const parsed = Number(value)
+const readNumber = (value: string | number | undefined, fallback = 0) => {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : fallback
+  if (!value) return fallback
+  const str = String(value).trim()
+  const leading = str.split(/[:|_\s]/)[0]
+  const parsed = Number(leading)
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
@@ -115,6 +119,22 @@ export const buildBookingFromPayuCallback = (
   const kids2QtyFromProduct = detailMeta[2] ? Number(detailMeta[2]) : 0
   const cityFromProduct = detailMeta[3] || ''
 
+  let adultQtyFromUdf: number | undefined
+  let kids1QtyFromUdf: number | undefined
+  let kids2QtyFromUdf: number | undefined
+
+  if (payload.udf4 && payload.udf4.includes(':')) {
+    const parts = payload.udf4.split(':')
+    if (parts[1]) {
+      const breakdown = parts[1].split(',')
+      if (breakdown.length >= 3) {
+        adultQtyFromUdf = Number(breakdown[0])
+        kids1QtyFromUdf = Number(breakdown[1])
+        kids2QtyFromUdf = Number(breakdown[2])
+      }
+    }
+  }
+
   const addOnSummary = payload.udf3 || 'None'
   const derivedAddOnSubtotal = parseAddOnSubtotalFromSummary(addOnSummary)
   const ticketQty = readNumber(payload.udf4, 0) || ticketQtyFromProduct || 1
@@ -133,11 +153,23 @@ export const buildBookingFromPayuCallback = (
   const mobile = payload.udf9 || payload.phone || payload.mobile || ''
   const email = payload.udf10 || payload.email || ''
   const city = payload.city || cityFromProduct || ''
-  const kids1Qty = readNumber(payload.kids1Qty || payload.udf13, kids1QtyFromProduct)
-  const kids2Qty = readNumber(payload.kids2Qty || payload.udf14, kids2QtyFromProduct)
+  const kids1Qty = readNumber(
+    payload.kids1Qty || payload.udf13,
+    kids1QtyFromUdf !== undefined && Number.isFinite(kids1QtyFromUdf)
+      ? kids1QtyFromUdf
+      : kids1QtyFromProduct
+  )
+  const kids2Qty = readNumber(
+    payload.kids2Qty || payload.udf14,
+    kids2QtyFromUdf !== undefined && Number.isFinite(kids2QtyFromUdf)
+      ? kids2QtyFromUdf
+      : kids2QtyFromProduct
+  )
   const adultQty = readNumber(
     payload.adultQty || payload.udf12,
-    detailMeta[0] !== undefined ? adultQtyFromProduct : Math.max(0, ticketQty - kids1Qty - kids2Qty)
+    adultQtyFromUdf !== undefined && Number.isFinite(adultQtyFromUdf)
+      ? adultQtyFromUdf
+      : (detailMeta[0] !== undefined ? adultQtyFromProduct : Math.max(0, ticketQty - kids1Qty - kids2Qty))
   )
 
   return {

@@ -816,6 +816,110 @@ const CheckoutPageContent = () => {
                                   </div>
                                 </div>
                               )}
+
+                              {/* Guest Quantity Breakdown Selection */}
+                              <div className="mt-3 border-t border-slate-200/80 pt-3 space-y-2 text-xs">
+                                <p className="font-bold text-slate-800">Select Guests Breakdown:</p>
+                                
+                                {/* Adult */}
+                                <div className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+                                  <div>
+                                    <p className="font-semibold text-slate-900">Adult (100% price)</p>
+                                    <p className="text-[11px] text-slate-500">₹{activeTicketTypePrice}/ticket</p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const nextAdult = Math.max(0, adultQty - 1)
+                                        setAdultQty(nextAdult)
+                                        setTicketQty(nextAdult + kids1Qty + kids2Qty)
+                                      }}
+                                      className="h-7 w-7 rounded-lg border border-slate-300 text-sm font-bold bg-slate-50"
+                                    >
+                                      -
+                                    </button>
+                                    <span className="font-bold min-w-6 text-center text-slate-900">{adultQty}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const nextAdult = adultQty + 1
+                                        setAdultQty(nextAdult)
+                                        setTicketQty(nextAdult + kids1Qty + kids2Qty)
+                                      }}
+                                      className="h-7 w-7 rounded-lg border border-slate-300 text-sm font-bold bg-slate-50"
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Kids 1 */}
+                                <div className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+                                  <div>
+                                    <p className="font-semibold text-slate-900">Kids 1 (121 cm - 140 cm / 5-10 yrs)</p>
+                                    <p className="text-[11px] text-slate-500">75% price • ₹{(activeTicketTypePrice * 0.75).toFixed(0)}/ticket</p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const nextKids1 = Math.max(0, kids1Qty - 1)
+                                        setKids1Qty(nextKids1)
+                                        setTicketQty(adultQty + nextKids1 + kids2Qty)
+                                      }}
+                                      className="h-7 w-7 rounded-lg border border-slate-300 text-sm font-bold bg-slate-50"
+                                    >
+                                      -
+                                    </button>
+                                    <span className="font-bold min-w-6 text-center text-slate-900">{kids1Qty}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const nextKids1 = kids1Qty + 1
+                                        setKids1Qty(nextKids1)
+                                        setTicketQty(adultQty + nextKids1 + kids2Qty)
+                                      }}
+                                      className="h-7 w-7 rounded-lg border border-slate-300 text-sm font-bold bg-slate-50"
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Kids 2 */}
+                                <div className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+                                  <div>
+                                    <p className="font-semibold text-slate-900">Kids 2 (100 cm - 120 cm / 3-5 yrs)</p>
+                                    <p className="text-[11px] text-slate-500">50% price • ₹{(activeTicketTypePrice * 0.5).toFixed(0)}/ticket</p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const nextKids2 = Math.max(0, kids2Qty - 1)
+                                        setKids2Qty(nextKids2)
+                                        setTicketQty(adultQty + kids1Qty + nextKids2)
+                                      }}
+                                      className="h-7 w-7 rounded-lg border border-slate-300 text-sm font-bold bg-slate-50"
+                                    >
+                                      -
+                                    </button>
+                                    <span className="font-bold min-w-6 text-center text-slate-900">{kids2Qty}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const nextKids2 = kids2Qty + 1
+                                        setKids2Qty(nextKids2)
+                                        setTicketQty(adultQty + kids1Qty + nextKids2)
+                                      }}
+                                      className="h-7 w-7 rounded-lg border border-slate-300 text-sm font-bold bg-slate-50"
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           )}
                         </div>

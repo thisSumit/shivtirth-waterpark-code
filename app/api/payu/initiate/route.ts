@@ -63,9 +63,11 @@ export async function POST(request: NextRequest) {
       process.env.PAYU_PAYMENT_URL || 'https://secure.payu.in/_payment'
 
     const city = (body.city || '').trim()
-    const adultQty = Number(body.adultQty || 0)
     const kids1Qty = Number(body.kids1Qty || 0)
     const kids2Qty = Number(body.kids2Qty || 0)
+    const ticketQty = Number(body.ticketQty || 1)
+    const rawAdultQty = Number(body.adultQty || 0)
+    const adultQty = rawAdultQty > 0 ? rawAdultQty : Math.max(0, ticketQty - kids1Qty - kids2Qty)
 
     if (!city) {
       return NextResponse.json(
@@ -100,7 +102,7 @@ export async function POST(request: NextRequest) {
     const udf1 = body.visitDate || ''
     const udf2 = body.ticketType || ''
     const udf3 = body.addOnSummary || ''
-    const udf4 = String(body.ticketQty || '')
+    const udf4 = `${body.ticketQty || 1}:${adultQty},${kids1Qty},${kids2Qty}`
     const udf5 = body.planName || ''
     const udf6 = String(body.ticketSubtotal || '')
     const udf7 = String(body.addOnSubtotal || '')

@@ -59,7 +59,9 @@ const processSuccessCallback = async (callbackPayload: Record<string, string>) =
         mobile: existingBooking.mobile || callbackBooking.mobile,
         email: existingBooking.email || callbackBooking.email,
         city: existingBooking.city || callbackBooking.city,
-        adultQty: typeof existingBooking.adult_qty === 'number' ? existingBooking.adult_qty : callbackBooking.adultQty,
+        adultQty: (typeof existingBooking.adult_qty === 'number' && existingBooking.adult_qty > 0)
+          ? existingBooking.adult_qty
+          : (callbackBooking.adultQty || Math.max(0, callbackBooking.ticketQty - (typeof existingBooking?.kid1_qty === 'number' ? existingBooking.kid1_qty : callbackBooking.kids1Qty) - (typeof existingBooking?.kid2_qty === 'number' ? existingBooking.kid2_qty : callbackBooking.kids2Qty))),
         kids1Qty: typeof existingBooking.kid1_qty === 'number' ? existingBooking.kid1_qty : callbackBooking.kids1Qty,
         kids2Qty: typeof existingBooking.kid2_qty === 'number' ? existingBooking.kid2_qty : callbackBooking.kids2Qty,
         bookedDate: existingBooking.booked_date || callbackBooking.bookedDate,

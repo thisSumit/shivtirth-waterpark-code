@@ -36,15 +36,21 @@ export async function GET(request: NextRequest) {
 
     const addOnSummary = data.addon_summary || 'None'
 
+    const kids1Qty = Number(data.kid1_qty || 0)
+    const kids2Qty = Number(data.kid2_qty || 0)
+    const ticketQty = Number(data.ticket_qty || 1)
+    const rawAdult = Number(data.adult_qty || 0)
+    const adultQty = rawAdult > 0 ? rawAdult : Math.max(0, ticketQty - kids1Qty - kids2Qty)
+
     const booking: CheckoutBooking = {
       txnid: data.txnid || txnidParam || '',
       name: data.name || '',
       mobile: data.mobile || '',
       email: data.email || '',
       city: data.city || '',
-      adultQty: Number(data.adult_qty || 0),
-      kids1Qty: Number(data.kid1_qty || 0),
-      kids2Qty: Number(data.kid2_qty || 0),
+      adultQty,
+      kids1Qty,
+      kids2Qty,
       bookedDate: data.booked_date || '',
       visitDate: data.visit_date || '',
       planName: data.plan_name || '',

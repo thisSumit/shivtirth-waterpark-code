@@ -440,7 +440,7 @@ export default function AdminBookingsPage() {
                       {/* Guests Column */}
                       <td className="py-4 px-5 min-w-36">
                         <div className="text-xs text-slate-200 font-medium space-y-0.5">
-                          <div>Adult: <span className="font-bold text-white">{b.adult_qty ?? Math.max(0, (b.ticket_qty || 0) - (b.kid1_qty || 0) - (b.kid2_qty || 0))}</span></div>
+                          <div>Adult: <span className="font-bold text-white">{(b.adult_qty && b.adult_qty > 0) ? b.adult_qty : Math.max(0, (b.ticket_qty || 0) - (b.kid1_qty || 0) - (b.kid2_qty || 0))}</span></div>
                           <div>Kid 1: <span className="font-bold text-white">{b.kid1_qty ?? 0}</span></div>
                           <div>Kid 2: <span className="font-bold text-white">{b.kid2_qty ?? 0}</span></div>
                         </div>
@@ -607,7 +607,7 @@ export default function AdminBookingsPage() {
                   Guests Quantity
                 </span>
                 <div className="text-xs text-slate-300 font-semibold space-y-1 pt-1">
-                  <div>Adult: <span className="font-bold text-white">{selectedBooking.adult_qty ?? Math.max(0, (selectedBooking.ticket_qty || 0) - (selectedBooking.kid1_qty || 0) - (selectedBooking.kid2_qty || 0))}</span></div>
+                  <div>Adult: <span className="font-bold text-white">{(selectedBooking.adult_qty && selectedBooking.adult_qty > 0) ? selectedBooking.adult_qty : Math.max(0, (selectedBooking.ticket_qty || 0) - (selectedBooking.kid1_qty || 0) - (selectedBooking.kid2_qty || 0))}</span></div>
                   <div>Kid 1: <span className="font-bold text-white">{selectedBooking.kid1_qty ?? 0}</span></div>
                   <div>Kid 2: <span className="font-bold text-white">{selectedBooking.kid2_qty ?? 0}</span></div>
                 </div>
