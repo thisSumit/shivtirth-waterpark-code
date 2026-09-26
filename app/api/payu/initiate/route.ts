@@ -1,5 +1,6 @@
 import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
+import { getBaseUrl } from '@/lib/get-base-url'
 
 type CheckoutPayload = {
   name: string
@@ -111,8 +112,9 @@ export async function POST(request: NextRequest) {
     const udf10 = email
 
     // Use API callback routes so PayU can POST response data reliably.
-    const surl = `${request.nextUrl.origin}/api/payu/success`
-    const furl = `${request.nextUrl.origin}/api/payu/failure`
+    const baseUrl = getBaseUrl(request)
+    const surl = `${baseUrl}/api/payu/success`
+    const furl = `${baseUrl}/api/payu/failure`
 
     // Correct PayU request hash formula for the transaction request:
     // key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10|salt

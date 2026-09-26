@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getBaseUrl } from '@/lib/get-base-url'
 import {
   buildBookingFromPayuCallback,
   parseAddOnsFromSummary,
@@ -91,6 +92,7 @@ const processSuccessCallback = async (callbackPayload: Record<string, string>) =
 }
 
 export async function POST(request: NextRequest) {
+  const baseUrl = getBaseUrl(request)
   try {
     const ct = request.headers.get('content-type') || ''
     let payload: unknown = {}
@@ -113,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     const callbackPayload = normalizePayload(payload)
     if (callbackPayload.status && !isSuccessStatus(callbackPayload.status)) {
-      const redirectUrl = new URL('/checkout/confirm', request.nextUrl.origin)
+      const redirectUrl = new URL('/checkout/confirm', baseUrl)
       return NextResponse.redirect(redirectUrl, 303)
     }
 
@@ -121,7 +123,7 @@ export async function POST(request: NextRequest) {
 
     const txnid = getStringValue(payload, ['txnid'])
     const mihpayid = getStringValue(payload, ['mihpayid'])
-    const redirectUrl = new URL('/checkout/confirm', request.nextUrl.origin)
+    const redirectUrl = new URL('/checkout/confirm', baseUrl)
 
     if (txnid) redirectUrl.searchParams.set('txnid', txnid)
     if (mihpayid) redirectUrl.searchParams.set('mihpayid', mihpayid)
@@ -131,24 +133,25 @@ export async function POST(request: NextRequest) {
     console.error('Error handling PayU success callback:', err)
   }
 
-  return NextResponse.redirect(new URL('/checkout/confirm', request.nextUrl.origin), 303)
+  return NextResponse.redirect(new URL('/checkout/confirm', baseUrl), 303)
 }
 
 export async function GET(request: NextRequest) {
+  const baseUrl = getBaseUrl(request)
   try {
     const callbackPayload = Object.fromEntries(request.nextUrl.searchParams.entries())
 
     if (Object.keys(callbackPayload).length) {
       console.log('PayU success GET callback received:', callbackPayload)
       if (callbackPayload.status && !isSuccessStatus(callbackPayload.status)) {
-        return NextResponse.redirect(new URL('/checkout/confirm', request.nextUrl.origin), 303)
+        return NextResponse.redirect(new URL('/checkout/confirm', baseUrl), 303)
       }
       await processSuccessCallback(callbackPayload)
     }
 
     const txnid = callbackPayload.txnid || ''
     const mihpayid = callbackPayload.mihpayid || ''
-    const redirectUrl = new URL('/checkout/confirm', request.nextUrl.origin)
+    const redirectUrl = new URL('/checkout/confirm', baseUrl)
 
     if (txnid) redirectUrl.searchParams.set('txnid', txnid)
     if (mihpayid) redirectUrl.searchParams.set('mihpayid', mihpayid)
@@ -158,5 +161,5 @@ export async function GET(request: NextRequest) {
     console.error('Error handling PayU success GET callback:', err)
   }
 
-  return NextResponse.redirect(new URL('/checkout/confirm', request.nextUrl.origin), 303)
+  return NextResponse.redirect(new URL('/checkout/confirm', baseUrl), 303)
 }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Tag, Package as PackageIcon } from "lucide-react";
+import { Tag, Package as PackageIcon, ShieldCheck, Sparkles, CheckCircle2, Info, Bus, Utensils, Lock, Shirt } from "lucide-react";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { supabase } from "@/lib/supabase";
 
@@ -347,7 +347,7 @@ export default function OffersView({
                     )}
 
                     {/* Note Section */}
-                    <NoteSection note={offer.note} />
+                    {/* <NoteSection note={offer.note} /> */}
                   </div>
 
                   <div className="px-5 pb-5 pt-1 text-slate-900">
@@ -490,7 +490,7 @@ export default function OffersView({
                             ))}
                           </ul>
 
-                          <NoteSection note={pkg.note} />
+                          {/* <NoteSection note={pkg.note} /> */}
                         </div>
                       </div>
 
@@ -612,7 +612,7 @@ export default function OffersView({
                             ))}
                           </ul>
 
-                          <NoteSection note={pkg.note} />
+                          {/* <NoteSection note={pkg.note} /> */}
                         </div>
                       </div>
 
@@ -627,6 +627,52 @@ export default function OffersView({
           )}
         </div>
       )}
+
+      {/* Dynamic Package Notes Section */}
+      <DynamicPackageNotes
+        offers={liveOffers}
+        packages={livePackages}
+        accommodation={liveAccommodation}
+      />
+    </div>
+  );
+}
+
+function DynamicPackageNotes({
+  offers,
+  packages,
+  accommodation,
+}: {
+  offers: OfferCardItem[];
+  packages: PackageItem[];
+  accommodation: PackageItem[];
+}) {
+  const allItems = [...offers, ...packages, ...accommodation];
+  const notes = Array.from(
+    new Set(
+      allItems
+        .map((item) => (item.note || '').trim())
+        .filter((n) => n.length > 0)
+    )
+  );
+
+  if (notes.length === 0) return null;
+
+  return (
+    <div className="mt-6 max-w-6xl mx-auto px-4">
+      <div className="rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-slate-100">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-amber-300 mb-1.5 flex items-center gap-1.5">
+          Note:
+        </p>
+        <div className="space-y-1.5">
+          {notes.map((note, idx) => (
+            <div key={idx} className="flex items-start gap-2 text-xs text-amber-100/90 leading-snug">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400/80 shrink-0 mt-1" />
+              <p className="whitespace-pre-line">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

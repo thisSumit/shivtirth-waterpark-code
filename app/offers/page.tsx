@@ -225,7 +225,8 @@ const Page = async () => {
   let accommodationCards: PackageItem[] = [];
 
   let heroTitle = "Offer & Packages";
-  let heroSub = "Customized and Affordable Various packages designed for every age group having special discounts.";
+  let heroSub = "Special Discounts | Group Offers | Ladies Offer | Combo Packages";
+  let heroDesc = "Customized and Affordable Various packages designed for every age group having special discounts.";
   let heroImage = "/Water-Park.jpg";
   let heroVideo = "";
 
@@ -238,7 +239,8 @@ const Page = async () => {
     if (headerRes.data && headerRes.data.content) {
       const c = headerRes.data.content;
       if (c.title) heroTitle = c.title;
-      if (c.subDescription || c.mainDescription) heroSub = c.subDescription || c.mainDescription;
+      if (c.subDescription) heroSub = c.subDescription;
+      if (c.mainDescription) heroDesc = c.mainDescription;
       if (c.imageUrl) heroImage = c.imageUrl;
       if (c.videoUrl) heroVideo = c.videoUrl;
     }
@@ -501,6 +503,17 @@ const Page = async () => {
           </div>
         </div>
       </div>
+
+      {/* =====================================================
+          DESCRIPTION SECTION
+      ===================================================== */}
+      <section className="pt-4 pb-2 bg-slate-900/90 text-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <p className="text-cyan-100/90 mb-4 text-sm leading-relaxed max-w-2xl">
+            {heroDesc}
+          </p>
+        </div>
+      </section>
 
       {/* =====================================================
           OFFERS & PACKAGES TABS VIEW

@@ -183,7 +183,7 @@ const AdventureParkPage = () => {
       </InteractiveHoverButton>
 
       {/* Attractions Section */}
-      <section className="py-10 md:py-14 bg-gradient-to-br from-[#1b4332] via-[#2d6a4f] to-[#081c15] text-white">
+      <section className="pt-4 pb-10 md:pb-14 bg-gradient-to-br from-[#1b4332] via-[#2d6a4f] to-[#081c15] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <p className="text-emerald-100/90 mb-8 text-sm leading-relaxed max-w-2xl">

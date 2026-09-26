@@ -172,7 +172,7 @@ const BoatingParkPage = () => {
       </InteractiveHoverButton>
 
       {/* Attractions Section */}
-      <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e57] via-[#006d77] to-[#002e34] text-white">
+      <section className="pt-4 pb-10 md:pb-14 bg-gradient-to-br from-[#004e57] via-[#006d77] to-[#002e34] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <p className="text-teal-100/90 mb-8 text-sm leading-relaxed max-w-2xl">

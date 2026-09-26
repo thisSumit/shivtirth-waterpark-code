@@ -331,7 +331,7 @@ export default function AccommodationPage() {
       </section>
 
       {/* Accommodation Cards Section */}
-      <section className="py-10 md:py-14 bg-white text-slate-900">
+      <section className="pt-4 pb-10 md:pb-14 bg-white text-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <p className="text-slate-600 mb-8 text-sm leading-relaxed max-w-2xl">

@@ -196,7 +196,7 @@ const WaterParkPage = () => {
       </InteractiveHoverButton>
 
       {/* Attractions Section */}
-      <section className="py-10 md:py-14 bg-gradient-to-br from-[#004e64] via-[#00a5cf] to-[#003440] text-white">
+      <section className="pt-4 pb-10 md:pb-14 bg-gradient-to-br from-[#004e64] via-[#00a5cf] to-[#003440] text-white">
         <div className="max-w-6xl mx-auto px-4">
           <ScrollReveal direction="up" delay={0.1}>
             <p className="text-cyan-100/90 mb-8 text-sm leading-relaxed max-w-2xl">

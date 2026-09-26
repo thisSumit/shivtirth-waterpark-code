@@ -76,7 +76,7 @@ export const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         className={cn(
-          "text-2xl   font-bold uppercase tracking-tight text-[#288382] font-times",
+          "text-2xl  font-bold uppercase tracking-tight text-black font-times",
           titleClassName
         )}
         style={{ fontFamily: "'Times New Roman', Times, Georgia, serif" }}

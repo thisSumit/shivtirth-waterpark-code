@@ -18,7 +18,7 @@ export default function PaymentFailedPage() {
         </p>
 
         <div className="flex flex-col gap-3">
-          <Link href="/billing" className="rounded-full bg-yellow-400 px-4 py-3 text-center font-bold text-slate-900 shadow-sm transition hover:bg-yellow-300">
+          <Link href="/offers" className="rounded-full bg-yellow-400 px-4 py-3 text-center font-bold text-slate-900 shadow-sm transition hover:bg-yellow-300">
             Retry Payment
           </Link>
           <a

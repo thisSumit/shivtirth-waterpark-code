@@ -211,7 +211,7 @@ const SchoolPicnicPage = () => {
       </InteractiveHoverButton>
 
       {/* ================= ATTRACTIONS ================= */}
-      <section className="py-10 md:py-14 bg-gradient-to-br from-[#35105f] via-[#673a9e] to-[#16072d] text-white">
+      <section className="pt-4 pb-10 md:pb-14 bg-gradient-to-br from-[#35105f] via-[#673a9e] to-[#16072d] text-white">
         <div className="max-w-6xl mx-auto px-4">
 
           <ScrollReveal direction="up" delay={0.1}>
@@ -292,7 +292,24 @@ const SchoolPicnicPage = () => {
             })}
           </div>
         </div>
+
+        <section className="mx-auto max-w-6xl md:max-w-2xl px-4 pt-8 md:pt-12">
+          <ScrollReveal direction="up" delay={0.15}>
+            <div className="overflow-hidden shadow-xl">
+              <div className="relative w-full overflow-hidden rounded-xl">
+                <Image
+                  src="/qoutation.jpeg"
+                  alt="Shivtirth Water Park School Picnic Quotation"
+                  width={100}
+                  height={100}
+                  className="w-full h-auto object-cover rounded-xl shadow-sm hover:scale-[1.01] transition duration-500"
+                />
+              </div>
+            </div>
+          </ScrollReveal>
+        </section>
       </section>
+
 
       {/* ================= FACILITIES & RULES ================= */}
       <section className="mx-auto max-w-6xl px-4 pt-6">

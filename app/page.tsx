@@ -15,7 +15,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="overflow-x-hidden">
+    <main className="overflow-x-hidden bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-200">
       <h1 className="hidden">Best Water Park in Nagpur Shivtirth Water Park</h1>
       <p className="hidden">Looking for the best water park in Nagpur? Shivtirth Water Park near Umari Dam offers thrilling rides, boating, dining and camping for families and groups.</p>
       <Hero initialData={heroData} />

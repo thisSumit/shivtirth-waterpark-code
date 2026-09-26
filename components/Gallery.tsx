@@ -136,7 +136,7 @@ export default function GalleryAutoScroll({ initialMedia }: GalleryProps) {
   };
 
   return (
-    <section className="py-8 bg-background overflow-hidden">
+    <section className="py-8 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
         <AnimatedHeading
           title="Watch Some MOMENTs!"

@@ -25,7 +25,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.shivtirthwaterpark.com"),
+  metadataBase: new URL("https://shivtirth.com"),
   title: {
     default: "Shivtirth Water Park - Best Water Park in Nagpur & Maharashtra",
     template: "%s | Shivtirth Water Park",
@@ -53,13 +53,13 @@ export const metadata: Metadata = {
   creator: "Shivtirth Water Park",
   publisher: "Shivtirth Water Park",
   alternates: {
-    canonical: "https://www.shivtirthwaterpark.com",
+    canonical: "https://shivtirth.com",
   },
   openGraph: {
     title: "Shivtirth Water Park - Best Water Park in Nagpur & Maharashtra",
     description:
       "Experience thrilling water slides, wave pools, boating, bird park, dining and resort camping at Shivtirth Water Park near Umari Dam, Saoner, Nagpur.",
-    url: "https://www.shivtirthwaterpark.com",
+    url: "https://shivtirth.com",
     siteName: "Shivtirth Water Park",
     images: [
       {
@@ -106,12 +106,12 @@ export default async function RootLayout({
     "@graph": [
       {
         "@type": ["WaterPark", "AmusementPark", "Resort"],
-        "@id": "https://www.shivtirthwaterpark.com/#park",
+        "@id": "https://shivtirth.com/#park",
         "name": "Shivtirth Water Park & Resort",
         "alternateName": ["Shivtirth Water Park", "Shivtirth Boating & Adventure Park"],
-        "url": "https://www.shivtirthwaterpark.com",
-        "logo": "https://www.shivtirthwaterpark.com/logo.png",
-        "image": "https://www.shivtirthwaterpark.com/logo.png",
+        "url": "https://shivtirth.com",
+        "logo": "https://shivtirth.com/logo.png",
+        "image": "https://shivtirth.com/logo.png",
         "description": "Premier water park, boating resort, bird sanctuary park, adventure park, and family picnic destination near Umari Dam, Saoner, Nagpur, Maharashtra.",
         "telephone": "+91-8605362212",
         "email": "shivtirthtourism@gmail.com",
@@ -148,10 +148,10 @@ export default async function RootLayout({
       },
       {
         "@type": "WebSite",
-        "@id": "https://www.shivtirthwaterpark.com/#website",
-        "url": "https://www.shivtirthwaterpark.com",
+        "@id": "https://shivtirth.com/#website",
+        "url": "https://shivtirth.com",
         "name": "Shivtirth Water Park",
-        "publisher": { "@id": "https://www.shivtirthwaterpark.com/#park" }
+        "publisher": { "@id": "https://shivtirth.com/#park" }
       }
     ]
   };
@@ -164,7 +164,7 @@ export default async function RootLayout({
         <meta name="geo.placename" content="Nagpur, Maharashtra, India" />
         <meta name="geo.position" content="21.3850;78.9100" />
         <meta name="ICBM" content="21.3850, 78.9100" />
-        <link rel="author" href="https://www.shivtirthwaterpark.com/about" />
+        <link rel="author" href="https://shivtirth.com/about" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

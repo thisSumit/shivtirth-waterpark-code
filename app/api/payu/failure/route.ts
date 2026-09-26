@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getBaseUrl } from '@/lib/get-base-url'
 import {
   buildBookingFromPayuCallback,
   submitBookingToDestinations,
@@ -36,6 +37,7 @@ const processFailureCallback = async (callbackPayload: Record<string, string>) =
 }
 
 export async function POST(request: NextRequest) {
+  const baseUrl = getBaseUrl(request)
   try {
     const ct = request.headers.get('content-type') || ''
     let payload: unknown = {}
@@ -58,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     const callbackPayload = normalizePayload(payload)
     if (!isFailureStatus(callbackPayload.status || '')) {
-      return NextResponse.redirect(new URL('/checkout/failed', request.nextUrl.origin), 303)
+      return NextResponse.redirect(new URL('/checkout/failed', baseUrl), 303)
     }
 
     await processFailureCallback(callbackPayload)
@@ -66,17 +68,18 @@ export async function POST(request: NextRequest) {
     console.error('Error handling PayU failure callback:', err)
   }
 
-  return NextResponse.redirect(new URL('/checkout/failed', request.nextUrl.origin), 303)
+  return NextResponse.redirect(new URL('/checkout/failed', baseUrl), 303)
 }
 
 export async function GET(request: NextRequest) {
+  const baseUrl = getBaseUrl(request)
   try {
     const callbackPayload = Object.fromEntries(request.nextUrl.searchParams.entries())
 
     if (Object.keys(callbackPayload).length) {
       console.log('PayU failure GET callback received:', callbackPayload)
       if (!isFailureStatus(callbackPayload.status || '')) {
-        return NextResponse.redirect(new URL('/checkout/failed', request.nextUrl.origin), 303)
+        return NextResponse.redirect(new URL('/checkout/failed', baseUrl), 303)
       }
       await processFailureCallback(callbackPayload)
     }
@@ -84,5 +87,5 @@ export async function GET(request: NextRequest) {
     console.error('Error handling PayU failure GET callback:', err)
   }
 
-  return NextResponse.redirect(new URL('/checkout/failed', request.nextUrl.origin), 303)
+  return NextResponse.redirect(new URL('/checkout/failed', baseUrl), 303)
 }

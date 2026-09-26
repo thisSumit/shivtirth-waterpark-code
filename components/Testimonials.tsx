@@ -62,13 +62,13 @@ const Testimonials = () => {
 	const [activeStat, setActiveStat] = useState(-1);
 
 	return (
-		<section className="relative overflow-hidden bg-slate-50/50 py-8 border-y border-slate-100">
+		<section className="relative overflow-hidden py-8 border-slate-100">
 			<div className="mx-auto w-full max-w-7xl px-4 md:px-6">
 				{/* <AnimatedHeading
 					title="1st Preference of People"
 					subtitle="Highest Rating & Reviews in Vidarbha Region"
 				/> */}
-				<h2 className="text-xl font-bold uppercase tracking-tight text-[#288382] font-times text-center mb-2">1st Preference of People</h2>
+				<h2 className="text-xl font-bold uppercase tracking-tight text-black font-times text-center mb-2">1st Preference of People</h2>
 
 				{/* 5 Highlight Stat Counter Bar */}
 				<ScrollReveal direction="up" delay={0.15} duration={0.5}>
