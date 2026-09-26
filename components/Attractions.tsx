@@ -27,7 +27,7 @@ const initialAttractionsData: AttractionItem[] = [
     subtitle: "Splash & Thrill",
     parkTag: "Shivtirth Water Park",
     description:
-      "Exciting water slides, massive wave pool, rain dance, and fun splash zones for all ages.",
+      "Dive into Water, Dive into Masti. Have unforgettable memories of Adishakti Waterfall",
     href: "/water-park",
     videoUrl: "/main.mp4",
     posterUrl: "/Water-Park.jpg",
@@ -39,7 +39,7 @@ const initialAttractionsData: AttractionItem[] = [
     subtitle: "Serene Waterways",
     parkTag: "Shivtirth Boating Lake",
     description:
-      "Enjoy peaceful pedal boats, family shikara boats, and scenic lake views.",
+      "Heart - Pumping Thrill Boating Rides. Enhance your Excitement. Now or never in Life.",
     href: "/boating-park",
     videoUrl: "/main.mp4",
     posterUrl: "/Boating-Park.jpg",
@@ -51,7 +51,7 @@ const initialAttractionsData: AttractionItem[] = [
     subtitle: "Heart-Pumping Thrills",
     parkTag: "Shivtirth Adventure Hub",
     description:
-      "Challenge yourself with high rope bridges, zip line, climbing towers, and obstacles.",
+      "Adventure is the Sowing of  Daring, Concentration and Spontaneity. Childhood to elderhood.",
     href: "/adventure-park",
     videoUrl: "/main.mp4",
     posterUrl: "/Adventure-Park.jpg",
@@ -63,7 +63,7 @@ const initialAttractionsData: AttractionItem[] = [
     subtitle: "Endless Joy",
     parkTag: "Shivtirth Fun World",
     description:
-      "Classic Columbus rides, spinning swings, bumper cars, and carnival fun for everyone.",
+      "Unleash Your Inner Daredevil with special activities, Designed for Ultimate Thrill and Non-Stop Fun!",
     href: "/amusement-park",
     videoUrl: "/main.mp4",
     posterUrl: "/amusement.jpg",
@@ -75,7 +75,7 @@ const initialAttractionsData: AttractionItem[] = [
     subtitle: "Exotic Nature",
     parkTag: "Shivtirth Bird Aviary",
     description:
-      "Interactive exotic bird aviary surrounded by lush Satpuda green valley.",
+      "Wings, Whistles & Wonder - Step Into a Colorful World Exotic Birds Chirping, Flying & Welcoming You With Pure Natural Joy!",
     href: "/bird-park",
     videoUrl: "/main.mp4",
     posterUrl: "/Bird-Park.jpg",
@@ -87,7 +87,7 @@ const initialAttractionsData: AttractionItem[] = [
     subtitle: "Luxury Stay",
     parkTag: "Shivtirth Resort Stay",
     description:
-      "Comfortable resort rooms, villas, and tranquil nature stays amidst dam views.",
+      "Comfortable Resort Rooms, Villa's, Dormitory cottages, tent stay with nature  and admist dam views.",
     href: "/accommodation",
     videoUrl: "/main.mp4",
     posterUrl: "/Stay-Facilities.jpg",
@@ -162,7 +162,7 @@ const Attractions: React.FC<AttractionsProps> = ({ initialVideos }) => {
     <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
       {/* Title with common AnimatedHeading component matching Speciallity.tsx */}
       <AnimatedHeading
-        title="Curated Destinations"
+        title="The Unique and Perfect Entertainment Destination in Central India for All Enjoyments with Resonable Packages."
         subtitle="Explore our world-class parks and luxury stays crafted for unforgettable family adventures."
       />
 
@@ -217,9 +217,9 @@ const Attractions: React.FC<AttractionsProps> = ({ initialVideos }) => {
 
                   {/* Top ParkTag Badge & Action Button */}
                   <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10 gap-2">
-                    <span className="text-[10px] sm:text-[11px] font-medium tracking-wider uppercase bg-black/40 backdrop-blur-md border border-white/20 text-slate-100 px-3 py-1 rounded-full shadow-xs">
+                    {/* <span className="text-[10px] sm:text-[11px] font-medium tracking-wider uppercase bg-black/40 backdrop-blur-md border border-white/20 text-slate-100 px-3 py-1 rounded-full shadow-xs">
                       {item.parkTag}
-                    </span>
+                    </span> */}
 
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md transition-all duration-300 group-hover:bg-accent group-hover:border-amber-400 group-hover:text-slate-950 group-hover:scale-110 shadow-md">
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300" />

@@ -367,10 +367,7 @@ export default function OffersView({
         <div className="animate-fadeIn">
           {/* STANDARD PACKAGES */}
           <section className="py-12 bg-gradient-to-b from-slate-950/60 via-cyan-950/40 to-slate-950/60 border-y border-slate-800">
-            <div className="text-center mb-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-amber-400">
-                All-Inclusive Packages
-              </p>
+            {/* <div className="text-center mb-10">
               <h2
                 className="text-2xl   font-bold text-white font-times uppercase"
                 style={{
@@ -379,10 +376,7 @@ export default function OffersView({
               >
                 Standard Entry Packages
               </h2>
-              <p className="text-slate-300 text-xs md:text-sm mt-1 max-w-xl mx-auto">
-                Choose the perfect package to match your family plan and budget.
-              </p>
-            </div>
+            </div> */}
 
             <div id="packages-list" className="max-w-7xl mx-auto px-4 md:px-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -523,7 +517,7 @@ export default function OffersView({
                     fontFamily: "'Times New Roman', Times, Georgia, serif",
                   }}
                 >
-                  Stay & Accommodation Packages
+                  Accommodation Packages
                 </h2>
                 <p className="text-slate-300 text-xs md:text-sm mt-1">
                   Extend your stay with peaceful campfire nights and luxury camping accommodations

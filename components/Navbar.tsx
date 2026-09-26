@@ -198,7 +198,7 @@ const Navbar: React.FC<NavbarProps> = ({ initialActivities }) => {
       href: "/accommodation",
     },
     {
-      name: "Offers & Packages",
+      name: "Packages & Offers",
       href: "/offers",
     },
     {
